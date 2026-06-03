@@ -16,6 +16,7 @@ This repository is a defensive/educational MVP mono-repo. Treat it as not produc
 - `backend_and_cloud/`: Firebase, Cloudflare, backend code, rules, functions, and backend tests.
 - `docs/`: project documentation and status notes.
 - `testing_tools/`: local test helpers and validation utilities.
+- `ai_and_analytics_tools/`: AI and analytics scripts.
 
 ## Context rules
 
@@ -101,6 +102,8 @@ The agent must ask before:
 - Changing auth, billing/payment, database access, Firebase, Cloudflare, security rules, or permissions.
 - Running scripts that write generated output.
 - Performing large refactors.
+- Editing `.gitignore`.
+- Running any `git add`, `git commit`, or `git push`.
 
 Do not add, remove, or upgrade dependencies unless the task explicitly requires it and the user approves.
 
@@ -119,17 +122,134 @@ Prior approval from earlier messages does not count.
 - Reading or modifying `.env`, `.dev.vars`, keys, service accounts, logs, dumps, database exports, or private user data.
 - `rm`
 - `rm -rf`
+- `Remove-Item -Recurse -Force .git` — this deletes ALL git history. Only run when user explicitly says so.
 - `git reset`
 - `git clean`
+- `git push --force` — this overwrites GitHub history. Requires explicit approval every time.
+- `Copy-Item` backup commands that copy large directories.
 
 ## Git safety
 
-Allowed without asking:
+### Allowed without asking:
 
 - `git status`
 - `git diff`
+- `git log --oneline -n 10` (read-only, limited)
+- `git check-ignore -v <file>` (read-only check)
 
-Do not commit, push, pull, rebase, merge, reset, stash, checkout branches, or modify Git history unless explicitly requested.
+### Must ask before:
+
+- `git add`
+- `git commit`
+- `git push` (any form)
+- `git pull`
+- `git merge`
+- `git rebase`
+- `git stash`
+- `git checkout` (branch changes)
+
+### Require explicit same-message approval:
+
+- `git push --force` or `git push -f` — overwrites remote history permanently.
+- `Remove-Item -Recurse -Force .git` — deletes local git history permanently.
+- `git reset --hard`
+- `git clean -fd`
+
+## Repository state after clean push
+
+After the clean Git push completed on 2026-06-03, this repository uses a **fresh single-commit history** on `main`.
+
+### What IS tracked (must stay tracked):
+
+```
+README.md
+AGENTS.md
+codemagic.yaml
+.gitignore
+mobile_app/
+  pubspec.yaml
+  pubspec.lock
+  android/         (build configs, manifests — NOT .gradle/ or .kotlin/)
+  ios/             (Runner/, project files — NOT Pods/)
+  web/
+  lib/
+  test/
+  integration_test/
+  l10n.yaml
+  analysis_options.yaml
+admin_dashboard/
+  pubspec.yaml
+  pubspec.lock
+  android/
+  ios/
+  web/
+  lib/
+  test/
+  analysis_options.yaml
+backend_and_cloud/
+  functions/
+    package.json
+    package-lock.json
+    (source files)
+  rules/
+    firebase.json
+    firestore.rules
+    firestore.indexes.json
+  workers/*/
+    package.json
+    package-lock.json
+    wrangler.toml or wrangler.jsonc
+    src/
+    test/
+docs/
+testing_tools/
+  (scripts and helpers — NOT *.log or local data files)
+ai_and_analytics_tools/
+```
+
+### What must NEVER be committed:
+
+```
+.wrangler/                          # Wrangler local state — NEVER commit
+**/.wrangler/                       # Nested wrangler state
+mobile_app/build/                   # Flutter build output
+admin_dashboard/build/              # Flutter build output
+mobile_app/.dart_tool/              # Dart tool cache
+admin_dashboard/.dart_tool/         # Dart tool cache
+mobile_app/.metadata                # Flutter IDE metadata
+mobile_app/devtools_options.yaml    # Dev-only Flutter tool
+admin_dashboard/devtools_options.yaml
+**/android/.gradle/                 # Gradle local cache
+**/android/.kotlin/                 # Kotlin local cache
+**/ios/Pods/                        # CocoaPods local cache
+**/node_modules/                    # Node dependencies
+test_artifacts/                     # Test run outputs
+coverage/                           # Coverage reports
+*.log                               # Any log files
+firebase-debug.log
+firestore-debug.log
+.env                                # Secrets
+.env.*                              # Secrets
+.dev.vars                           # Cloudflare secrets
+serviceAccount*.json                # Service account keys
+service-account*.json               # Service account keys
+*.pem                               # Private keys
+*.key                               # Private keys
+```
+
+If any of these appears in `git status` as untracked or staged, **stop and update `.gitignore` before committing**.
+
+## Adding new features or areas
+
+If a new feature, worker, package, or service area is added to the project, the agent must:
+
+1. **Check `.gitignore`** to ensure any generated/cache directories for the new area are covered.
+2. **Do NOT commit** build outputs, lock caches, or secrets from the new area.
+3. For new Cloudflare workers: ensure `.wrangler/` inside the worker directory is in `.gitignore`.
+4. For new Flutter packages: ensure `.dart_tool/`, `build/`, `.metadata` are covered.
+5. For new Node packages: ensure `node_modules/` is covered.
+6. For new Firebase services: ensure debug logs and emulator artifacts are covered.
+7. After adding new files, run `git status --short` and review all `??` (untracked) entries before `git add .`.
 
 ## Tooling policy
 
@@ -171,3 +291,20 @@ After edits:
 - Summarize changed files.
 - Summarize tests/checks run.
 - Mention anything not verified.
+
+## Pre-commit checklist (run before any `git add .`)
+
+Before staging files, always verify:
+
+```powershell
+# Check that these are ignored (each should return a rule name, not blank):
+git check-ignore -v .wrangler
+git check-ignore -v backend_and_cloud/firebase-debug.log
+git check-ignore -v mobile_app/devtools_options.yaml
+git check-ignore -v mobile_app/.metadata
+
+# Check git status for anything suspicious:
+git status --short
+```
+
+If any of the above does NOT return a rule, add the pattern to `.gitignore` before continuing.
