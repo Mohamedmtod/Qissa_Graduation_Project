@@ -1,0 +1,2902 @@
+{
+  "mode": "dry-run",
+  "collection": "products",
+  "taxonomyVersion": 1,
+  "selectedCount": 81,
+  "patchCount": 81,
+  "skippedCount": 0,
+  "skipped": [],
+  "patches": [
+    {
+      "id": "bleu_de_chanel",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "long_lasting": 3,
+          "loud_projection": 3,
+          "sauvage_like": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Bleu de Chanel is a daily, clean, fresh, masculine pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Bleu de Chanel اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، masculine. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [
+          "sauvage_like"
+        ],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_01",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "luxury": 2,
+          "youthful": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Velvet Amber Bloom is a daily, clean, fresh, masculine pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Velvet Amber Bloom اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، masculine. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_02",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "wedding": 3,
+          "date": 2,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Citrus Sand Whisper is a wedding, feminine, fresh, masculine pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Citrus Sand Whisper اختيار مناسب حسب تاجات الموظفين: wedding، feminine، fresh، masculine. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_03",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "fresh": 3,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Midnight Oud Trace is a daily, fresh, long lasting, loud projection pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Midnight Oud Trace اختيار مناسب حسب تاجات الموظفين: daily، fresh، long lasting، loud projection. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_04",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Rose Musk Veil is a daily, clean, fresh, masculine pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Rose Musk Veil اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، masculine. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_05",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "office": 3,
+          "date": 2,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Golden Spice Route is a office, feminine, fresh, masculine pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Golden Spice Route اختيار مناسب حسب تاجات الموظفين: office، feminine، fresh، masculine. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_06",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "clean": 3,
+          "fresh": 3,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Ocean Cedar Pulse is a daily, clean, fresh, long lasting pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Ocean Cedar Pulse اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، long lasting. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_07",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "university": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "youthful": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Vanilla Smoke Halo is a daily, university, fresh, masculine pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Vanilla Smoke Halo اختيار مناسب حسب تاجات الموظفين: daily، university، fresh، masculine. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_08",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "White Floral Echo is a daily, feminine, fresh, masculine pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "White Floral Echo اختيار مناسب حسب تاجات الموظفين: daily، feminine، fresh، masculine. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_09",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "wedding": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Fresh Linen Drift is a daily, wedding, clean, fresh pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Fresh Linen Drift اختيار مناسب حسب تاجات الموظفين: daily، wedding، clean، fresh. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_10",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Ruby Berry Mist is a daily, clean, fresh, masculine pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Ruby Berry Mist اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، masculine. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_11",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "date": 2,
+          "clean": 3,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Saffron Noir Touch is a clean, feminine, fresh, masculine pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Saffron Noir Touch اختيار مناسب حسب تاجات الموظفين: clean، feminine، fresh، masculine. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_12",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "fresh": 3,
+          "luxury": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3,
+          "soft_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Soft Powder Silk is a daily, office, fresh, soft on nose pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Soft Powder Silk اختيار مناسب حسب تاجات الموظفين: daily، office، fresh، soft on nose. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_13",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "fresh": 3,
+          "masculine": 3,
+          "luxury": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Jasmine Wood Aura is a daily, fresh, masculine, soft on nose pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Jasmine Wood Aura اختيار مناسب حسب تاجات الموظفين: daily، fresh، masculine، soft on nose. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_14",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "university": 3,
+          "date": 2,
+          "clean": 3,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3,
+          "soft_projection": 3
+        },
+        "staffWarnings": [],
+        "staffSalesNotes": {
+          "en": "Silver Marine Light is a university, clean, feminine, fresh pick based on staff taste tags.",
+          "ar": "Silver Marine Light اختيار مناسب حسب تاجات الموظفين: university، clean، feminine، fresh."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_15",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Honey Amber Dusk is a daily, fresh, long lasting, loud projection pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Honey Amber Dusk اختيار مناسب حسب تاجات الموظفين: daily، fresh، long lasting، loud projection. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_16",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "wedding": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Crystal Citrus Air is a daily, wedding, clean, fresh pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Crystal Citrus Air اختيار مناسب حسب تاجات الموظفين: daily، wedding، clean، fresh. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_17",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "date": 2,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Dark Resin Story is a feminine, fresh, masculine, moderate projection pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Dark Resin Story اختيار مناسب حسب تاجات الموظفين: feminine، fresh، masculine، moderate projection. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_18",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "fresh": 3,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Blooming Pearl is a daily, fresh, long lasting, loud projection pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Blooming Pearl اختيار مناسب حسب تاجات الموظفين: daily، fresh، long lasting، loud projection. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_19",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [],
+        "staffSalesNotes": {
+          "en": "Urban Musk Signal is a daily, office, clean, fresh pick based on staff taste tags.",
+          "ar": "Urban Musk Signal اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_20",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "date": 2,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Desert Night Code is a feminine, fresh, masculine, moderate projection pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Desert Night Code اختيار مناسب حسب تاجات الموظفين: feminine، fresh، masculine، moderate projection. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_21",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "university": 3,
+          "clean": 3,
+          "fresh": 3,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Moonlit Petals is a daily, university, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Moonlit Petals اختيار مناسب حسب تاجات الموظفين: daily، university، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_22",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Cedar Spice Focus is a daily, clean, fresh, masculine pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Cedar Spice Focus اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، masculine. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_23",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "wedding": 3,
+          "date": 2,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Amber Vanilla Note is a wedding, feminine, fresh, masculine pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Amber Vanilla Note اختيار مناسب حسب تاجات الموظفين: wedding، feminine، fresh، masculine. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_24",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Blue Aqua Trail is a daily, clean, fresh, long lasting pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Blue Aqua Trail اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، long lasting. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_25",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3,
+          "moderate_projection": 2
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Velvet Rose Flame is a daily, fresh, masculine, soft on nose pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Velvet Rose Flame اختيار مناسب حسب تاجات الموظفين: daily، fresh، masculine، soft on nose. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_26",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "office": 3,
+          "date": 2,
+          "clean": 3,
+          "feminine": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [],
+        "staffSalesNotes": {
+          "en": "Clean Musk Hour is a office, clean, feminine, fresh pick based on staff taste tags.",
+          "ar": "Clean Musk Hour اختيار مناسب حسب تاجات الموظفين: office، clean، feminine، fresh."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_27",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "fresh": 3,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Oud Leather Frame is a daily, fresh, long lasting, loud projection pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Oud Leather Frame اختيار مناسب حسب تاجات الموظفين: daily، fresh، long lasting، loud projection. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_28",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "university": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "soft_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Sunny Citrus Pop is a daily, university, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Sunny Citrus Pop اختيار مناسب حسب تاجات الموظفين: daily، university، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_29",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3,
+          "soft_projection": 3
+        },
+        "staffWarnings": [],
+        "staffSalesNotes": {
+          "en": "Floral Cashmere Mood is a daily, clean, fresh, soft on nose pick based on staff taste tags.",
+          "ar": "Floral Cashmere Mood اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، soft on nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "catalog_refresh_30",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "wedding": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Warm Sand Elixir is a daily, wedding, fresh, long lasting pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Warm Sand Elixir اختيار مناسب حسب تاجات الموظفين: daily، wedding، fresh، long lasting. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_101151",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Her is a daily, clean, fresh, moderate projection pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Her اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، moderate projection. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_10131",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "clean": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Another 13 is a daily, clean, moderate projection, date pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Another 13 اختيار مناسب حسب تاجات الموظفين: daily، clean، moderate projection، date. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_1018",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Black Orchid is a daily, clean, fresh, moderate projection pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Black Orchid اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، moderate projection. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_11755",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Acqua di Giò is a daily, office, classic, clean pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Acqua di Giò اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_12201",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "classic": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Santal 33 is a daily, classic, moderate projection, elegant pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Santal 33 اختيار مناسب حسب تاجات الموظفين: daily، classic، moderate projection، elegant. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_127045",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Luna Rossa Carbon is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Luna Rossa Carbon اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_1361",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Daisy is a daily, clean, fresh, moderate projection pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Daisy اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، moderate projection. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_14220",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Angel is a daily, office, classic, clean pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Angel اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_1460",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Flowerbomb is a daily, office, classic, clean pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Flowerbomb اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_14982",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "La Vie Est Belle is a daily, classic, fresh, moderate projection pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "La Vie Est Belle اختيار مناسب حسب تاجات الموظفين: daily، classic، fresh، moderate projection. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_16657",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Eros is a daily, classic, fresh, masculine pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Eros اختيار مناسب حسب تاجات الموظفين: daily، classic، fresh، masculine. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_17",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [],
+        "staffSalesNotes": {
+          "en": "Terre d’Hermès is a daily, office, clean, fresh pick based on staff taste tags.",
+          "ar": "Terre d’Hermès اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_1825",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "date": 2,
+          "classic": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Tobacco Vanille is a classic, moderate projection, date, elegant pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Tobacco Vanille اختيار مناسب حسب تاجات الموظفين: classic، moderate projection، date، elegant. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_1826",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "date": 2,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Oud Wood is a clean, fresh, masculine, long lasting pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Oud Wood اختيار مناسب حسب تاجات الموظفين: clean، fresh، masculine، long lasting. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_18453",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3,
+          "acqua_di_gio_like": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Si is a daily, classic, moderate projection, acqua di gio like pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Si اختيار مناسب حسب تاجات الموظفين: daily، classic، moderate projection، acqua di gio like. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [
+          "acqua_di_gio_like"
+        ],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_23098",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "not_headachey": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Hypnotic Poison is a daily, fresh, moderate projection, date pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Hypnotic Poison اختيار مناسب حسب تاجات الموظفين: daily، fresh، moderate projection، date. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_25324",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Black Opium is a daily, classic, fresh, moderate projection pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Black Opium اختيار مناسب حسب تاجات الموظفين: daily، classic، fresh، moderate projection. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_2609",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Fahrenheit is a daily, office, classic, clean pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Fahrenheit اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_31861",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Sauvage is a daily, office, classic, clean pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Sauvage اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_31872",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Thé Noir 29 is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Thé Noir 29 اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_33519",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3,
+          "baccarat_like": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Baccarat Rouge 540 is a daily, classic, clean, fresh pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Baccarat Rouge 540 اختيار مناسب حسب تاجات الموظفين: daily، classic، clean، fresh. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [
+          "baccarat_like"
+        ],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_39029",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "L’Homme is a daily, office, clean, fresh pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "L’Homme اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_39314",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "long_lasting": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Layton is a daily, classic, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Layton اختيار مناسب حسب تاجات الموظفين: daily، classic، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_39681",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3,
+          "good_girl_like": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Good Girl is a daily, classic, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Good Girl اختيار مناسب حسب تاجات الموظفين: daily، classic، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [
+          "good_girl_like"
+        ],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_43871",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [],
+        "staffSalesNotes": {
+          "en": "Delina is a daily, office, clean, fresh pick based on staff taste tags.",
+          "ar": "Delina اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_45651",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "not_headachey": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Scandal is a daily, fresh, moderate projection, date pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Scandal اختيار مناسب حسب تاجات الموظفين: daily، fresh، moderate projection، date. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_485",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "soft_on_nose": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Light Blue is a daily, office, classic, clean pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Light Blue اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_50239",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "date": 2,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Ombré Leather is a masculine, long lasting, loud projection, date pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Ombré Leather اختيار مناسب حسب تاجات الموظفين: masculine، long lasting، loud projection، date. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_50384",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "medium_risk": 2,
+          "long_lasting": 3,
+          "loud_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Cloud is a daily, classic, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Cloud اختيار مناسب حسب تاجات الموظفين: daily، classic، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_51411",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "not_headachey": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Lost Cherry is a daily, moderate projection, date, elegant pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Lost Cherry اختيار مناسب حسب تاجات الموظفين: daily، moderate projection، date، elegant. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_51818",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [],
+        "staffSalesNotes": {
+          "en": "J’adore is a daily, classic, clean, fresh pick based on staff taste tags.",
+          "ar": "J’adore اختيار مناسب حسب تاجات الموظفين: daily، classic، clean، fresh."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_56077",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Libre is a daily, office, classic, clean pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Libre اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_58770",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [],
+        "staffSalesNotes": {
+          "en": "Le Male is a daily, office, classic, fresh pick based on staff taste tags.",
+          "ar": "Le Male اختيار مناسب حسب تاجات الموظفين: daily، office، classic، fresh."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_607",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Allure Homme Sport is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Allure Homme Sport اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_611",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Coco Mademoiselle is a daily, office, classic, clean pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Coco Mademoiselle اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_62021",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "clean": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Perfect is a daily, clean, moderate projection, date pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Perfect اختيار مناسب حسب تاجات الموظفين: daily، clean، moderate projection، date. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_62036",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3,
+          "acqua_di_gio_like": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "My Way is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "My Way اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [
+          "acqua_di_gio_like"
+        ],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_632",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Bright Crystal is a daily, office, classic, clean pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Bright Crystal اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_67667",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Twilly d’Hermès is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Twilly d’Hermès اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_69910",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Chanel No. 5 is a daily, classic, clean, fresh pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Chanel No. 5 اختيار مناسب حسب تاجات الموظفين: daily، classic، clean، fresh. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_707",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "classic": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Alien is a daily, classic, moderate projection, date pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Alien اختيار مناسب حسب تاجات الموظفين: daily، classic، moderate projection، date. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_75668",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Paradoxe is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Paradoxe اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_77056",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Love Don’t Be Shy is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Love Don’t Be Shy اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_77132",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "date": 2,
+          "classic": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Angels’ Share is a classic, moderate projection, date, elegant pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Angels’ Share اختيار مناسب حسب تاجات الموظفين: classic، moderate projection، date، elegant. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_78574",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Valaya is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Valaya اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_8069",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some",
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Chance Eau Tendre is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some, not_for_hot_weather.",
+          "ar": "Chance Eau Tendre اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some, not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_83483",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Goddess is a daily, office, clean, fresh pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Goddess اختيار مناسب حسب تاجات الموظفين: daily، office، clean، fresh. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_9099",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Bleu de Chanel is a daily, office, classic, clean pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Bleu de Chanel اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_97340",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "date": 2,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "luxury": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather"
+        ],
+        "staffSalesNotes": {
+          "en": "Miss Dior is a daily, clean, fresh, moderate projection pick based on staff taste tags. Watch out: not_for_hot_weather.",
+          "ar": "Miss Dior اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، moderate projection. Watch out: not_for_hot_weather."
+        },
+        "similarFamousDna": [],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    },
+    {
+      "id": "fragrantica_9828",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "office": 3,
+          "classic": 3,
+          "clean": 3,
+          "fresh": 3,
+          "elegant": 2,
+          "youthful": 2,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "not_headachey": 2,
+          "crowd_pleaser": 2,
+          "safe_blind_buy": 2,
+          "moderate_projection": 3,
+          "aventus_like": 3
+        },
+        "staffWarnings": [
+          "too_sweet_for_some"
+        ],
+        "staffSalesNotes": {
+          "en": "Aventus is a daily, office, classic, clean pick based on staff taste tags. Watch out: too_sweet_for_some.",
+          "ar": "Aventus اختيار مناسب حسب تاجات الموظفين: daily، office، classic، clean. Watch out: too_sweet_for_some."
+        },
+        "similarFamousDna": [
+          "aventus_like"
+        ],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    }
+  ]
+}

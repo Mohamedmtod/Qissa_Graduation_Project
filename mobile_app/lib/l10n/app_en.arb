@@ -1,0 +1,1495 @@
+{
+  "@@locale": "en",
+  "labelQty": "Qty",
+  "@labelQty": {
+    "description": "Short label for Quantity"
+  },
+  "appTitle": "QISSA",
+  "@appTitle": {
+    "description": "The application name shown in the app bar and title"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Title shown in the app bar of the Language selection page"
+  },
+  "english": "English",
+  "@english": {
+    "description": "Label for the English language option in the list"
+  },
+  "arabic": "Arabic",
+  "@arabic": {
+    "description": "Label for the Arabic (العربية) language option in the list"
+  },
+  "labelWelcomeTitle": "Welcome to Qissa",
+  "@labelWelcomeTitle": {
+    "description": "Title shown on the Welcome screen"
+  },
+  "btnLogin": "Log in",
+  "@btnLogin": {
+    "description": "Button to navigate to login or trigger login"
+  },
+  "btnRegister": "Create an account",
+  "@btnRegister": {
+    "description": "Button to trigger registration"
+  },
+  "hintEmail": "Email",
+  "@hintEmail": {
+    "description": "Hint text for email input"
+  },
+  "hintPassword": "Password",
+  "@hintPassword": {
+    "description": "Hint text for password input"
+  },
+  "labelLoginWelcome": "Welcome back!\nLog in to your account",
+  "@labelLoginWelcome": {
+    "description": "Header text on the Login screen"
+  },
+  "btnForgotPassword": "Forgot password?",
+  "@btnForgotPassword": {
+    "description": "Link to the forgot password screen"
+  },
+  "hintFirstName": "First name",
+  "@hintFirstName": {
+    "description": "Hint text for first name input"
+  },
+  "hintLastName": "Last name",
+  "@hintLastName": {
+    "description": "Hint text for last name input"
+  },
+  "msgLoggingIn": "Logging in...",
+  "@msgLoggingIn": {
+    "description": "Loading text during login"
+  },
+  "msgCreatingAccount": "Creating account...",
+  "@msgCreatingAccount": {
+    "description": "Loading text during account creation"
+  },
+  "hintConfirmPassword": "Confirm Password",
+  "@hintConfirmPassword": {
+    "description": "Hint text for confirm password input"
+  },
+  "labelResetPassword": "Reset Password",
+  "@labelResetPassword": {
+    "description": "Header text on the Forgot Password screen"
+  },
+  "msgResetPasswordInstructions": "Enter your email to receive a password reset link.",
+  "@msgResetPasswordInstructions": {
+    "description": "Body text explaining how to reset password"
+  },
+  "msgSending": "Sending...",
+  "@msgSending": {
+    "description": "Loading text while sending the reset link"
+  },
+  "btnSendResetLink": "Send Reset Code",
+  "@btnSendResetLink": {
+    "description": "Button to trigger sending the reset code"
+  },
+  "msgResetLinkSent": "Reset link sent! Check your email.",
+  "@msgResetLinkSent": {
+    "description": "Success message after a reset link is sent"
+  },
+  "msgResetCodeInstructions": "Enter your email to receive a 6-digit reset code.",
+  "@msgResetCodeInstructions": {
+    "description": "Body text explaining how to request a password reset OTP"
+  },
+  "msgEnterResetCodeInstructions": "Enter the code sent to your email.",
+  "@msgEnterResetCodeInstructions": {
+    "description": "Body text explaining how to enter a password reset OTP"
+  },
+  "msgChooseNewPasswordInstructions": "Choose a new password for your account.",
+  "@msgChooseNewPasswordInstructions": {
+    "description": "Body text explaining how to choose a new password after OTP"
+  },
+  "msgResetCodeSentGeneric": "If this email exists, a reset code has been sent.",
+  "@msgResetCodeSentGeneric": {
+    "description": "Generic success message that does not reveal whether an email exists"
+  },
+  "msgInvalidOrExpiredCode": "Invalid or expired code.",
+  "@msgInvalidOrExpiredCode": {
+    "description": "Error shown when a password reset OTP is invalid or expired"
+  },
+  "msgResetCodeSendFailed": "Could not send a reset code right now.",
+  "@msgResetCodeSendFailed": {
+    "description": "Generic error shown when sending a password reset OTP fails"
+  },
+  "hintResetCode": "6-digit code",
+  "@hintResetCode": {
+    "description": "Hint text for the password reset OTP field"
+  },
+  "btnContinue": "Continue",
+  "@btnContinue": {
+    "description": "Button to continue to the next form step"
+  },
+  "btnResendCode": "Resend code",
+  "@btnResendCode": {
+    "description": "Button to resend a password reset OTP"
+  },
+  "labelCategories": "Categories",
+  "@labelCategories": {
+    "description": "Header for categories section"
+  },
+  "hintSearch": "Search",
+  "@hintSearch": {
+    "description": "Short hint text for search field"
+  },
+  "hintSearchPerfumes": "Search for perfumes...",
+  "@hintSearchPerfumes": {
+    "description": "Longer hint text for the main search page"
+  },
+  "labelFlashSale": "Flash Sale",
+  "@labelFlashSale": {
+    "description": "Header for flash sale section"
+  },
+  "btnSeeAll": "SEE ALL",
+  "@btnSeeAll": {
+    "description": "Button to see all items in a category/section"
+  },
+  "labelViewedBefore": "Viewed Before",
+  "@labelViewedBefore": {
+    "description": "Header for recently viewed products"
+  },
+  "msgViewedBefore": "Browse items you've already viewed",
+  "@msgViewedBefore": {
+    "description": "Subtitle for the recently viewed products section"
+  },
+  "btnHistory": "HISTORY",
+  "@btnHistory": {
+    "description": "Button to view product history"
+  },
+  "labelMyWishlist": "My Wishlist",
+  "@labelMyWishlist": {
+    "description": "Title for the wishlist page"
+  },
+  "msgEmptyWishlist": "Your wishlist is empty",
+  "@msgEmptyWishlist": {
+    "description": "Message shown when wishlist has no items"
+  },
+  "labelPrice": "{price} EGP",
+  "@labelPrice": {
+    "description": "Format for displaying price",
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "description": "The price value"
+      }
+    }
+  },
+  "labelInStock": "In Stock",
+  "@labelInStock": {
+    "description": "Label indicating a product is available"
+  },
+  "labelOutOfStock": "Out of Stock",
+  "@labelOutOfStock": {
+    "description": "Label indicating a product is out of stock"
+  },
+  "labelDescription": "Description",
+  "@labelDescription": {
+    "description": "Header for the product description section"
+  },
+  "msgLoginToAddToCart": "Please login to add items to cart",
+  "@msgLoginToAddToCart": {
+    "description": "Message prompting user to login before adding to cart"
+  },
+  "msgLoginToAddToWishlist": "Please login to add items to your wishlist.",
+  "@msgLoginToAddToWishlist": {
+    "description": "Message prompting user to login before adding to wishlist"
+  },
+  "btnAddToCart": "Add to Cart",
+  "@btnAddToCart": {
+    "description": "Button to add an item to the shopping cart"
+  },
+  "labelFrequentlyBoughtTogether": "Frequently Bought Together",
+  "@labelFrequentlyBoughtTogether": {
+    "description": "Header for frequent recommendations"
+  },
+  "msgCustomersAlsoBought": "Customers who bought this item also picked these perfumes.",
+  "@msgCustomersAlsoBought": {
+    "description": "Description text for frequent recommendations"
+  },
+  "labelConfidence": "{percent}% confidence",
+  "@labelConfidence": {
+    "description": "Metric showing AI recommendation confidence",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "description": "Confidence percentage"
+      }
+    }
+  },
+  "labelLift": "Lift {lift}",
+  "@labelLift": {
+    "description": "Metric showing recommendation lift",
+    "placeholders": {
+      "lift": {
+        "type": "String",
+        "description": "Lift value"
+      }
+    }
+  },
+  "msgCancelOrderTitle": "Cancel Order?",
+  "@msgCancelOrderTitle": {
+    "description": "Title for cancel order dialog"
+  },
+  "msgCancelOrderDesc": "You can cancel only pending orders. Stock will be restored automatically.",
+  "@msgCancelOrderDesc": {
+    "description": "Description for cancel order dialog"
+  },
+  "btnNo": "No",
+  "@btnNo": {
+    "description": "No button"
+  },
+  "btnYesCancel": "Yes, Cancel",
+  "@btnYesCancel": {
+    "description": "Yes cancel button"
+  },
+  "msgOrderCancelledSuccess": "Order #{id} cancelled successfully.",
+  "@msgOrderCancelledSuccess": {
+    "description": "Success message for cancelled order",
+    "placeholders": {
+      "id": {
+        "type": "String",
+        "description": "Order ID"
+      }
+    }
+  },
+  "msgNoOrdersYet": "No orders yet",
+  "@msgNoOrdersYet": {
+    "description": "Title when no orders exist"
+  },
+  "msgStartShoppingOrders": "Start shopping and your orders\nwill appear here",
+  "@msgStartShoppingOrders": {
+    "description": "Subtitle when no orders exist"
+  },
+  "btnBrowseProducts": "Browse Products",
+  "@btnBrowseProducts": {
+    "description": "Button to browse products"
+  },
+  "msgSomethingWentWrong": "Something went wrong",
+  "@msgSomethingWentWrong": {
+    "description": "Error title"
+  },
+  "btnTryAgain": "Try Again",
+  "@btnTryAgain": {
+    "description": "Try again button"
+  },
+  "labelOrderNumber": "Order #{id}",
+  "@labelOrderNumber": {
+    "description": "Order number display",
+    "placeholders": {
+      "id": {
+        "type": "String",
+        "description": "Order ID"
+      }
+    }
+  },
+  "labelNA": "N/A",
+  "@labelNA": {
+    "description": "Not available"
+  },
+  "labelReason": "Reason: {reason}",
+  "@labelReason": {
+    "description": "Failure reason",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "description": "Reason text"
+      }
+    }
+  },
+  "labelTotal": "Total",
+  "@labelTotal": {
+    "description": "Total amount"
+  },
+  "btnCancelOrder": "Cancel Order",
+  "@btnCancelOrder": {
+    "description": "Button to cancel order"
+  },
+  "labelStatusOrderProcessing": "Processing",
+  "@labelStatusOrderProcessing": {
+    "description": "Order processing status"
+  },
+  "labelStatusOutForDelivery": "Out for Delivery",
+  "@labelStatusOutForDelivery": {
+    "description": "Out for delivery status"
+  },
+  "labelStatusDelivered": "Delivered",
+  "@labelStatusDelivered": {
+    "description": "Delivered status"
+  },
+  "msgEmptyCart": "Your Cart is Empty",
+  "@msgEmptyCart": {
+    "description": "Title when cart is empty"
+  },
+  "labelOrderSummary": "Order Summary",
+  "@labelOrderSummary": {
+    "description": "Header for order summary section"
+  },
+  "labelSubtotal": "Subtotal",
+  "@labelSubtotal": {
+    "description": "Subtotal label"
+  },
+  "labelShippingFee": "Shipping fee",
+  "@labelShippingFee": {
+    "description": "Shipping fee label"
+  },
+  "labelDiscounts": "Discounts",
+  "@labelDiscounts": {
+    "description": "Discounts label"
+  },
+  "btnCheckout": "CHECKOUT",
+  "@btnCheckout": {
+    "description": "Checkout button"
+  },
+  "labelHello": "Hello,",
+  "@labelHello": {
+    "description": "Greeting in profile page"
+  },
+  "labelCheckout": "Checkout",
+  "@labelCheckout": {
+    "description": "Checkout page title"
+  },
+  "msgFailedToLoadCart": "Failed to load cart data",
+  "@msgFailedToLoadCart": {
+    "description": "Error message when cart fails to load"
+  },
+  "msgOrderPlacedAwaitingConfirmation": "Order placed. Awaiting final confirmation...",
+  "@msgOrderPlacedAwaitingConfirmation": {
+    "description": "Success message after placing order"
+  },
+  "msgSelectDeliveryAddress": "Select Delivery Address",
+  "@msgSelectDeliveryAddress": {
+    "description": "Prompt to select an address"
+  },
+  "labelCityStreet": "{city}, {street}",
+  "@labelCityStreet": {
+    "description": "Format for city and street",
+    "placeholders": {
+      "city": {
+        "type": "String",
+        "description": "City name"
+      },
+      "street": {
+        "type": "String",
+        "description": "Street name"
+      }
+    }
+  },
+  "labelBuildingFloor": "Bldg {building}, Floor {floor}",
+  "@labelBuildingFloor": {
+    "description": "Format for building and floor",
+    "placeholders": {
+      "building": {
+        "type": "String",
+        "description": "Building number"
+      },
+      "floor": {
+        "type": "String",
+        "description": "Floor number"
+      }
+    }
+  },
+  "labelPayWith": "Pay With",
+  "@labelPayWith": {
+    "description": "Payment method section header"
+  },
+  "labelPaymentSummary": "Payment Summary",
+  "@labelPaymentSummary": {
+    "description": "Payment summary header"
+  },
+  "msgPleaseSelectDeliveryAddress": "Please select a delivery address first.",
+  "@msgPleaseSelectDeliveryAddress": {
+    "description": "Error when no address is selected"
+  },
+  "btnPlaceOrder": "PLACE ORDER",
+  "@btnPlaceOrder": {
+    "description": "Button to place the order"
+  },
+  "msgNumOfItems": "{count} Items",
+  "@msgNumOfItems": {
+    "description": "Number of items in cart",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Item count"
+      }
+    }
+  },
+  "labelOrderPreview": "Order Preview",
+  "@labelOrderPreview": {
+    "description": "Order preview section header"
+  },
+  "labelDeliveryInstructions": "Delivery Instructions",
+  "@labelDeliveryInstructions": {
+    "description": "Delivery instructions section header"
+  },
+  "hintAddDeliveryInstructions": "Add delivery instructions...",
+  "@hintAddDeliveryInstructions": {
+    "description": "Hint text for delivery notes"
+  },
+  "labelMyOrders": "My Orders",
+  "@labelMyOrders": {
+    "description": "Title for orders section"
+  },
+  "msgWhereDeliver": "Where should we deliver?",
+  "@msgWhereDeliver": {
+    "description": "Header for address page"
+  },
+  "labelPersonalInfo": "Personal Info",
+  "@labelPersonalInfo": {
+    "description": "Header for personal info"
+  },
+  "labelFullName": "Full Name",
+  "@labelFullName": {
+    "description": "Full name label"
+  },
+  "hintName": "name",
+  "@hintName": {
+    "description": "Name hint"
+  },
+  "msgNameRequired": "Name is required",
+  "@msgNameRequired": {
+    "description": "Validation error for name"
+  },
+  "msgNameNoSymbols": "Name cannot contain symbols or numbers.",
+  "@msgNameNoSymbols": {
+    "description": "Validation error for name containing symbols"
+  },
+  "labelPhoneNumber": "Phone Number",
+  "@labelPhoneNumber": {
+    "description": "Phone number label"
+  },
+  "hintPhone": "01XXXXXXXXX",
+  "@hintPhone": {
+    "description": "Phone number hint"
+  },
+  "msgPhoneRequired": "Phone is required",
+  "@msgPhoneRequired": {
+    "description": "Validation error for phone"
+  },
+  "msgInvalidPhone": "Enter a valid phone number",
+  "@msgInvalidPhone": {
+    "description": "Validation error for invalid phone"
+  },
+  "labelAddressDetails": "Address Details",
+  "@labelAddressDetails": {
+    "description": "Header for address details"
+  },
+  "labelCity": "City",
+  "@labelCity": {
+    "description": "City label"
+  },
+  "hintCity": "city",
+  "@hintCity": {
+    "description": "City hint"
+  },
+  "msgCityRequired": "City is required",
+  "@msgCityRequired": {
+    "description": "Validation error for city"
+  },
+  "labelAreaDistrict": "Area / District",
+  "@labelAreaDistrict": {
+    "description": "Area label"
+  },
+  "hintArea": "area",
+  "@hintArea": {
+    "description": "Area hint"
+  },
+  "msgAreaRequired": "Area is required",
+  "@msgAreaRequired": {
+    "description": "Validation error for area"
+  },
+  "labelStreetDetailed": "Street / Detailed Address",
+  "@labelStreetDetailed": {
+    "description": "Street address label"
+  },
+  "hintSearchMapOrManual": "Search on map or enter manually",
+  "@hintSearchMapOrManual": {
+    "description": "Hint for street input"
+  },
+  "msgAddressDetailsRequired": "Address details are required",
+  "@msgAddressDetailsRequired": {
+    "description": "Validation error for street"
+  },
+  "labelBuilding": "Building",
+  "@labelBuilding": {
+    "description": "Building label"
+  },
+  "hintBuilding": "12",
+  "@hintBuilding": {
+    "description": "Building hint"
+  },
+  "labelFloorApt": "Floor / Apt",
+  "@labelFloorApt": {
+    "description": "Floor label"
+  },
+  "hintFloor": "3rd",
+  "@hintFloor": {
+    "description": "Floor hint"
+  },
+  "labelAdditionalNotes": "Additional Notes",
+  "@labelAdditionalNotes": {
+    "description": "Additional notes header"
+  },
+  "labelDeliveryNotesOptional": "Delivery Notes (optional)",
+  "@labelDeliveryNotesOptional": {
+    "description": "Notes label"
+  },
+  "hintDeliveryNotesEx": "Near the mosque, blue gate…",
+  "@hintDeliveryNotesEx": {
+    "description": "Notes hint"
+  },
+  "labelSettingsTitle": "Settings",
+  "@labelSettingsTitle": {
+    "description": "Settings section header"
+  },
+  "labelSetAsDefaultAddress": "Set as Default Address",
+  "@labelSetAsDefaultAddress": {
+    "description": "Toggle to set address as default"
+  },
+  "msgSuccess": "Success",
+  "@msgSuccess": {
+    "description": "Generic success message"
+  },
+  "btnSaveAddress": "SAVE ADDRESS",
+  "@btnSaveAddress": {
+    "description": "Button to save address"
+  },
+  "btnAddNewAddress": "Add New Address",
+  "@btnAddNewAddress": {
+    "description": "Button to add new address"
+  },
+  "msgNoSavedAddresses": "No saved addresses found.",
+  "@msgNoSavedAddresses": {
+    "description": "Empty state for addresses list"
+  },
+  "labelDefault": "Default",
+  "@labelDefault": {
+    "description": "Default address badge"
+  },
+  "btnSetAsDefault": "Set as Default",
+  "@btnSetAsDefault": {
+    "description": "Button to set as default"
+  },
+  "titleDeleteAddress": "Delete Address",
+  "@titleDeleteAddress": {
+    "description": "Dialog title for delete address"
+  },
+  "msgConfirmDeleteAddress": "Are you sure you want to delete this address?",
+  "@msgConfirmDeleteAddress": {
+    "description": "Dialog confirmation for delete"
+  },
+  "btnCancel": "Cancel",
+  "@btnCancel": {
+    "description": "Cancel button"
+  },
+  "btnDelete": "Delete",
+  "@btnDelete": {
+    "description": "Delete button"
+  },
+  "msgManageAndTrack": "Manage & Track",
+  "@msgManageAndTrack": {
+    "description": "Subtitle for orders section"
+  },
+  "msgSavedItems": "{count} saved items",
+  "@msgSavedItems": {
+    "description": "Subtitle for wishlist showing count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of items"
+      }
+    }
+  },
+  "labelAvailabilityRequests": "My Availability Requests",
+  "@labelAvailabilityRequests": {
+    "description": "Title for restock requests"
+  },
+  "msgTrackCancelRequests": "Track and cancel Notify Me requests",
+  "@msgTrackCancelRequests": {
+    "description": "Subtitle for restock requests"
+  },
+  "labelMyAccount": "My Account",
+  "@labelMyAccount": {
+    "description": "Header for account section"
+  },
+  "labelAddress": "Address",
+  "@labelAddress": {
+    "description": "Title for address section"
+  },
+  "msgManageAddresses": "Manage your addresses",
+  "@msgManageAddresses": {
+    "description": "Subtitle for address section"
+  },
+  "labelPaymentMethods": "Saved Cards",
+  "@labelPaymentMethods": {
+    "description": "Title for payment methods"
+  },
+  "msgManagePaymentOptions": "Manage your cards and payment preferences",
+  "@msgManagePaymentOptions": {
+    "description": "Subtitle for payment methods"
+  },
+  "msgUseCardAsDefault": "Use card as the default choice at checkout",
+  "@msgUseCardAsDefault": {
+    "description": "Helper text for enabling saved card preference"
+  },
+  "msgSelectLanguage": "Select your language",
+  "@msgSelectLanguage": {
+    "description": "Subtitle for language section"
+  },
+  "labelSecurity": "Security",
+  "@labelSecurity": {
+    "description": "Title for security section"
+  },
+  "msgChangePasswordAndMore": "Change password & more",
+  "@msgChangePasswordAndMore": {
+    "description": "Subtitle for security section"
+  },
+  "labelSignOut": "Sign Out",
+  "@labelSignOut": {
+    "description": "Title for sign out button"
+  },
+  "msgLogoutFromAccount": "Logout from your account",
+  "@msgLogoutFromAccount": {
+    "description": "Subtitle for sign out"
+  },
+  "labelChangePassword": "Change Password",
+  "@labelChangePassword": {
+    "description": "Title for change password page"
+  },
+  "labelEditProfile": "Edit Profile",
+  "@labelEditProfile": {
+    "description": "Title for edit profile page"
+  },
+  "msgProfileUpdated": "Profile updated successfully",
+  "@msgProfileUpdated": {
+    "description": "Success message when profile is updated"
+  },
+  "labelFirstName": "First Name",
+  "@labelFirstName": {
+    "description": "Label for first name field"
+  },
+  "hintEnterFirstName": "Enter your first name",
+  "@hintEnterFirstName": {
+    "description": "Hint for first name field"
+  },
+  "msgRequiredField": "Required field",
+  "@msgRequiredField": {
+    "description": "Validation message for a required field"
+  },
+  "labelLastName": "Last Name",
+  "@labelLastName": {
+    "description": "Label for last name field"
+  },
+  "hintEnterLastName": "Enter your last name",
+  "@hintEnterLastName": {
+    "description": "Hint for last name field"
+  },
+  "labelPhoneNumberOptional": "Phone Number (Optional)",
+  "@labelPhoneNumberOptional": {
+    "description": "Label for phone number field"
+  },
+  "hintEnterPhoneNumber": "Enter your phone number",
+  "@hintEnterPhoneNumber": {
+    "description": "Hint for phone number field"
+  },
+  "btnSaveChanges": "Save Changes",
+  "@btnSaveChanges": {
+    "description": "Button to save profile changes"
+  },
+  "msgNewPasswordsDoNotMatch": "New passwords do not match",
+  "@msgNewPasswordsDoNotMatch": {
+    "description": "Validation message when new passwords don't match"
+  },
+  "msgPasswordUpdated": "Password updated successfully",
+  "@msgPasswordUpdated": {
+    "description": "Success message when password is updated"
+  },
+  "labelCurrentPassword": "Current Password",
+  "@labelCurrentPassword": {
+    "description": "Label for current password field"
+  },
+  "hintEnterCurrentPassword": "Enter current password",
+  "@hintEnterCurrentPassword": {
+    "description": "Hint for current password field"
+  },
+  "labelNewPassword": "New Password",
+  "@labelNewPassword": {
+    "description": "Label for new password field"
+  },
+  "hintEnterNewPassword": "Enter new password",
+  "@hintEnterNewPassword": {
+    "description": "Hint for new password field"
+  },
+  "labelConfirmNewPassword": "Confirm New Password",
+  "@labelConfirmNewPassword": {
+    "description": "Label for confirm password field"
+  },
+  "hintReenterNewPassword": "Re-enter new password",
+  "@hintReenterNewPassword": {
+    "description": "Hint for confirm password field"
+  },
+  "btnUpdatePassword": "Update Password",
+  "@btnUpdatePassword": {
+    "description": "Button to submit new password"
+  },
+  "labelCashOnDelivery": "Cash on Delivery",
+  "@labelCashOnDelivery": {
+    "description": "Cash on delivery payment method"
+  },
+  "msgDefaultPaymentMethod": "Default payment method",
+  "@msgDefaultPaymentMethod": {
+    "description": "Subtitle indicating default payment"
+  },
+  "labelDebitCreditCard": "Debit/Credit Card",
+  "@labelDebitCreditCard": {
+    "description": "Credit card payment method"
+  },
+  "msgAddANewCard": "Add a new card",
+  "@msgAddANewCard": {
+    "description": "Subtitle indicating to add new card"
+  },
+  "msgPleaseLogInFirst": "Please log in first",
+  "@msgPleaseLogInFirst": {
+    "description": "Title when user needs to login"
+  },
+  "msgNeedAccountToTrack": "You need an account to track availability requests.",
+  "@msgNeedAccountToTrack": {
+    "description": "Explanation why login is needed"
+  },
+  "msgCouldNotLoadRequests": "Could not load requests",
+  "@msgCouldNotLoadRequests": {
+    "description": "Title when requests fail to load"
+  },
+  "msgPleaseTryAgain": "Please try again in a moment.",
+  "@msgPleaseTryAgain": {
+    "description": "Subtitle for error state"
+  },
+  "msgNoAvailabilityRequests": "No availability requests yet",
+  "@msgNoAvailabilityRequests": {
+    "description": "Title for empty request list"
+  },
+  "msgUseNotifyMeButton": "Use the Notify Me button from AI recommendations when an item is out of stock.",
+  "@msgUseNotifyMeButton": {
+    "description": "Explanation for how to make a request"
+  },
+  "labelProductId": "Product ID: {id}",
+  "@labelProductId": {
+    "description": "Prefix for product ID",
+    "placeholders": {
+      "id": {
+        "type": "String",
+        "description": "Product ID"
+      }
+    }
+  },
+  "labelRequestedDate": "Requested: {date}",
+  "@labelRequestedDate": {
+    "description": "Prefix for requested date",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "description": "Formatted date"
+      }
+    }
+  },
+  "labelNotifiedDate": "Notified: {date}",
+  "@labelNotifiedDate": {
+    "description": "Prefix for notified date",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "description": "Formatted date"
+      }
+    }
+  },
+  "labelConvertedDate": "Converted: {date}",
+  "@labelConvertedDate": {
+    "description": "Prefix for converted date",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "description": "Formatted date"
+      }
+    }
+  },
+  "labelCancelledDate": "Cancelled: {date}",
+  "@labelCancelledDate": {
+    "description": "Prefix for cancelled date",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "description": "Formatted date"
+      }
+    }
+  },
+  "btnCancelRequest": "Cancel request",
+  "@btnCancelRequest": {
+    "description": "Button to cancel a restock request"
+  },
+  "msgRequestCancelled": "Request cancelled successfully.",
+  "@msgRequestCancelled": {
+    "description": "Success message when request is cancelled"
+  },
+  "labelStatusPending": "Pending",
+  "@labelStatusPending": {
+    "description": "Status pending for restock request"
+  },
+  "labelStatusNotified": "Notified",
+  "@labelStatusNotified": {
+    "description": "Status notified for restock request"
+  },
+  "labelStatusPurchased": "Purchased",
+  "@labelStatusPurchased": {
+    "description": "Status purchased for restock request"
+  },
+  "labelStatusCancelled": "Cancelled",
+  "@labelStatusCancelled": {
+    "description": "Status cancelled for restock request"
+  },
+  "labelTabAddress": "Address",
+  "@labelTabAddress": {
+    "description": "Tab label for Address"
+  },
+  "labelTabPickup": "Pickup",
+  "@labelTabPickup": {
+    "description": "Tab label for Pickup"
+  },
+  "msgPickupContentPlaceholder": "Pickup content // will add it later",
+  "@msgPickupContentPlaceholder": {
+    "description": "Placeholder for pickup tab content"
+  },
+  "labelQuantityFormat": "×{count}",
+  "@labelQuantityFormat": {
+    "description": "Format for item quantity",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "The quantity amount"
+      }
+    }
+  },
+  "labelFullAddressStrings": "{street}, {area}, {city}",
+  "@labelFullAddressStrings": {
+    "description": "Format for displaying a full address line",
+    "placeholders": {
+      "street": {
+        "type": "String"
+      },
+      "area": {
+        "type": "String"
+      },
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "labelFullAddressDetails": "{city}, {area}, {street}, Bldg {building}, Floor {floor}",
+  "@labelFullAddressDetails": {
+    "description": "Format for full address including building and floor",
+    "placeholders": {
+      "city": {
+        "type": "String"
+      },
+      "area": {
+        "type": "String"
+      },
+      "street": {
+        "type": "String"
+      },
+      "building": {
+        "type": "String"
+      },
+      "floor": {
+        "type": "String"
+      }
+    }
+  },
+  "labelDeliverTo": "Deliver to",
+  "@labelDeliverTo": {
+    "description": "Label for delivery header"
+  },
+  "labelSelectAddress": "Select Address",
+  "@labelSelectAddress": {
+    "description": "Placeholder for when no address is selected"
+  },
+  "msgGenericTryAgainLater": "Oops, try again later.",
+  "@msgGenericTryAgainLater": {
+    "description": "Generic fallback error message"
+  },
+  "msgNoInternetConnection": "No internet connection. Please try again.",
+  "@msgNoInternetConnection": {
+    "description": "Error shown when network is unavailable"
+  },
+  "msgInvalidEmailOrPassword": "Invalid email or password.",
+  "@msgInvalidEmailOrPassword": {
+    "description": "Login failure for invalid credentials"
+  },
+  "msgNoUserFoundForEmail": "No user found for that email.",
+  "@msgNoUserFoundForEmail": {
+    "description": "Login or reset failure when email is not registered"
+  },
+  "msgInvalidEmailAddress": "Please enter a valid email address.",
+  "@msgInvalidEmailAddress": {
+    "description": "Error shown for invalid email address"
+  },
+  "msgTooManyAttempts": "Too many attempts. Try again later.",
+  "@msgTooManyAttempts": {
+    "description": "Error shown when too many auth attempts were made"
+  },
+  "msgAccountAlreadyExists": "The account already exists for that email.",
+  "@msgAccountAlreadyExists": {
+    "description": "Registration failure for existing account"
+  },
+  "msgWeakPassword": "The password provided is too weak.",
+  "@msgWeakPassword": {
+    "description": "Registration or password update error for weak password"
+  },
+  "msgIncorrectCurrentPassword": "Incorrect current password.",
+  "@msgIncorrectCurrentPassword": {
+    "description": "Password update error when current password is wrong"
+  },
+  "msgAddedToCartSuccessfully": "Added to cart successfully!",
+  "@msgAddedToCartSuccessfully": {
+    "description": "Success message after adding an item to the cart"
+  },
+  "msgAddToCartFailed": "Could not add this item to the cart right now.",
+  "@msgAddToCartFailed": {
+    "description": "Fallback error when add to cart fails"
+  },
+  "msgNotEnoughStockAvailable": "Not enough stock available.",
+  "@msgNotEnoughStockAvailable": {
+    "description": "Error shown when requested quantity exceeds stock"
+  },
+  "msgOnlyItemsAvailable": "Only {count} items available in stock.",
+  "@msgOnlyItemsAvailable": {
+    "description": "Error shown when only a limited number of items are available",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Available stock count"
+      }
+    }
+  },
+  "msgCartUpdateFailed": "Could not update the cart right now.",
+  "@msgCartUpdateFailed": {
+    "description": "Fallback error when cart changes fail"
+  },
+  "msgWishlistLoadFailed": "Could not load your wishlist right now.",
+  "@msgWishlistLoadFailed": {
+    "description": "Error shown when wishlist loading fails"
+  },
+  "msgHomeLoadFailed": "Could not load the home page right now.",
+  "@msgHomeLoadFailed": {
+    "description": "Error shown when home data fails to load"
+  },
+  "msgSearchLoadFailed": "Could not load search results right now.",
+  "@msgSearchLoadFailed": {
+    "description": "Error shown when search loading fails"
+  },
+  "msgProductLoadFailed": "Could not load product details right now.",
+  "@msgProductLoadFailed": {
+    "description": "Error shown when product details fail to load"
+  },
+  "msgProductNotFound": "Product not found.",
+  "@msgProductNotFound": {
+    "description": "Error shown when a product cannot be found"
+  },
+  "msgProductUnavailable": "This product is no longer available.",
+  "@msgProductUnavailable": {
+    "description": "Message shown when a product is hidden or inactive"
+  },
+  "msgOrderLoadFailed": "Could not load your orders right now.",
+  "@msgOrderLoadFailed": {
+    "description": "Error shown when orders loading fails"
+  },
+  "msgOrderPlaceFailed": "Could not place your order right now.",
+  "@msgOrderPlaceFailed": {
+    "description": "Error shown when placing an order fails"
+  },
+  "msgProfileLoadFailed": "Could not load your profile right now.",
+  "@msgProfileLoadFailed": {
+    "description": "Error shown when profile loading fails"
+  },
+  "msgProfileUpdateFailed": "Could not update your profile right now.",
+  "@msgProfileUpdateFailed": {
+    "description": "Error shown when profile update fails"
+  },
+  "msgPasswordUpdateFailed": "Could not update your password right now.",
+  "@msgPasswordUpdateFailed": {
+    "description": "Error shown when password update fails"
+  },
+  "msgAddressSavedSuccessfully": "Address saved successfully.",
+  "@msgAddressSavedSuccessfully": {
+    "description": "Success message after saving an address"
+  },
+  "msgAddressSaveFailedGeneric": "Could not save the address right now.",
+  "@msgAddressSaveFailedGeneric": {
+    "description": "Fallback error when saving an address fails"
+  },
+  "msgCancelRequestFailedGeneric": "Could not cancel the request right now.",
+  "@msgCancelRequestFailedGeneric": {
+    "description": "Fallback error when cancelling a restock request fails"
+  },
+  "msgLocationServicesDisabled": "Please enable Location Services (GPS).",
+  "@msgLocationServicesDisabled": {
+    "description": "Error shown when device location services are off"
+  },
+  "msgLocationPermissionDenied": "Location permission denied.",
+  "@msgLocationPermissionDenied": {
+    "description": "Error shown when location permission is denied"
+  },
+  "msgLocationPermissionPermanentlyDenied": "Location permission is permanently denied. Please enable it from settings.",
+  "@msgLocationPermissionPermanentlyDenied": {
+    "description": "Error shown when location permission is permanently denied"
+  },
+  "msgEnableGpsAndPermissions": "Please enable GPS and grant permissions.",
+  "@msgEnableGpsAndPermissions": {
+    "description": "Empty state message for location picker when GPS or permissions are missing"
+  },
+  "msgAddressLookupFailed": "Could not fetch the address for this location.",
+  "@msgAddressLookupFailed": {
+    "description": "Error shown when reverse geocoding fails"
+  },
+  "labelPickDeliveryLocation": "Pick Delivery Location",
+  "@labelPickDeliveryLocation": {
+    "description": "Title for the location picker page"
+  },
+  "btnConfirmLocation": "Confirm Location",
+  "@btnConfirmLocation": {
+    "description": "Button to confirm the currently picked map location"
+  },
+  "msgNoProductsFound": "No products found.",
+  "@msgNoProductsFound": {
+    "description": "Empty state message for product searches with no results"
+  },
+  "msgNoRecentlyViewedProducts": "No recently viewed products yet.",
+  "@msgNoRecentlyViewedProducts": {
+    "description": "Empty state message when there are no recently viewed products"
+  },
+  "msgNoProductsFoundForCategory": "No products found for {category}.",
+  "@msgNoProductsFoundForCategory": {
+    "description": "Empty state message when a category has no products",
+    "placeholders": {
+      "category": {
+        "type": "String",
+        "description": "Category name"
+      }
+    }
+  },
+  "labelAIChatTitle": "AI Assistant",
+  "@labelAIChatTitle": {
+    "description": "Title of the AI Chat page in the AppBar"
+  },
+  "tooltipNewChat": "New Chat",
+  "@tooltipNewChat": {
+    "description": "Tooltip for the refresh/new-chat button in AI Chat AppBar"
+  },
+  "msgAIChatFeedbackThankYou": "Thanks for your feedback.",
+  "@msgAIChatFeedbackThankYou": {
+    "description": "Snackbar shown after a feedback is successfully submitted"
+  },
+  "msgAIChatPrivacyDisclosure": "Avoid sharing phone numbers, addresses, or payment details. Chat messages and feedback may be stored to improve recommendations and support quality review.",
+  "@msgAIChatPrivacyDisclosure": {
+    "description": "Short privacy disclosure shown near the AI chat interface"
+  },
+  "hintAIChatThinking": "Thinking...",
+  "@hintAIChatThinking": {
+    "description": "Hint text and loading bubble text while AI is processing"
+  },
+  "hintAIChatCooldown": "Wait {seconds}s before sending again...",
+  "@hintAIChatCooldown": {
+    "description": "Hint text shown in input field during cooldown period",
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "description": "Remaining cooldown seconds"
+      }
+    }
+  },
+  "hintAIChatInput": "Tell me what kind of perfume you want...",
+  "@hintAIChatInput": {
+    "description": "Default hint text for the AI chat message input field"
+  },
+  "labelGenderMen": "Men",
+  "@labelGenderMen": {
+    "description": "Gender tag label: Men"
+  },
+  "labelGenderWomen": "Women",
+  "@labelGenderWomen": {
+    "description": "Gender tag label: Women"
+  },
+  "labelGenderUnisex": "Unisex",
+  "@labelGenderUnisex": {
+    "description": "Gender tag label: Unisex"
+  },
+  "labelPrefBudgetUnder": "Under {amount}",
+  "@labelPrefBudgetUnder": {
+    "description": "Preference bar chip showing budget ceiling",
+    "placeholders": {
+      "amount": {
+        "type": "int",
+        "description": "Budget ceiling value"
+      }
+    }
+  },
+  "labelPrefSeason": "Season",
+  "@labelPrefSeason": {
+    "description": "Prefix label for season preference chip"
+  },
+  "labelPrefOccasion": "Occasion",
+  "@labelPrefOccasion": {
+    "description": "Prefix label for occasion preference chip"
+  },
+  "labelPrefTime": "Time",
+  "@labelPrefTime": {
+    "description": "Prefix label for time-of-day preference chip"
+  },
+  "labelPrefIntensity": "Intensity",
+  "@labelPrefIntensity": {
+    "description": "Prefix label for intensity preference chip"
+  },
+  "labelPrefNote": "Note",
+  "@labelPrefNote": {
+    "description": "Prefix label for preferred-notes chip"
+  },
+  "labelPrefTopNote": "Top",
+  "@labelPrefTopNote": {
+    "description": "Prefix label for preferred top-notes chip"
+  },
+  "labelPrefMiddleNote": "Middle",
+  "@labelPrefMiddleNote": {
+    "description": "Prefix label for preferred middle-notes chip"
+  },
+  "labelPrefBaseNote": "Base",
+  "@labelPrefBaseNote": {
+    "description": "Prefix label for preferred base-notes chip"
+  },
+  "labelPrefVibe": "Vibe",
+  "@labelPrefVibe": {
+    "description": "Prefix label for vibe / mood tags chip"
+  },
+  "labelPrefWithout": "Without",
+  "@labelPrefWithout": {
+    "description": "Prefix label for excluded-notes chip"
+  },
+  "labelAIChatFeedbackQuestion": "Were these recommendations helpful?",
+  "@labelAIChatFeedbackQuestion": {
+    "description": "Feedback form header asking if recommendations were helpful"
+  },
+  "labelFeedbackHelpful": "Helpful",
+  "@labelFeedbackHelpful": {
+    "description": "Label for the thumbs-up (helpful) feedback button"
+  },
+  "labelFeedbackNotHelpful": "Not helpful",
+  "@labelFeedbackNotHelpful": {
+    "description": "Label for the thumbs-down (not helpful) feedback button"
+  },
+  "hintFeedbackNote": "Optional note (no sensitive info)",
+  "@hintFeedbackNote": {
+    "description": "Hint text in the optional feedback note field"
+  },
+  "msgFeedbackSaved": "Your feedback was saved.",
+  "@msgFeedbackSaved": {
+    "description": "Confirmation text shown below feedback form after submission"
+  },
+  "labelChatWarning": "Warning",
+  "@labelChatWarning": {
+    "description": "Warning label shown below an error message bubble in AI Chat"
+  },
+  "labelFilterBy": "Filter By",
+  "@labelFilterBy": {
+    "description": "Header title for the filter bottom sheet"
+  },
+  "btnApplyFilters": "Apply Filters",
+  "@btnApplyFilters": {
+    "description": "Button to apply selected filters"
+  },
+  "labelClearFilters": "Clear All",
+  "@labelClearFilters": {
+    "description": "Button to clear all active filters"
+  },
+  "labelGender": "Gender",
+  "@labelGender": {
+    "description": "Filter section title for gender"
+  },
+  "labelSeason": "Season",
+  "@labelSeason": {
+    "description": "Filter section title for season"
+  },
+  "labelFragranceFamily": "Fragrance Family",
+  "@labelFragranceFamily": {
+    "description": "Filter section title for fragrance family"
+  },
+  "labelComingSoon": "Coming Soon",
+  "@labelComingSoon": {
+    "description": "Placeholder text when a product section has no items yet"
+  },
+  "labelTestPage": "Test Page",
+  "@labelTestPage": {
+    "description": "Title for the development test page"
+  },
+  "labelSoldOut": "Sold",
+  "@labelSoldOut": {
+    "description": "Badge label when a product is out of stock in AI recommendations"
+  },
+  "labelBestSeller": "Best Seller",
+  "@labelBestSeller": {
+    "description": "Badge label when a product is a best seller"
+  },
+  "labelNew": "New",
+  "@labelNew": {
+    "description": "Badge label when a product is new"
+  },
+  "msgNotifyMeRequestSaved": "Your request was saved. We will notify you as soon as it is available.",
+  "@msgNotifyMeRequestSaved": {
+    "description": "Snackbar message confirming a restock notification request"
+  },
+  "labelNotifySaved": "Saved",
+  "@labelNotifySaved": {
+    "description": "Button label after a notify-me request has been saved"
+  },
+  "btnNotifyMe": "Notify",
+  "@btnNotifyMe": {
+    "description": "Button to request notification when product is back in stock"
+  },
+  "btnDetails": "Details",
+  "@btnDetails": {
+    "description": "Button to view product details from AI recommendation card"
+  },
+  "labelBehavioralRecommendationsTitle": "Based on your taste",
+  "@labelBehavioralRecommendationsTitle": {
+    "description": "Title shown for behavioral recommendation source"
+  },
+  "labelFallbackRecommendationsTitle": "Recommended for you",
+  "@labelFallbackRecommendationsTitle": {
+    "description": "Title shown for fallback recommendation source"
+  },
+  "msgAddressAdded": "Address added successfully",
+  "@msgAddressAdded": {
+    "description": "Success message after adding a new address"
+  },
+  "msgAddressUpdated": "Address updated successfully",
+  "@msgAddressUpdated": {
+    "description": "Success message after updating an address"
+  },
+  "msgAddressDeleted": "Address deleted successfully",
+  "@msgAddressDeleted": {
+    "description": "Success message after deleting an address"
+  },
+  "msgDefaultAddressUpdated": "Default address updated",
+  "@msgDefaultAddressUpdated": {
+    "description": "Success message after changing the default address"
+  },
+  "labelOptionSummer": "Summer",
+  "@labelOptionSummer": {
+    "description": "Filter option"
+  },
+  "labelOptionWinter": "Winter",
+  "@labelOptionWinter": {
+    "description": "Filter option"
+  },
+  "labelOptionSpring": "Spring",
+  "@labelOptionSpring": {
+    "description": "Filter option"
+  },
+  "labelOptionAutumn": "Autumn",
+  "@labelOptionAutumn": {
+    "description": "Filter option"
+  },
+  "labelOptionAllSeason": "All Season",
+  "@labelOptionAllSeason": {
+    "description": "Filter option"
+  },
+  "labelOptionFloral": "Floral",
+  "@labelOptionFloral": {
+    "description": "Filter option"
+  },
+  "labelOptionWoody": "Woody",
+  "@labelOptionWoody": {
+    "description": "Filter option"
+  },
+  "labelOptionOriental": "Oriental",
+  "@labelOptionOriental": {
+    "description": "Filter option"
+  },
+  "labelOptionFresh": "Fresh",
+  "@labelOptionFresh": {
+    "description": "Filter option"
+  },
+  "labelOptionCitrus": "Citrus",
+  "@labelOptionCitrus": {
+    "description": "Filter option"
+  },
+  "categoryPerfumes": "Perfumes",
+  "@categoryPerfumes": {
+    "description": "Category name"
+  },
+  "categoryBokhoor": "Bokhoor",
+  "@categoryBokhoor": {
+    "description": "Category name"
+  },
+  "categoryMabkhara": "Mabkhara",
+  "@categoryMabkhara": {
+    "description": "Category name"
+  },
+  "categoryFawa7a": "Fawa7a",
+  "@categoryFawa7a": {
+    "description": "Category name"
+  },
+  "categoryWatches": "Watches",
+  "@categoryWatches": {
+    "description": "Category name"
+  },
+  "categorySunglasses": "Sunglasses",
+  "@categorySunglasses": {
+    "description": "Category name"
+  },
+  "labelNavHome": "Home",
+  "@labelNavHome": {
+    "description": "Navigation bar label for Home"
+  },
+  "labelNavCategories": "Categories",
+  "@labelNavCategories": {
+    "description": "Navigation bar label for Categories"
+  },
+  "labelNavAI": "AI",
+  "@labelNavAI": {
+    "description": "Navigation bar label for AI Assistant"
+  },
+  "labelNavCart": "Cart",
+  "@labelNavCart": {
+    "description": "Navigation bar label for Cart"
+  },
+  "labelNavProfile": "Profile",
+  "@labelNavProfile": {
+    "description": "Navigation bar label for Profile"
+  },
+  "labelOrderSuccessful": "Order Placed Successfully!",
+  "@labelOrderSuccessful": {
+    "description": "Title shown when order is placed successfully"
+  },
+  "msgOrderProcessingAssurance": "We've received your order and are currently processing it.",
+  "@msgOrderProcessingAssurance": {
+    "description": "Assurance message shown on order success page"
+  },
+  "btnTrackOrder": "Track Order",
+  "@btnTrackOrder": {
+    "description": "Button to track the order from the success page"
+  },
+  "btnContinueShopping": "Continue Shopping",
+  "@btnContinueShopping": {
+    "description": "Button to continue shopping from the success page"
+  },
+  "msgCartCleanupWarning": "Your order was placed successfully, but we couldn't update your cart right now.",
+  "@msgCartCleanupWarning": {
+    "description": "Warning shown when order succeeds but cart clearing fails"
+  },
+  "labelFragranceFamiliesTitle": "Fragrance\nFamilies",
+  "@labelFragranceFamiliesTitle": {
+    "description": "Title for Fragrance Families section"
+  },
+  "labelUnsureWhereToBegin": "Unsure where to begin?",
+  "@labelUnsureWhereToBegin": {
+    "description": "Title for AI assistant banner"
+  },
+  "msgAiAssistantHelp": "Our Ai assistant can help you find your perfect scent match!",
+  "@msgAiAssistantHelp": {
+    "description": "Message for AI assistant banner"
+  },
+  "btnStartChatting": "Start Chatting",
+  "@btnStartChatting": {
+    "description": "Button to start AI chat"
+  },
+  "descFloral": "Petals & Blooms",
+  "@descFloral": {
+    "description": "Description for Floral category"
+  },
+  "labelOptionFruity": "Fruity",
+  "@labelOptionFruity": {
+    "description": "Filter option"
+  },
+  "descFruity": "Bright & Juicy",
+  "@descFruity": {
+    "description": "Description for Fruity category"
+  },
+  "descOriental": "Spicy & Ambery",
+  "@descOriental": {
+    "description": "Description for Oriental category"
+  },
+  "descWoody": "Cedar &\nSandalwood",
+  "@descWoody": {
+    "description": "Description for Woody category"
+  },
+  "descFresh": "citrusy & aquatic",
+  "@descFresh": {
+    "description": "Description for Fresh category"
+  },
+  "labelOptionGourmand": "Gourmand",
+  "@labelOptionGourmand": {
+    "description": "Filter option"
+  },
+  "descGourmand": "Caramel & Coffee",
+  "@descGourmand": {
+    "description": "Description for Gourmand category"
+  },
+  "labelOptionLeather": "Leather",
+  "@labelOptionLeather": {
+    "description": "Filter option"
+  },
+  "descLeather": "Smoky Accords",
+  "@descLeather": {
+    "description": "Description for Leather category"
+  },
+  "labelOptionOud": "Oud",
+  "@labelOptionOud": {
+    "description": "Filter option"
+  },
+  "descOud": "Rich Oud & Smoke",
+  "@descOud": {
+    "description": "Description for Oud category"
+  },
+  "btnEdit": "Edit",
+  "@btnEdit": {
+    "description": "Tooltip/label for edit action"
+  },
+  "msgDeliveryZoneUnavailable": "Sorry, we don't deliver to this address at the moment.",
+  "@msgDeliveryZoneUnavailable": {
+    "description": "Error shown when delivery zone is disabled"
+  },
+  "addressGovernorate": "Governorate",
+  "addressSelectGovernorate": "Select governorate",
+  "addressErrGovernorateRequired": "Governorate is required",
+  "btnRequestAccountDeletion": "Request Account Deletion",
+  "securityDeleteAccountSubtitle": "Submit a secure request for admin review",
+  "securityDeleteAccountDialogTitle": "Do you want to request account deletion?",
+  "securityDeleteAccountDialogBody": "Your request will be sent to the admin team for review.",
+  "btnSubmitRequest": "Submit request",
+  "msgAccountDeletionSubmitted": "Account deletion request submitted.",
+  "orderNumber": "Order number",
+  "btnCopyID": "Copy ID",
+  "msgOrderNumberCopied": "Order number copied",
+  "loginWelcomeBack": "Welcome back!",
+  "loginSubtitle": "Log in to your account",
+  "btnCreateAccount": "Create account",
+  "welcomeExploreProducts": "Explore Products",
+  "btnRemoveFromCart": "Remove from cart",
+  "btnReset": "Reset",
+  "filterMen": "Men",
+  "filterWomen": "Women",
+  "filterUnisex": "Unisex",
+  "seasonSummer": "Summer",
+  "seasonWinter": "Winter",
+  "seasonSpring": "Spring",
+  "seasonAutumn": "Autumn",
+  "seasonAllSeason": "All Season",
+  "scentFloral": "Floral",
+  "scentWoody": "Woody",
+  "scentOriental": "Oriental",
+  "scentFresh": "Fresh",
+  "scentCitrus": "Citrus",
+  "scentFruity": "Fruity",
+  "scentGourmand": "Gourmand",
+  "scentLeather": "Leather",
+  "msgDontHaveAccount": "Don't have an account? ",
+  "msgAlreadyHaveAccount": "Already have an account? "
+}

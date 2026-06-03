@@ -1,0 +1,31 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "perfume-orders-worker",
+	"main": "src/index.js",
+	"compatibility_date": "2025-12-01",
+	"workers_dev": true,
+	"triggers": {
+		"crons": [
+			"0 * * * *"
+		]
+	},
+	"vars": {
+		"RESTOCK_LOST_OPPORTUNITY_HOURS": "48",
+		"RESTOCK_LOST_OPPORTUNITY_LIMIT": "400",
+		"ALLOWED_ORIGIN": "http://localhost:8080,http://localhost:3000,https://qessa-suez.site,https://www.qessa-suez.site",
+		"MEDIA_PUBLIC_BASE_URL": "https://perfume-orders-worker.qessa-prefume.workers.dev/media/public",
+		"MEDIA_MAX_UPLOAD_BYTES": "5242880"
+	},
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "perfume-media"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "ORDERS_RATE_LIMIT_KV",
+			"id": "19caed8039a04b0d82318029ca5f12d3"
+		}
+	]
+}

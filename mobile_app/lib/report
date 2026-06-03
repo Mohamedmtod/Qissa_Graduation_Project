@@ -1,0 +1,215 @@
+
+# تقرير شامل - مشروع Perfume App
+# 📅 التاريخ: 2026-02-15 (الساعة 11:38 AM)
+
+====================================================================
+## 📂 ملخص المشروع الكامل (55+ ملف عبر 8 features)
+====================================================================
+
+## 🔐 Auth Feature: مكتمل 100% ✅
+  - auth/data/auth_repository.dart ✅
+  - auth/data/login_auth.dart ✅
+  - auth/data/registration_auth.dart ✅
+  - auth/presentation/bloc/auth_bloc.dart ✅
+  - auth/presentation/bloc/auth_event.dart ✅
+  - auth/presentation/bloc/auth_state.dart ✅
+  - auth/presentation/cubit/forgot_password_cubit.dart ✅
+  - auth/presentation/cubit/login_cubit.dart ✅
+  - auth/presentation/cubit/registration_cubit.dart ✅
+  - auth/presentation/pages/forgot_password_page.dart ✅
+  - auth/presentation/pages/login_page.dart ✅
+  - auth/presentation/pages/registration_page.dart ✅
+  - auth/presentation/pages/welcome_page.dart ✅
+  - auth/presentation/states/ (3 ملفات) ✅
+
+--------------------------------------------------------------------
+
+## 🏠 Home Feature: مكتمل 100% ✅
+  - home/data/models/banner_model.dart ✅
+  - home/data/repositories/banner_repository.dart ✅
+  - home/presentation/manager/home_cubit.dart ✅
+  - home/presentation/manager/home_state.dart ✅
+  - home/presentation/manager/layout_cubit.dart ✅
+  - home/presentation/pages/home_page.dart ✅
+  - home/presentation/pages/main_layout_page.dart ✅
+
+--------------------------------------------------------------------
+
+## ✅ الأسبوع 1 — Product Details: مكتمل 100%
+  - products/data/models/product_model.dart ✅
+  - products/data/repos/product_repo.dart ✅
+  - products/presentation/manager/product_details_cubit.dart ✅
+  - products/presentation/manager/product_details_state.dart ✅
+  - products/presentation/pages/product_details_page.dart ✅
+  - products/presentation/widgets/product_details_shimmer.dart ✅
+  - widgets/product_image_slider.dart ✅
+  - cart/presentation/manager/add_to_cart_cubit.dart ✅ (+ Stock Check)
+
+--------------------------------------------------------------------
+
+## ✅ الأسبوع 2 — Search + Filters + Categories: مكتمل 100%
+  - products/presentation/manager/search_cubit.dart ✅
+  - products/presentation/manager/search_state.dart ✅
+  - products/presentation/pages/search_page.dart ✅
+  - products/presentation/pages/search_results_page.dart ✅
+  - products/presentation/widgets/filter_section.dart ✅
+  - categories/data/models/category_model.dart ✅
+  - events/data/models/event_model.dart ✅
+  - events/data/repos/event_repo.dart ✅ (logSearch فقط)
+
+--------------------------------------------------------------------
+
+## ✅ الأسبوع 3 — Cart Feature: مكتمل 100% ✨
+  - cart/data/models/cart_item_model.dart ✅
+  - cart/data/repos/cart_repo.dart ✅
+  - cart/presentation/manager/cart_cubit.dart ✅ (+ Stock Validation ✅)
+  - cart/presentation/manager/cart_state.dart ✅ (+ CartStockError ✅)
+  - cart/presentation/pages/cart_page.dart ✅
+
+--------------------------------------------------------------------
+
+## 🔶 الأسبوع 4 — Checkout + Orders: مكتمل ~80%
+
+### ✅ اليوم 1: Checkout Page UI — تم 100%
+  - orders/presentation/pages/checkout_page.dart ✅
+  ⚠️ ملاحظة: الـ Form بتاع الاسم/موبايل/عنوان عنده Controllers
+     لكن مفيش TextFormField ظاهر في UI (الحقول مش مرسومة)
+     العنوان hardcoded: "Malha, Suez"
+
+### ✅ اليوم 2: Create Order Logic — تم 100%
+  - orders/data/models/order_model.dart ✅
+  - orders/data/models/order_item_model.dart ✅
+  - orders/data/repos/order_repo.dart ✅ (createOrder + streamMyOrders)
+  - orders/presentation/manager/order_cubit.dart ✅
+  - orders/presentation/manager/order_state.dart ✅
+  - OrderRepo مسجل في main.dart ✅
+  - زر "Place Order" مربوط بـ OrderCubit ✅
+  - clearCart() بعد نجاح الطلب ✅
+  - Navigation لصفحة الطلبات بعد النجاح ✅
+
+### ❌ اليوم 3: Update Stock عند الطلب — لم يتم (0%)
+  - ❌ خصم المخزون من المنتج وقت إنشاء الطلب (Firestore Transaction)
+  - الحل: تعديل OrderRepo.createOrder ليعمل Transaction:
+    → قراءة stock → تأكيد الكمية → update stock → create order
+
+### ✅ اليوم 4: My Orders Page — تم 100% 🆕
+  - orders/presentation/pages/my_orders_page.dart ✅
+  - orders/presentation/manager/orders_cubit.dart ✅
+  - orders/presentation/manager/orders_state.dart ✅
+  - يعرض الطلبات بـ ExpansionTile مع Status Chips ✅
+  - ⚠️ يحتاج Firestore Composite Index:
+    Collection: orders | Fields: userId (Asc) + createdAt (Desc)
+
+### 🔶 اليوم 5: Profile Page — مبدئي (20%)
+  - profile/data/models/user_model.dart ✅ (جاهز بالـ fields)
+  - profile/presentation/pages/profile_page.dart ⚠️ (زر Logout فقط!)
+  - ❌ لا يوجد عرض بيانات المستخدم (الاسم، الإيميل)
+  - ❌ لا يوجد رابط "طلباتي" (My Orders)
+  - ❌ لا يوجد UserModel fetch من Firestore
+
+### ❌ اليوم 6: Firestore Rules Review — لم يتم (0%)
+  - ❌ لا يوجد ملف firestore.rules في المشروع
+  - المطلوب:
+    → Users: يقرأ/يكتب لنفسه فقط
+    → Cart: لنفسه فقط
+    → Orders: user يشوف أوامره فقط
+    → Products/Banners: قراءة للكل، كتابة للأدمن
+
+--------------------------------------------------------------------
+
+## 🧭 Navigation & Routing: مكتمل 95% ✅
+  - core/router/app_router.dart ✅ (كل الـ Routes مسجلة)
+  - core/router/navigation_logic.dart ✅
+  - 🆕 Go class للتنقل بين tabs: Go.home / Go.cart / Go.profile
+  - navigateToMainLayout(context, Go.cart) ✅
+  - navigateToOrders(context)() ✅
+
+--------------------------------------------------------------------
+
+## 🎨 Widgets المشتركة: مكتمل ✅
+  - widgets/auto_banner.dart ✅
+  - widgets/cards.dart ✅
+  - widgets/custom_error_widget.dart ✅
+  - widgets/custom_icon.dart ✅
+  - widgets/custom_text_field.dart ✅
+  - widgets/custom_text_style.dart ✅
+  - widgets/home_header_bar.dart ✅
+  - widgets/product_image_slider.dart ✅
+  - widgets/search_field.dart ✅
+  - widgets/sign_out_in_button.dart ✅
+  - widgets/icons/go_back_icon.dart ✅
+
+--------------------------------------------------------------------
+
+## ❌ الأسبوع 5-8 — R2 + Admin Dashboard: لم يبدأ (0%)
+## ❌ الأسبوع 9-12 — AI Chatbot + Recommendations: لم يبدأ (0%)
+
+====================================================================
+## 📊 ملخص النسب
+====================================================================
+
+| المرحلة                    | النسبة  | الأيام المتبقية |
+|---------------------------|---------|----------------|
+| Auth Feature               | 100%    | 0              |
+| Home Feature               | 100%    | 0              |
+| أسبوع 1 (Product Details)  | 100%    | 0              |
+| أسبوع 2 (Search/Filters)   | 100%    | 0              |
+| أسبوع 3 (Cart + Stock)     | 100%    | 0              |
+| أسبوع 4 (Checkout/Orders)  | 80%     | ~2 يوم         |
+| أسبوع 5 (R2 Upload)        | 0%      | ~6 أيام        |
+| أسبوع 6-7 (Admin Dashboard)| 0%      | ~12 يوم        |
+| أسبوع 8 (Hardening)        | 0%      | ~6 أيام        |
+| أسبوع 9-12 (AI/Chatbot)    | 0%      | ~24 يوم        |
+
+📱 MVP (نسخة العميل - أسابيع 1-4): ~92%
+   الأيام المتبقية للـMVP: ~2 يوم عمل
+
+🌐 المشروع الكامل (أسابيع 1-12): ~35%
+   الأيام المتبقية للمشروع الكامل: ~50 يوم عمل
+
+====================================================================
+## 🆕 ما تم إنجازه اليوم (2026-02-15):
+====================================================================
+
+1. ✅ إصلاح Navigation من Checkout → My Orders
+   - navigateToOrders(context)() بقيت شغالة
+
+2. ✅ إضافة Go class للـ Tab Navigation
+   - navigateToMainLayout(context, Go.cart) شغالة
+
+3. ✅ إصلاح navigateToMainLayout في home_header_bar.dart
+
+4. ⚠️ Firestore Index مطلوب لصفحة الطلبات
+   - Collection: orders | userId (Asc) + createdAt (Desc)
+
+====================================================================
+## 🔜 الخطوات القادمة — ابدأ بالترتيب ده:
+====================================================================
+
+1️⃣ إكمال صفحة Profile (الأولوية العالية)
+   ← ملف: features/profile/presentation/pages/profile_page.dart
+   ← اجلب UserModel من Firestore (users/{uid})
+   ← اعرض: الاسم + الإيميل + الصورة (لو متاحة)
+   ← أضف: زر "طلباتي" → navigateToOrders(context)()
+   ← أضف: زر "Logout" (موجود أصلاً)
+
+2️⃣ إضافة حقول الإدخال في Checkout Page
+   ← الـ Controllers موجودين (_nameController, _phoneController, _addressController)
+   ← لكن مفيش TextFormField ظاهر في الـ UI
+   ← أضف 3 حقول: الاسم / الموبايل / العنوان
+   ← شيل العنوان الـ Hardcoded "Malha, Suez"
+
+3️⃣ خصم المخزون عند الطلب (Stock Reduction)
+   ← تعديل OrderRepo.createOrder → Firestore Transaction
+   ← الخطوات: قراءة stock → تأكيد → update stock → create order → clear cart
+   ← ده يخلي النظام Production-Ready
+
+4️⃣ Firestore Rules Review
+   ← إنشاء ملف firestore.rules
+   ← تأمين: users / cart / orders / products
+
+5️⃣ بعد كده → ابدأ الأسبوع 5 (R2 + Admin Dashboard) 🚀
+
+====================================================================
+شغل ممتاز! أنت قريب جداً من الـ MVP! 💪🔥
+يومين بس وتخلص! 🚀

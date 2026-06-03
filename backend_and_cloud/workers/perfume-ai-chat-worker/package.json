@@ -1,0 +1,19 @@
+{
+  "name": "perfume-ai-chat-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare worker for Perfume App AI Chat",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.37.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.95.0"
+  }
+}

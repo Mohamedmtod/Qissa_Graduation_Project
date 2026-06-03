@@ -1,0 +1,49 @@
+{
+  "mode": "write",
+  "collection": "products",
+  "taxonomyVersion": 1,
+  "selectedCount": 1,
+  "patchCount": 1,
+  "skippedCount": 0,
+  "skipped": [],
+  "patches": [
+    {
+      "id": "bleu_de_chanel",
+      "skipped": false,
+      "staffFields": {
+        "staffTagScores": {
+          "daily": 3,
+          "clean": 3,
+          "fresh": 3,
+          "masculine": 3,
+          "non_offensive": 2,
+          "not_cloying": 2,
+          "crowd_pleaser": 2,
+          "medium_risk": 2,
+          "safe_blind_buy": 2,
+          "long_lasting": 3,
+          "loud_projection": 3,
+          "sauvage_like": 3
+        },
+        "staffWarnings": [
+          "not_for_hot_weather",
+          "too_loud_for_sensitive_nose"
+        ],
+        "staffSalesNotes": {
+          "en": "Bleu de Chanel is a daily, clean, fresh, masculine pick based on staff taste tags. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose.",
+          "ar": "Bleu de Chanel اختيار مناسب حسب تاجات الموظفين: daily، clean، fresh، masculine. Watch out: not_for_hot_weather, too_loud_for_sensitive_nose."
+        },
+        "similarFamousDna": [
+          "sauvage_like"
+        ],
+        "staffIntelligenceStatus": "reviewed",
+        "reviewNeeded": false,
+        "staffConfidence": 2,
+        "staffDataCoverage": 1,
+        "staffTaxonomyVersion": 1,
+        "staffUpdatedBy": "staff_taste_patch_tool",
+        "staffReviewCount": 1
+      }
+    }
+  ]
+}

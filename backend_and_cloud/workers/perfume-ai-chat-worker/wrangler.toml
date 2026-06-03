@@ -1,0 +1,38 @@
+name = "perfume-ai-chat-worker"
+main = "src/index.js"
+compatibility_date = "2024-04-01"
+
+[vars]
+FIREBASE_PROJECT_ID = "perfume-app-9999"
+ENFORCE_AUTH = "false"
+ENFORCE_CATALOG_TRUTH = "true"
+AI_CHAT_STRUCTURED_COMMANDS_V2 = "true"
+AI_CHAT_TOOL_ROUTER_V1 = "true"
+AI_CHAT_TURN_DEBUG_STORE_ENABLED = "true"
+AI_CHAT_FEEDBACK_STORE_ENABLED = "true"
+ALLOW_DEV_ORIGINS = "false"
+ALLOWED_ORIGINS = "http://localhost:8080,http://localhost:3000,https://qessa-suez.site,https://www.qessa-suez.site"
+
+# We use .dev.vars for local secrets during wrangler dev.
+# For production deployment, you will run:
+# npx wrangler secret put OPENROUTER_API_KEY
+# npx wrangler secret put SERVICE_ACCOUNT_JSON
+#
+[[d1_databases]]
+binding = "AI_CHAT_DEBUG_DB"
+database_name = "qissa_ai_chat_debug"
+database_id = "bfc2abfe-0e1e-4362-bd4f-19e93325733b"
+
+[env.demo]
+name = "perfume-ai-chat-worker-demo"
+
+[env.demo.vars]
+FIREBASE_PROJECT_ID = "perfume-app-9999"
+ENFORCE_AUTH = "false"
+ENFORCE_CATALOG_TRUTH = "true"
+AI_CHAT_STRUCTURED_COMMANDS_V2 = "true"
+AI_CHAT_TOOL_ROUTER_V1 = "true"
+AI_CHAT_TURN_DEBUG_STORE_ENABLED = "false"
+AI_CHAT_FEEDBACK_STORE_ENABLED = "false"
+ALLOW_DEV_ORIGINS = "true"
+ALLOWED_ORIGINS = "http://localhost:8080,http://localhost:3000,https://qessa-suez.site,https://www.qessa-suez.site"

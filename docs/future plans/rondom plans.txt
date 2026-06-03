@@ -1,0 +1,1918 @@
+فاهمك جدًا. أنت دلوقتي مش بتسأل “أزود feature إيه؟”، أنت بتسأل سؤال أهم:
+
+```text
+إزاي أخلي النظام يعيش ويتراقب ويتصلح ويتطور من غير ما كل تعديل يبقى رعب؟
+```
+
+وده تفكير صح جدًا قبل production.
+
+رأيي: أنت محتاج خطة من 4 محاور:
+
+```text
+1. Observability: أعرف إيه اللي بيحصل.
+2. Analytics: أعرف الناس بتسأل عن إيه.
+3. Maintenance: أعرف أعدل بسرعة من غير ما أكسر.
+4. Cost Optimization: أعرف أحوّل المتكرر إلى local/FAQ/tools.
+```
+
+---
+
+# الهدف النهائي
+
+عايز توصل لنظام كده:
+
+```text
+كل رسالة تدخل AI Chat
+↓
+تتسجل كـ metadata آمن
+↓
+نعرف نوعها: recommendation / availability / cheaper / rejection / business / external perfume / social...
+↓
+نعرف هل اتحلت local ولا worker ولا tool
+↓
+نعرف هل نجحت ولا فشلت ولا سألت clarification
+↓
+نعرف هل العميل كمل ولا رفض ولا اشترى
+↓
+نطلع patterns متكررة
+↓
+نحوّل المتكرر إلى local shortcut أو FAQ أو tool
+```
+
+ده اللي هيخليك توفر تكلفة وتصلّح بسرعة وتفهم السوق.
+
+---
+
+# PR13: AI Chat Maintenance + Observability + Analytics Plan
+
+## Phase 1 — Structured Event Logging
+
+أول حاجة تعملها: كل turn يطلع event منظم.
+
+مش log نصي عشوائي. Event structured.
+
+مثال:
+
+```json
+{
+  "eventType": "ai_chat_turn_completed",
+  "sessionId": "hashed/session-safe",
+  "requestId": "uuid",
+  "timestamp": "...",
+  "language": "ar",
+  "route": "recommendation",
+  "action": "recommend",
+  "source": "tool_executor",
+  "toolName": "similar_cheaper",
+  "renderIntent": "similar_cheaper_results",
+  "workerUsed": true,
+  "workerStatus": "success",
+  "workerLatencyMs": 1850,
+  "fallbackUsed": false,
+  "finalProductIds": ["aqua_breeze", "light_blue"],
+  "clarificationType": null,
+  "noMatchReason": null,
+  "guardBlockedCount": 2,
+  "resultType": "recommendation",
+  "cardsRendered": 2
+}
+```
+
+## مهم جدًا
+
+في production:
+
+```text
+لا تخزن raw user message بشكل افتراضي.
+```
+
+خزن:
+
+```text
+messageLength
+language
+normalizedIntent
+route
+tool
+entities extracted
+```
+
+لو عايز تحتفظ بالنصوص لتحليل patterns، اعملها واحدة من دول:
+
+### خيار آمن
+
+تخزن message بعد redaction:
+
+```text
+"عايز عطر [PRICE] ومش بحب [NOTE]"
+```
+
+### خيار أفضل
+
+تخزن فقط normalized semantic labels:
+
+```json
+{
+  "detectedSignals": ["budget", "fresh", "office", "cheaper_followup"],
+  "mentionedPerfumeType": "external_profile",
+  "mentionedProductResolved": true
+}
+```
+
+---
+
+# Phase 2 — Conversation Outcome Metrics
+
+مش كفاية تعرف الرد طلع. لازم تعرف النتيجة.
+
+## Metrics مهمة جدًا
+
+```text
+turn_success_rate
+worker_timeout_rate
+fallback_rate
+tool_success_rate
+tool_validation_fail_rate
+clarification_rate
+no_match_rate
+cards_rendered_rate
+rejection_rate
+same_products_after_rejection_rate
+budget_floor_acceptance_rate
+external_lookup_success_rate
+availability_question_rate
+business_question_rate
+```
+
+## Metrics تجارية
+
+لو عندك add to cart / product view:
+
+```text
+ai_recommendation_product_click_rate
+ai_recommendation_add_to_cart_rate
+ai_recommendation_purchase_rate
+top_products_recommended
+top_products_clicked
+top_products_rejected
+top_no_match_queries
+```
+
+دي أهم من أي accuracy وهمية.
+
+---
+
+# Phase 3 — Question Type Analytics
+
+دي اللي أنت سألت عنها تحديدًا: “أعرف أكتر نوع أسئلة بتتسأل”.
+
+اعمل taxonomy للرسائل:
+
+```text
+recommendation_request
+recommendation_refinement
+availability_question
+product_context_question
+visible_product_question
+cheaper_followup
+similar_followup
+rejection
+budget_floor_acceptance
+business_info
+external_perfume_reference
+social
+complaint
+unknown
+```
+
+كل turn يتسجل له:
+
+```json
+{
+  "questionType": "availability_question",
+  "subType": "exact_catalog_product",
+  "resolvedEntity": "Light Blue",
+  "handledBy": "local",
+  "confidence": 0.96
+}
+```
+
+بعد أسبوع هتعرف مثلًا:
+
+```text
+35% recommendations
+20% availability
+12% cheaper
+8% business info
+7% external perfume references
+5% rejection
+3% social
+10% unknown
+```
+
+ساعتها تعرف تشتغل فين.
+
+---
+
+# Phase 4 — Pattern Mining
+
+هنا التوفير الحقيقي.
+
+اعمل job أسبوعي أو script يطلع:
+
+```text
+Top repeated normalized user intents
+Top unknown messages
+Top worker-routed messages that could be local
+Top failed tool calls
+Top clarification loops
+Top no-match reasons
+Top external perfumes requested
+Top business questions
+```
+
+مثال output:
+
+```text
+Pattern: "طرق الدفع"
+Count: 154
+Current route: worker 40%, local 60%
+Recommendation: add local business shortcut
+```
+
+مثال:
+
+```text
+Pattern: "ينفع للجيوب الأنفية؟"
+Count: 87
+Current route: worker
+Recommendation: map to soft_on_nose / not_headachey staff tags
+```
+
+مثال:
+
+```text
+Pattern: "عايز حاجة شبه سوفاج بس أهدى"
+Count: 61
+Current route: external_similar
+Recommendation: add local shortcut to sauvage_like + soft_projection
+```
+
+---
+
+# Phase 5 — Local Shortcut Candidate System
+
+مش تضيف rule مباشرة. اعمل pipeline:
+
+```text
+repeated pattern detected
+↓
+suggest shortcut
+↓
+review manually
+↓
+add to local dictionary/router
+↓
+test
+↓
+enable
+```
+
+يعني النظام يطلعلك recommendations:
+
+```json
+{
+  "suggestedShortcut": {
+    "pattern": "payment_methods",
+    "examples": ["طرق الدفع", "بدفع ازاي", "في فودافون كاش؟"],
+    "suggestedRoute": "business_info",
+    "expectedHandler": "AIChatBusinessInfoResponder",
+    "estimatedSavings": "120 worker calls/week"
+  }
+}
+```
+
+ده يمنع إنك تضيف shortcuts عشوائي.
+
+---
+
+# Phase 6 — AI Chat Health Dashboard
+
+اعمل dashboard بسيط جدًا، حتى لو في Admin أو صفحة داخلية.
+
+## Sections
+
+### 1. Overview
+
+```text
+Total AI chat sessions
+Total messages
+Worker usage %
+Local usage %
+Tool usage %
+Fallback %
+Timeout %
+No-match %
+```
+
+### 2. Top Intents
+
+```text
+recommendation
+availability
+cheaper
+similar
+business info
+external perfume
+```
+
+### 3. Tool Health
+
+```text
+tool name
+calls
+success %
+validation fail %
+avg latency
+cards rendered
+```
+
+### 4. Product Analytics
+
+```text
+most recommended
+most clicked
+most rejected
+most purchased after AI
+most no-match substitutes
+```
+
+### 5. Unknown / Failed
+
+```text
+unknown messages
+failed routes
+worker timeout samples
+guard blocked candidates
+```
+
+### 6. Cost
+
+```text
+worker calls
+estimated tokens
+estimated cost
+local shortcut savings
+```
+
+---
+
+# Phase 7 — Feedback Loop
+
+بعد كل recommendations أو بعد product click:
+
+```text
+هل الترشيحات قريبة من ذوقك؟
+👍 آه
+👎 لا
+```
+
+لو لا:
+
+```text
+إيه السبب؟
+- تقيل
+- حلو زيادة
+- مش فواح
+- غالي
+- مش مناسب
+- مش نفس الطابع
+- عايز أهدى
+- عايز أفخم
+```
+
+خزنها structured:
+
+```json
+{
+  "eventType": "ai_chat_feedback",
+  "sessionId": "...",
+  "turnRequestId": "...",
+  "productIds": ["..."],
+  "rating": "negative",
+  "reason": "too_sweet",
+  "source": "recommendation_cards"
+}
+```
+
+دي هتخليك تعرف هل الترشيحات فعلاً بتعجب.
+
+---
+
+# Phase 8 — Code Cleanliness Plan
+
+هنا أهم جزء للصيانة.
+
+## 1. وثيقة Ownership لكل ملف
+
+اعمل doc:
+
+```text
+docs/ai_chat/ownership.md
+```
+
+فيه:
+
+```text
+AIChatCubit = orchestration only
+AIChatToolExecutor = execute validated tools
+FinalRecommendationGuard = final card safety
+PerfumeReferenceResolver = product/external reference resolution
+StaffTasteScorer = staff shadow/ranking signals
+AIChatReplyHandler = state rendering
+AIChatCopyResolver = user-facing copy
+```
+
+كل ملف: مسؤوليته، ممنوع يعمل إيه، tests بتاعته.
+
+---
+
+## 2. منع تضخم Cubit
+
+أي feature جديدة تسأل:
+
+```text
+هل دي orchestration ولا domain logic؟
+```
+
+لو domain logic، تطلع service.
+
+قاعدة:
+
+```text
+AIChatCubit لا يقرر تفاصيل smell/ranking/reference/copy.
+AIChatCubit ينسق فقط.
+```
+
+---
+
+## 3. Tool Registry واحد
+
+بدل ما tool names تتكرر في:
+
+```text
+Dart enum
+compact context
+worker prompt
+worker allowed tools
+tests
+```
+
+اعمل registry واضح.
+
+حتى لو مش shared بين JS/Dart، اعمل test يقارن القوائم.
+
+---
+
+## 4. Decision Trace موحد
+
+أي route decision لازم يطلع:
+
+```text
+route
+action
+confidence
+decisionOwner
+ambiguityReasons
+llmEscalationReason
+toolName
+shouldRenderCards
+```
+
+ده هيسهل debugging جدًا.
+
+---
+
+## 5. ADR Documents
+
+كل قرار معماري مهم اكتبه في ADR.
+
+مثال:
+
+```text
+docs/adr/0001-ai-chat-tool-router.md
+docs/adr/0002-catalog-only-rendering.md
+docs/adr/0003-external-profile-anchor-only.md
+docs/adr/0004-staff-taste-shadow-first.md
+docs/adr/0005-release-logging-redaction.md
+```
+
+كل ADR فيه:
+
+```text
+Context
+Decision
+Consequences
+Alternatives considered
+```
+
+ده يخلي الشغل professional جدًا.
+
+---
+
+# Phase 9 — Testing Strategy Maintenance
+
+اعمل test matrix واضح:
+
+## Unit
+
+```text
+parsers
+resolvers
+tool executor
+scorers
+guards
+copy resolver
+```
+
+## Flow
+
+```text
+Cubit recommendation
+worker tool_call
+fallback
+budget
+rejection
+external profile
+```
+
+## E2E
+
+```text
+main AI chat smoke
+external knowledge smoke
+Arabic UX smoke
+```
+
+## Regression
+
+```text
+capability audit
+tool contract audit
+staff generated data guard
+release logging redaction
+```
+
+كل bug جديد لازم يضاف له test.
+
+---
+
+# Phase 10 — Release Checklist
+
+قبل أي deploy:
+
+```text
+flutter analyze
+flutter test
+E2E smoke
+worker npm test
+worker npm audit
+rules tests
+no raw logs in release
+staff scoring off unless approved
+worker flags correct
+allowed origins correct
+backup before Firestore patch
+```
+
+اعمل ملف:
+
+```text
+docs/release/ai_chat_release_checklist.md
+```
+
+---
+
+# Phase 11 — Incident Playbook
+
+لازم تبقى عارف تعمل إيه لو حاجة حصلت.
+
+## مثال
+
+### Worker timeout عالي
+
+```text
+1. Check worker_timeout_rate
+2. Lower timeout? 
+3. Enable local fallback
+4. Check provider latency
+5. Review recent deploy
+```
+
+### AI يرندر كروت غلط
+
+```text
+1. Disable tool router flag
+2. Check FinalRecommendationGuard logs
+3. Verify product IDs grounded
+4. Rollback worker if needed
+```
+
+### External lookup بيهبد
+
+```text
+1. Disable live external lookup
+2. Use cached profiles only
+3. Review lookup logs
+```
+
+### Staff ranking بوظ النتائج
+
+```text
+1. Disable staffTasteScoringEnabled
+2. Revert to shadow
+3. Review recent staff tag changes
+```
+
+---
+
+# Phase 12 — Cost Control
+
+بما إن LLM رخيص معاك، مش لازم تبالغ في optimization الآن.
+لكن اعمل visibility.
+
+## Cost metrics
+
+```text
+worker_calls_per_day
+avg_tokens_per_call
+tool_router_calls
+local_handled_rate
+cost_per_1000_sessions
+top_worker_intents
+```
+
+## Savings plan
+
+بعد شهر:
+
+```text
+لو intent متكرر + ثابت + آمن
+=> local shortcut
+```
+
+لكن لا تحول كل حاجة local.
+خلي local للحاجات deterministic فقط.
+
+---
+
+# PR Breakdown
+
+## PR13A — Observability Events
+
+```text
+AIChatAnalyticsEvent
+turn_completed
+tool_executed
+fallback_used
+clarification_asked
+no_match
+```
+
+## PR13B — Safe Analytics Logging
+
+```text
+redacted/metadata-only logging
+no raw message
+event sink interface
+debug console sink
+production remote sink later
+```
+
+## PR13C — Intent Analytics
+
+```text
+questionType taxonomy
+normalized intent labels
+top intent aggregation script
+```
+
+## PR13D — Maintenance Docs
+
+```text
+ownership.md
+ADRs
+release checklist
+incident playbook
+tool contract doc
+```
+
+## PR13E — Admin Dashboard MVP
+
+```text
+AI Chat health overview
+top intents
+tool health
+fallback/no-match
+top products
+```
+
+## PR13F — Feedback Loop
+
+```text
+thumbs up/down
+reason chips
+feedback event storage
+```
+
+## PR13G — Pattern Mining
+
+```text
+weekly script
+suggested shortcuts
+unknown messages
+worker-saving candidates
+```
+
+---
+
+# أول حاجة أنصحك تعملها
+
+ابدأ بـ PR13A + PR13B فقط.
+
+يعني:
+
+```text
+event model
+event sink
+safe metadata
+console/debug sink
+no raw user message
+turn_completed
+tool_executed
+fallback_used
+```
+
+ولا تعمل dashboard الآن.
+
+ليه؟
+
+لأن أول خطوة هي “نجمع بيانات صح”.
+الداشبورد ييجي بعد ما الداتا تتجمع.
+
+---
+
+# شكل Event Model المقترح
+
+```dart
+class AIChatAnalyticsEvent {
+  final String eventType;
+  final String requestId;
+  final String sessionIdHash;
+  final DateTime timestamp;
+  final String language;
+  final String route;
+  final String action;
+  final String source;
+  final String? toolName;
+  final String? renderIntent;
+  final bool workerUsed;
+  final bool fallbackUsed;
+  final int? workerLatencyMs;
+  final int productCount;
+  final List<String> finalProductIds;
+  final String? clarificationType;
+  final String? noMatchReason;
+  final String? failureReason;
+  final Map<String, Object?> extra;
+}
+```
+
+مهم:
+
+```text
+لا raw userMessage
+لا full prompt
+لا secrets
+لا PII
+```
+
+---
+
+# الخلاصة
+
+أنت محتاج نظام صيانة، مش بس كود.
+
+أولوياتك الآن:
+
+```text
+1. Structured analytics events
+2. Safe logging
+3. Intent taxonomy
+4. Ownership docs
+5. Release checklist
+6. Incident playbook
+7. Feedback loop
+8. Dashboard لاحقًا
+9. Pattern mining لتوفير worker calls بعد ما تجمع data
+```
+
+أقوى بداية:
+
+```text
+PR13A/B: AI Chat Observability Foundation
+```
+
+دي هتخليك تعرف:
+
+```text
+الناس بتسأل عن إيه؟
+إيه اللي بيروح worker؟
+إيه اللي بيتكرر؟
+إيه اللي بيعمل timeout؟
+إيه اللي محتاج shortcut؟
+إيه اللي بيبوظ تجربة المستخدم؟
+```
+
+وده اللي هيخلي المشروع يعيش ويتطور بذكاء.
+
+
+سؤال مهم جدًا، وده بالضبط سبب إنك **ماينفعش تعتمد على local rules فقط**.
+
+الإجابة المختصرة:
+**السؤال الجديد مش لازم تعرف نوعه مسبقًا.**
+لازم يبقى عندك نظام تصنيف على مستويين:
+
+```text
+1. Local classifier للحالات الواضحة جدًا
+2. LLM semantic classifier/router لأي حاجة جديدة أو غامضة
+```
+
+يعني لو السؤال معروف وواضح:
+
+```text
+Do you have Light Blue?
+أغلى عطر عندك
+I don't like these
+```
+
+يمسكه local.
+
+لكن لو سؤال جديد مش معروف:
+
+```text
+عايز ريحة تحسسني إني داخل اجتماع مهم
+عايز حاجة شبه ريحة الفنادق الفخمة
+عايز عطر يبان غالي بس مش خانق
+عايز حاجة مناسبة لواحد شخصيته هادية
+```
+
+ده يروح LLM semantic router، وهو يطلع له type عام أو tool مناسب.
+
+---
+
+# الفكرة الصح: ما تصنفش كل جملة، صنّف النية العامة
+
+ما تعملش types كثيرة جدًا لكل سؤال.
+اعمل taxonomy عامة تستوعب الجديد.
+
+مثلاً بدل ما تعمل type خاص لـ:
+
+```text
+ريحة فنادق
+ريحة عريس
+ريحة اجتماع مهم
+ريحة ناس كبيرة
+ريحة فخمة مش خانقة
+```
+
+خليهم كلهم يندرجوا تحت:
+
+```text
+recommendation_request
+```
+
+ومعاه semantic labels:
+
+```text
+vibe=luxury/elegant/clean/non_offensive
+occasion=formal_event
+risk=safe
+```
+
+يعني الـ type مش لازم يكون دقيق جدًا.
+الدقة تكون في الـ extracted signals.
+
+---
+
+# الشكل المقترح للـ classification
+
+كل رسالة تطلع منها:
+
+```json
+{
+  "questionType": "recommendation_request",
+  "confidence": 0.82,
+  "signals": ["luxury", "clean", "formal_event", "non_offensive"],
+  "entities": {
+    "occasion": "formal_event",
+    "vibe": ["luxury", "elegant"],
+    "comfort": ["non_offensive"]
+  },
+  "requiresTool": "update_preferences_and_recommend",
+  "isNewPattern": true
+}
+```
+
+لو مش متأكد:
+
+```json
+{
+  "questionType": "unknown_or_ambiguous",
+  "confidence": 0.48,
+  "ambiguityReasons": ["new_phrase", "unclear_target"],
+  "action": "ask_clarification"
+}
+```
+
+---
+
+# طب يعرف منين type السؤال الجديد؟
+
+## 1. Local يعطي type لو confidence عالي
+
+أمثلة:
+
+```text
+أغلى عطر عندك => direct_catalog_query
+Do you have X? => availability_question
+I don't like these => rejection
+cheaper => cheaper_followup
+```
+
+دي سهلة.
+
+## 2. LLM يعطي type لو الكلام جديد
+
+تبعتله compact context + allowed types:
+
+```text
+Classify the user message into one of these types:
+- recommendation_request
+- recommendation_refinement
+- availability_question
+- product_context_question
+- visible_product_question
+- cheaper_followup
+- similar_followup
+- rejection
+- budget_floor_acceptance
+- business_info
+- external_perfume_reference
+- social
+- complaint
+- unknown_or_ambiguous
+```
+
+والـ LLM يرجع structured output:
+
+```json
+{
+  "questionType": "recommendation_request",
+  "confidence": 0.78,
+  "tool": "update_preferences_and_recommend",
+  "preferencePatch": {
+    "tags": ["luxury", "elegant", "non_offensive"],
+    "occasion": "formal_event"
+  }
+}
+```
+
+## 3. لو LLM confidence قليل، ما تنفذش
+
+لو:
+
+```text
+confidence < 0.70
+```
+
+اعمل:
+
+```text
+ask_clarification
+```
+
+مش ترشيح عشوائي.
+
+---
+
+# مهم: خلي عندك type اسمه `unknown_or_ambiguous`
+
+ده مهم جدًا.
+
+مش كل حاجة لازم تتحشر في type موجود.
+
+لو السؤال جديد وغريب:
+
+```text
+عايز ريحة شبه إحساس المطر على الأسفلت
+```
+
+ممكن الـ LLM يفهمها:
+
+```text
+fresh / earthy / rainy / unique
+```
+
+أو لو مش واثق:
+
+```text
+unknown_or_ambiguous
+```
+
+والرد:
+
+```text
+تقصد حاجة فريش وممطرة/ترابية شوية، ولا تقصد ريحة نضيفة وهادية عمومًا؟
+```
+
+ده أحسن من تصنيف غلط.
+
+---
+
+# الفرق بين questionType و pattern
+
+دي نقطة مهمة.
+
+## questionType
+
+ده التصنيف العام:
+
+```text
+recommendation_request
+availability_question
+cheaper_followup
+```
+
+## pattern
+
+ده الصياغة المتكررة:
+
+```text
+"ريحة فنادق"
+"مش خانق"
+"ينفع للجيوب الأنفية"
+"ريحة عريس"
+"شبه سوفاج بس أهدى"
+```
+
+السؤال الجديد ممكن يكون questionType معروف، لكن pattern جديد.
+
+مثال:
+
+```text
+عايز ريحة كأنها أوضة فندق نضيفة
+```
+
+type:
+
+```text
+recommendation_request
+```
+
+pattern:
+
+```text
+hotel_clean_scent
+```
+
+signals:
+
+```text
+clean, fresh, luxury, soft_on_nose
+```
+
+---
+
+# ازاي أكتشف patterns جديدة؟
+
+كل رسالة تسجل:
+
+```json
+{
+  "questionType": "recommendation_request",
+  "confidence": 0.76,
+  "handledBy": "llm",
+  "normalizedSignals": ["clean", "luxury", "soft_on_nose"],
+  "rawStored": false,
+  "redactedText": "عايز ريحة كأنها [PLACE] نضيفة",
+  "isKnownPattern": false
+}
+```
+
+بعد أسبوع تعمل aggregation:
+
+```text
+Top unknown/new semantic clusters:
+1. hotel clean scent - 42 messages
+2. sinus-friendly / not headachey - 31 messages
+3. groom scent / wedding male - 26 messages
+4. quiet luxury - 19 messages
+```
+
+وساعتها تقرر:
+
+```text
+hotel clean scent => add alias to clean + luxury + soft_on_nose
+sinus-friendly => soft_on_nose + not_headachey
+groom scent => wedding + masculine + elegant
+```
+
+---
+
+# هل لازم أخزن raw messages؟
+
+مش لازم دائمًا.
+
+عندك 3 مستويات:
+
+## مستوى آمن جدًا
+
+لا تخزن نص الرسالة، فقط:
+
+```text
+questionType
+signals
+tool
+success/fail
+```
+
+ممتاز للخصوصية، لكنه أضعف في pattern discovery.
+
+## مستوى متوسط
+
+خزن redacted normalized text:
+
+```text
+"عايز عطر [BUDGET] [OCCASION]"
+```
+
+أو:
+
+```text
+"عايز ريحة فنادق"
+```
+
+مع إزالة أرقام، أسماء، عناوين، تليفونات.
+
+## مستوى داخلي opt-in
+
+تخزن raw message لفترة قصيرة جدًا، مثل 7 أيام، للـ debugging فقط، مع admin access محدود.
+
+لمشروعك، أنصح بالمستوى الثاني:
+
+```text
+redacted normalized text + semantic labels
+```
+
+---
+
+# إيه يحصل لما يظهر type جديد فعلًا؟
+
+لو بعد مدة اكتشفت إن فيه نوع أسئلة غير موجود، مثل:
+
+```text
+"compare these perfumes"
+```
+
+وقتها تضيف type جديد:
+
+```text
+comparison_request
+```
+
+لكن ما تضيفش type لكل صياغة.
+
+أمثلة types ممكن تضيفها مستقبلًا:
+
+```text
+comparison_request
+gift_advice
+sample_pack_request
+complaint_or_return
+skin_sensitivity_question
+longevity_projection_question
+```
+
+لكن في البداية خليك بالـ 14 type اللي عندك + unknown.
+
+---
+
+# الـ LLM هيعرف يصنف الجديد؟
+
+أيوه غالبًا، بشرط تعطيه:
+
+```text
+1. compact context
+2. allowed question types
+3. examples قليلة
+4. confidence
+5. fallback rule
+```
+
+مش لازم يكون مدرب على كل سيناريو.
+
+لكن لا تثق فيه 100%.
+خليه يقترح، وDart يتحقق.
+
+---
+
+# الشكل العملي المقترح
+
+## Step 1
+
+local classifier يحاول.
+
+لو:
+
+```text
+confidence >= 0.85
+```
+
+ينفذ local.
+
+## Step 2
+
+لو أقل:
+
+يروح LLM classifier/router.
+
+## Step 3
+
+LLM يرجع:
+
+```json
+{
+  "questionType": "...",
+  "confidence": 0.0-1.0,
+  "tool": "...",
+  "signals": [],
+  "preferencePatch": {},
+  "needsClarification": false
+}
+```
+
+## Step 4
+
+Dart يقرر:
+
+```text
+confidence عالي + tool valid => execute
+confidence متوسط + safe tool => execute cautiously
+confidence منخفض => ask clarification
+unknown => ask clarification
+```
+
+---
+
+# مثال كامل
+
+المستخدم:
+
+```text
+عايز ريحة فنادق فخمة ومش خانقة
+```
+
+Local:
+
+```text
+مش exact
+confidence=0.45
+send_to_llm
+```
+
+LLM:
+
+```json
+{
+  "questionType": "recommendation_request",
+  "confidence": 0.84,
+  "tool": "update_preferences_and_recommend",
+  "preferencePatch": {
+    "tags": ["clean", "luxury", "elegant", "soft_on_nose", "non_offensive"]
+  },
+  "signals": ["hotel_clean_scent", "luxury", "not_cloying"]
+}
+```
+
+Dart:
+
+```text
+tool valid
+search catalog
+guard
+cards
+```
+
+Analytics:
+
+```text
+pattern=hotel_clean_scent
+knownPattern=false
+handledBy=llm
+success=true
+```
+
+بعد ما يتكرر 50 مرة:
+
+```text
+add local alias:
+"ريحة فنادق" => clean + luxury + soft_on_nose
+```
+
+---
+
+# الخلاصة
+
+السؤال الجديد يعرف type بتاعه من:
+
+```text
+local لو واضح
+LLM semantic classifier لو جديد/غامض
+unknown_or_ambiguous لو الثقة قليلة
+```
+
+وأنت لا تحتاج تكتب rule لكل سؤال جديد.
+أنت تحتاج:
+
+```text
+1. Types عامة قليلة
+2. LLM يصنف الجديد
+3. Confidence threshold
+4. Analytics تسجل patterns
+5. Manual review يحول المتكرر إلى shortcut
+```
+
+دي الطريقة الصح عشان النظام يكبر من غير ما تغرق في سيناريوهات.
+
+
+
+فاهمك جدًا، وده اعتراض صحيح.
+لو الـ local classifier “بيتجرأ” ويمسك أسئلة مش متأكد منها، يبقى هو مصدر التعب كله. ساعتها الحل مش إننا نحسن local rules أكتر؛ الحل إننا **نقلل صلاحيات الـ local جدًا**.
+
+يعني بدل النظام ده:
+
+```text
+local يحاول يفهم أغلب الكلام
+ولو فشل يروح LLM
+```
+
+خليه كده:
+
+```text
+local لا يفهم لغة طبيعية تقريبًا
+local ينفذ فقط أوامر deterministic شبه مؤكدة
+كل natural language يروح LLM semantic router
+```
+
+وده أريح لك فعلًا.
+
+## القاعدة الجديدة المقترحة
+
+```text
+Local is not a semantic classifier.
+Local is a deterministic gate only.
+```
+
+يعني local يمسك فقط الحاجات اللي عليها دليل صريح جدًا، مش “حاسس إنها كذا”.
+
+---
+
+# إيه اللي يفضل local؟
+
+خلي local يمسك الحاجات دي فقط:
+
+## 1. Pending clarification reply
+
+لو البوت لسه سائل:
+
+```text
+Which product do you mean?
+1. Light Blue
+2. Acqua
+3. Si
+```
+
+والمستخدم قال:
+
+```text
+1
+التاني
+si
+acqua
+```
+
+ده local.
+لأنه مش فهم لغة، ده اختيار من قائمة.
+
+---
+
+## 2. Exact catalog availability
+
+لو الرسالة شكلها واضح جدًا:
+
+```text
+Do you have Light Blue?
+عندك لايت بلو؟
+```
+
+ومنتج exact أو near-exact من الكتالوج.
+
+ده local.
+
+لكن لو:
+
+```text
+عندك حاجة لايت؟
+blue
+dior
+```
+
+غموض → LLM أو clarification، مش local يخمن.
+
+---
+
+## 3. Direct catalog command
+
+أوامر deterministic:
+
+```text
+أغلى عطر عندك
+أرخص عطر عندك
+cheapest perfume
+most expensive perfume
+```
+
+دي local.
+
+---
+
+## 4. Business info واضح
+
+```text
+طرق الدفع
+مواعيد العمل
+التوصيل
+رقم التواصل
+```
+
+دي local من config.
+
+---
+
+## 5. Safety/hard guard
+
+الحاجات اللي لازم local يحميها:
+
+```text
+allergy
+excluded notes
+out of stock
+inactive
+budget strict
+non-catalog card
+prompt injection
+```
+
+لكن دي guard بعد الفهم، مش classifier لغوي واسع.
+
+---
+
+# إيه اللي مايمسكوش local؟
+
+أي حاجة فيها لغة طبيعية أو نية محتملة:
+
+```text
+ينفع لموعد مع خطيبتي؟
+عايز حاجة تشبه ريحة الفنادق
+عايز حاجة هادية بس شيك
+مش عايز حاجة تبان شعبية
+عايز ريحة حلوة
+خليه مناسب للجامعة
+مش عاجبني دول بس عايز نفس الفكرة
+```
+
+كل ده يروح LLM semantic router.
+
+حتى لو local يقدر يلقط كلمات زي:
+
+```text
+university
+work
+suitable
+it
+```
+
+مايمسكش إلا لو الشكل deterministic 100%.
+
+---
+
+# الحل المعماري: Local Allowlist مش Local Classifier
+
+بدل ما تعمل local classifier يحاول يقرر من كل الرسائل، اعمل:
+
+```text
+Local Deterministic Allowlist
+```
+
+يعني local لازم يثبت إن الرسالة واحدة من الحالات المسموحة بدليل قوي.
+
+لو مش متأكد:
+
+```text
+send_to_llm
+```
+
+مش:
+
+```text
+try local route
+```
+
+## القرار يبقى كده
+
+```dart
+if (isPendingClarificationReply(message)) {
+  return localClarificationSelection;
+}
+
+if (isExactCatalogAvailability(message) && hasSingleExactCatalogMatch) {
+  return localAvailability;
+}
+
+if (isDirectCatalogCommand(message)) {
+  return localCatalogCommand;
+}
+
+if (isBusinessInfoExact(message)) {
+  return localBusinessInfo;
+}
+
+return sendToSemanticRouter;
+```
+
+ده هيقلل جدًا misrouting.
+
+---
+
+# مهم: ممنوع local يمسك بالـ pronouns وحدها
+
+أكبر مصدر مشاكل عندك كان:
+
+```text
+it
+these
+suitable
+work
+university
+```
+
+القاعدة:
+
+```text
+pronoun alone is not enough for local route
+```
+
+يعني:
+
+```text
+is it suitable for work?
+```
+
+حتى دي ممكن تعملها local فقط لو:
+
+```text
+visibleProducts.count > 1
+message is exact question shape
+```
+
+لكن لو:
+
+```text
+i want it suitable for university
+```
+
+يبقى LLM.
+
+ولو local مش 100% متأكد من question shape:
+
+```text
+send_to_llm
+```
+
+---
+
+# بدل confidence، استخدم proof requirements
+
+أنا فاهم إن كلمة confidence ممكن تكون مطاطة.
+اعمل requirements محددة.
+
+مثال:
+
+## Local availability لازم:
+
+```text
+message has availability verb
+AND product match is exact/single
+AND no recommendation/refinement language
+```
+
+لو أي شرط ناقص:
+
+```text
+LLM
+```
+
+## Product context local لازم:
+
+```text
+message is explicit question
+AND product reference is resolved uniquely
+AND asks about product property/suitability
+```
+
+لو فيه `want/make/change/need`:
+
+```text
+LLM
+```
+
+## Direct catalog query لازم:
+
+```text
+message contains cheapest/most expensive intent
+AND asks catalog-wide query
+```
+
+---
+
+# خلي LLM هو default
+
+الـ default route لازم يبقى:
+
+```text
+semantic_router
+```
+
+مش local.
+
+يعني بدل:
+
+```text
+detectedIntent = newRecommendation
+```
+
+من local بشكل تلقائي، خليه:
+
+```text
+detectedIntent = unknown_natural_language
+action = send_to_llm
+```
+
+إلا لو local allowlist أثبت العكس.
+
+---
+
+# طيب التكلفة؟
+
+أنت بنفسك قلت التكلفة عندك قليلة جدًا.
+فمافيش داعي تعذب نفسك عشان توفر calls بدري.
+
+التوفير ييجي بعدين من analytics:
+
+```text
+patterns متكررة
+مضمونة
+اتراجعت
+تتحول local
+```
+
+لكن البداية الإنتاجية الأفضل:
+
+```text
+LLM-first for natural language
+local-only for deterministic operations
+```
+
+---
+
+# شكل النظام اللي أنصحك به
+
+## Routing priority الجديد
+
+```text
+1. Hard safety/blocked input checks
+2. Pending clarification reply local
+3. Exact deterministic local commands
+   - business info
+   - direct catalog query
+   - exact availability
+4. Everything else -> LLM semantic router
+5. Dart validates tool
+6. Guard/render
+```
+
+ده أبسط وأقل تعب.
+
+---
+
+# أمثلة
+
+## `is Light Blue suitable for work?`
+
+ده ممكن local لأنه:
+
+```text
+explicit product name
+explicit question
+single catalog match
+answer-only
+```
+
+أو ممكن LLM عادي. الاتنين مقبولين.
+
+لو عايز تقلل local، خليه LLM.
+
+## `is it suitable for work?`
+
+لو فيه 3 visible cards:
+
+```text
+local ask product clarification
+```
+
+لأنه pending/visible reference واضح.
+
+لكن لو فيه تعارض أو صياغة مش واضحة:
+
+```text
+LLM
+```
+
+## `i wwantit too suitable for university`
+
+```text
+LLM
+```
+
+بدون نقاش.
+
+## `make it suitable for university`
+
+```text
+LLM
+```
+
+ويرجع:
+
+```text
+update_preferences_and_recommend
+```
+
+## `I don't like these`
+
+ممكن local deterministic لأن pattern واضح ومتكرر.
+لكن لو خايف، خليه LLM أيضًا.
+
+---
+
+# إيه أعمل في الكود؟
+
+اعمل refactor صغير اسمه:
+
+```text
+DeterministicLocalGate
+```
+
+يرجع فقط:
+
+```text
+handled
+notHandled
+```
+
+مش يرجع 20 intent.
+
+مثال:
+
+```dart
+sealed class LocalGateResult {
+  const LocalGateResult();
+}
+
+class LocalHandled extends LocalGateResult {
+  final LocalRoute route;
+  final double proofScore;
+  final List<String> proofReasons;
+}
+
+class LocalNotHandled extends LocalGateResult {
+  final String reason; // "not_deterministic"
+}
+```
+
+ولو `notHandled`:
+
+```dart
+sendToSemanticRouter();
+```
+
+---
+
+# ممنوع local يعمل إيه؟
+
+اكتب rules صريحة:
+
+```text
+Local gate must not classify:
+- vague recommendation requests
+- social/advisory turns
+- emotional descriptions
+- style/vibe phrases
+- "make it..." refinements
+- typo-heavy messages
+- ambiguous pronouns except pending clarification
+```
+
+---
+
+# analytics بعد كده
+
+كل رسالة راحت LLM، سجل:
+
+```text
+questionType
+toolName
+confidence
+success
+normalizedSignals
+```
+
+بعد أسبوع تقول:
+
+```text
+"طرق الدفع" اتسألت 200 مرة والLLM مسكها
+```
+
+ساعتها تضيفها local.
+
+لكن local shortcuts الجديدة لازم تمر بـ:
+
+```text
+repeated pattern
+deterministic
+low risk
+test
+manual approval
+```
+
+---
+
+# الخلاصة الصريحة
+
+أنت صح. النظام المتوازن القديم:
+
+```text
+local للحالات الواضحة
+LLM للغامض
+```
+
+ممكن يبقى متعب لو local مش محافظ جدًا.
+
+فخليه:
+
+```text
+LLM by default
+Local only by proof
+```
+
+وده هيريحك جدًا.
+
+## الصيغة النهائية
+
+```text
+Local لا يفهم.
+Local يثبت فقط.
+لو مفيش إثبات قوي، LLM يفهم.
+```
+
+ده أنسب لمشروعك لأن:
+
+```text
+LLM رخيص عندك
+اللغة العربية متنوعة
+العملاء هيقولوا حاجات غير متوقعة
+الخطأ في local أسوأ من تكلفة worker call
+```
+
+ابدأ production كده. بعد ما تجمع data، حول المتكرر والمضمون فقط إلى local.

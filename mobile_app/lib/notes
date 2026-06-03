@@ -1,0 +1,32 @@
+ onTap: () async {
+                                final result = await showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  isDismissible: true,
+                                  enableDrag: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (ctx) => const AddressPage(),
+                                );
+                                
+                                // AddressPage shouldn't be nested blindly, assuming it was updated to return data.
+                                // If using router, we use `context.push()` to await.
+                                // But navigation_logic.dart uses `context.go()` for address which drops the return value.
+                                // So we will push the bottom sheet here directly to await the result, assuming AddressPage is a Scaffold or sheet.
+                                // *Wait, AddressPage builds a Scaffold with a Form. We will just push it!*
+                                final pushedResult = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const AddressPage()),
+                                );
+
+                                if (!mounted) return;
+
+                                if (pushedResult != null && pushedResult is Map<String, dynamic>) {
+                                  setState(() {
+                                    _selectedAddress = pushedResult;
+                                  });
+                                }
+
+
+
+
+                                

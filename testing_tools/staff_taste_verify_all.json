@@ -1,0 +1,416 @@
+{
+  "mode": "dry-run",
+  "collection": "products",
+  "taxonomyVersion": 1,
+  "selectedCount": 81,
+  "patchCount": 0,
+  "skippedCount": 81,
+  "skipped": [
+    {
+      "id": "bleu_de_chanel",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_01",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_02",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_03",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_04",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_05",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_06",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_07",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_08",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_09",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_10",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_11",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_12",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_13",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_14",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_15",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_16",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_17",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_18",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_19",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_20",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_21",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_22",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_23",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_24",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_25",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_26",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_27",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_28",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_29",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "catalog_refresh_30",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_101151",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_10131",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_1018",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_11755",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_12201",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_127045",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_1361",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_14220",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_1460",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_14982",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_16657",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_17",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_1825",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_1826",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_18453",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_23098",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_25324",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_2609",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_31861",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_31872",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_33519",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_39029",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_39314",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_39681",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_43871",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_45651",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_485",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_50239",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_50384",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_51411",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_51818",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_56077",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_58770",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_607",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_611",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_62021",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_62036",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_632",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_67667",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_69910",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_707",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_75668",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_77056",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_77132",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_78574",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_8069",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_83483",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_9099",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_97340",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    },
+    {
+      "id": "fragrantica_9828",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    }
+  ],
+  "patches": []
+}

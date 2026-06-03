@@ -1,0 +1,16 @@
+{
+  "mode": "dry-run",
+  "collection": "products",
+  "taxonomyVersion": 1,
+  "selectedCount": 1,
+  "patchCount": 0,
+  "skippedCount": 1,
+  "skipped": [
+    {
+      "id": "bleu_de_chanel",
+      "skipped": true,
+      "reason": "already_has_staffTagScores"
+    }
+  ],
+  "patches": []
+}

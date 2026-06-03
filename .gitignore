@@ -1,0 +1,60 @@
+# Secrets / private config
+.env
+.env.*
+.dev.vars
+*.pem
+*.key
+serviceAccount*.json
+service-account*.json
+.local/
+secret/
+
+# Logs / crash logs
+*.log
+firebase-debug.log
+firestore-debug.log
+**/hs_err_pid*.log
+**/replay_pid*.log
+**/flutter_*.log
+
+# Flutter / Dart generated files
+**/build/
+**/.dart_tool/
+**/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/devtools_options.yaml
+**/flutter_export_environment.sh
+**/.metadata
+
+# Android / Gradle local cache
+**/android/.gradle/
+**/android/.kotlin/
+**/android/captures/
+
+# iOS / Xcode local cache
+**/ios/Pods/
+**/ios/.symlinks/
+
+# Node dependencies
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cloudflare / Wrangler local state
+.wrangler/
+**/.wrangler/
+
+# Test/generated artifacts
+test_artifacts/
+**/test_artifacts/
+coverage/
+**/coverage/
+
+# IDE / OS local files
+**/.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

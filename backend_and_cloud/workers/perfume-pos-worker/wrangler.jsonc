@@ -1,0 +1,11 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "perfume-pos-worker",
+	"main": "src/index.js",
+	"compatibility_date": "2025-12-01",
+	"workers_dev": true,
+	"vars": {
+		"ALLOWED_ORIGIN": "http://localhost:8080,http://localhost:3000,https://qessa-suez.site,https://www.qessa-suez.site",
+		"FIREBASE_PROJECT_ID": "perfume-app-9999"
+	}
+}

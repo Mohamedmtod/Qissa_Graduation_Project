@@ -1,0 +1,70 @@
+
+1.	Authentication
+•	User registers or logs in.
+•	A users/{uid} document is created with basic user info and role.
+2.	Browse & Discovery
+•	User enters MainLayout.
+•	Main tabs:
+•	Home
+•	AI Chat
+•	Cart
+•	Profile
+•	Home shows banners, categories, featured products, and search.
+3.	Search & Product Discovery
+•	User searches for a product or opens a category.
+•	App fetches matching products from database.
+•	User opens the product details page.
+4.	Product Details
+•	Page shows images, name, brand, price, stock, description, and fragrance notes.
+•	User can add the product to cart.
+•	Product events can be logged, such as product_view and add_to_cart.
+5.	Cart
+•	User reviews cart items.
+•	User can increase, decrease, or remove products.
+•	App checks stock before increasing quantity.
+6.	Address & Checkout
+•	User selects address from saved addresses or map picker.
+•	In checkout, user reviews address, payment method, notes, and order summary.
+•	User taps Place Order.
+7.	Order Processing
+•	App creates an order with pending status.
+•	Backend stock-processing function verifies stock, deducts quantity, and updates order status.
+•	Cart is cleared after success.
+•	User tracks order in My Orders.
+8.	Profile
+•	Profile shows user info, order history, saved addresses, and logout.
+•	includes edit profile and preference management.
+9.	AI Chat Feature
+•	User enters AI Chat and starts a new session.
+•	Before giving recommendations, AI asks a few short qualifying questions to understand user taste and need.
+
+•	User Sends a message, such as:
+ o   “عايز عطر صيفي مناسب للافراح قوي ويكون ريحته فيه لمسة لمون ”
+ o " I want a strong winter oud perfume suitable for university" 
+
+• The AI responds based on the product catalog and injected business logic prompts.
+•	AI then responds using product catalog data and business logic.
+•	Chat sessions and messages are stored in database.
+10.	AI Feedback Feature
+•	After the conversation, a feedback sheet appears.
+•	User submits:
+•	Rating from 1 to 5
+•	Was this helpful?
+•	Optional comment
+•	Feedback is stored under the same chat session.
+11.	AI Feedback Analysis
+•	A Cloudflare Worker reads the chat transcript, rating, helpfulness flag, and comment.
+•	Worker sends them securely to an LLM.
+•	LLM returns structured analysis:
+•	intentUnderstood
+•	needSatisfied
+•	satisfactionScore
+•	sentiment
+•	failureReason
+•	improvementSuggestion
+•	missingNeeds
+•	Analysis is stored in database.
+12.	Admin Dashboard
+•	Admin manages products, orders, banners, and general statistics.
+•	Admin also views AI analytics such as satisfaction score, negative sessions, failure reasons, and difficult user queries.
+

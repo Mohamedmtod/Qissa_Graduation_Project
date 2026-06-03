@@ -1,0 +1,251 @@
+
+الجدول “الأقوى” من النقطة اللي أنا فيها (مفصل + عملي)
+افتراض: 6 أيام شغل/أسبوع (2–4 ساعات يوميًا).
+لو بتشتغل 2 ساعات بس: اعتبر كل “يوم” في الخطة = يومين.
+قواعد عامة امشي عليها كل Feature
+DoD = Definition of Done لكل ميزة
+UI Screen(s)
+Cubit + States (Loading/Success/Error)
+Repo method(s) + Firebase logic
+Firestore Rules / Validation
+Test سريع يدوي + Edge cases
+الأسبوع 1 — Product Details (أهم خطوة بعد Home)
+اليوم 1 (2–3 ساعات)
+هدف اليوم: تجهيز Route + فتح التفاصيل لما تدوس على المنتج
+اعمل صفحة:
+features/products/presentation/pages/product_details_page.dart
+عدّل ProductsCard:
+لفّ الكارد بـGestureDetector/InkWell
+onTap → context.push('/product/${product.id}')
+عدّل app_router.dart:
+أضف Route جديد product/:id
+جوّه الـbuilder: اعمل BlocProvider لـProductDetailsCubit
+اليوم 2 (3–4 ساعات)
+Cubit للتفاصيل
+أنشئ:
+features/products/presentation/manager/product_details_cubit.dart
+product_details_state.dart
+في الـCubit:
+method: watchProduct(String id) تستخدم ProductRepo.streamProductById(id)
+States: Initial/Loading/Success(ProductModel)/Error
+اليوم 3 (2–4 ساعات)
+UI تفاصيل المنتج
+في ProductDetailsPage اعرض:
+صور المنتج (لو imageUrls فاضية: placeholder)
+الاسم/البراند/السعر/المخزون
+الوصف + notes
+استخدم:
+CachedNetworkImage (لو مش عندك) للصور
+Slider: carousel_slider (اختياري)
+------------------------------------------------------------------------------------------------
+اليوم 4 (3–5 ساعات)
+زر Add To Cart (بس لسه Cart UI مش جاهز)
+جهّز CartRepo في DI:
+ضيفه في MultiRepositoryProvider في main.dart
+اعمل Cubit بسيط للـAddToCart (ممكن داخل ProductDetails كبداية):
+addToCart(uid, CartItemModel(...))
+في UI:
+زر “Add to Cart”
+لو stock == 0 → Disable + رسالة
+------------------------------------------------------------------------------------------------
+اليوم 5 (2–3 ساعات)
+Polish
+Loading أحسن (Shimmer اختياري)
+Error UI بدل print:
+SnackBar لما يحصل Failure
+اليوم 6 (2–3 ساعات)
+Refactor + تأكيد Navigation
+تأكد إن الـRoute شغال من Home ومن MainLayout Home tab
+راجع naming: fromMap موحد في كل المودلز (زي نصيحتك لنفسك)
+الأسبوع 2 — Search + Filters + Categories (مش UI بس… Logic كمان)
+اليوم 1 (3–5 ساعات)
+Repo methods للبحث
+في ProductRepo زوّد:
+Stream<List<ProductModel>> searchByNamePrefix(String q)
+Stream<List<ProductModel>> filter({gender, season, family})
+Firestore “contains” صعب… كبداية استخدم prefix search (مثلاً حقل nameLowercase في المنتجات).
+اليوم 2 (2–4 ساعات)
+Search Cubit + Page
+أنشئ:
+features/products/presentation/pages/search_page.dart
+search_cubit.dart + states
+اربط SearchField:
+onChanged → debounce 300ms → cubit.search(q)
+اليوم 3 (2–4 ساعات)
+Filters UI
+Dropdowns/Chips:
+gender / season / fragranceFamily
+Apply → cubit.filter()
+اليوم 4 (2–4 ساعات)
+وصل Search tab في MainLayout
+بدّل Placeholder “Search Page” بـSearchPage
+اعمل BlocProvider للـSearchCubit (إما في الـTab widget أو أعلى MainLayout)
+اليوم 5 (2–4 ساعات)
+Category click
+الـCategories عندك Static list — خليه يفتح SearchPage بفلتر جاهز:
+context.push('/search?category=Perfumes')
+أو مرر parameter للـCubit
+اليوم 6 (2–3 ساعات)
+تسجيل سلوك المستخدم للـAmazon-like
+اعمل features/events (عندك فولدر فاضي)
+Repo: EventRepo.logSearch(query)
+Store: users/{uid}/events/{eventId}
+الأسبوع 3 — Cart Feature كامل (UI + Cubit + Stock)
+اليوم 1 (3–5 ساعات)
+CartCubit
+أنشئ:
+features/cart/presentation/manager/cart_cubit.dart + states
+Methods:
+watchCart(uid) (streamCart)
+increase/decrease/remove/clear
+اليوم 2 (2–4 ساعات)
+Cart Page UI
+features/cart/presentation/pages/cart_page.dart
+Stream من cubit → list items
+اعرض: الاسم/السعر/quantity + أزرار +/-
+اليوم 3 (3–5 ساعات)
+ربط Cart tab
+بدّل Placeholder “Cart Page” بـCartPage
+BlocProvider في MainLayout
+اليوم 4 (3–5 ساعات)
+Join cart items مع بيانات المنتج
+عشان تعرض صورة/مخزون:
+اختيار (A) سريع:
+cart item يخزن imageUrlSnapshot كمان عند الإضافة
+اختيار (B) أدق:
+تعمل lookup للمنتجات بالـIDs (أثقل)
+أنصح (A) للـMVP.
+اليوم 5 (2–4 ساعات)
+Stock validation
+قبل زيادة الكمية:
+هات stock من ProductRepo.streamProductById
+امنع الزيادة لو تعدّى المتاح
+UX:
+رسالة “Out of stock”
+اليوم 6 (2–3 ساعات)
+تحسينات
+Empty cart screen
+Confirm delete dialog
+الأسبوع 4 — Checkout + Orders (المسار التجاري الكامل)
+الـReport عندك بيعتبر “Place Order” use case أساسي. 
+AI-Powered Niche E-Commerce App…
+اليوم 1 (3–5 ساعات)
+Checkout Page
+features/orders/presentation/pages/checkout_page.dart
+Form: الاسم/موبايل/عنوان
+زر “Place Order” (COD فقط للـMVP)
+اليوم 2 (3–6 ساعات)
+Create Order
+في OrderRepo.createOrder(order)
+من الـCart:
+items → OrderItemModel
+total = sum(priceSnapshot * qty)
+status = pending
+بعد نجاح:
+CartRepo.clearCart(uid)
+اليوم 3 (3–6 ساعات)
+Update stock (اختيار MVP)
+MVP أسهل: قلّل stock وقت إنشاء order
+الأفضل: Transaction/Batch:
+اقرأ المنتج → تأكد stock → update stock → create order → clear cart
+(ده يوم تقيل، بس بيخلي النظام “Production-ish”)
+اليوم 4 (2–4 ساعات)
+My Orders Page
+features/orders/presentation/pages/my_orders_page.dart
+OrderRepo.streamMyOrders(uid)
+اعرض status + تفاصيل
+اليوم 5 (2–4 ساعات)
+Profile Page
+اعمل profile_page.dart
+يعرض بيانات المستخدم + زر:
+My Orders
+Logout
+اليوم 6 (2–4 ساعات)
+Firestore Rules Review
+Users: يقرأ/يكتب لنفسه
+Cart: لنفسه
+Orders: user يشوف أوامره فقط
+Admin/employee: صلاحيات أوسع (هتتقفل صح لما نعمل Admin Dashboard)
+من هنا كده… أنت خلصت “MVP شغال للشراء” ✅ (خلال 4 أسابيع)
+بعدها هنقسم الباقي على مراحل: R2 + Admin + AI + Recommendations.
+الجدول النهائي للمرحلة القادمة: 21 يوم للمتبقي 🚀
+ملاحظة للمستخدم: بناءً على مراجعة الكود، أنت بالفعل خلصت الـ MVP الأساسي (التصفح، البحث، السلة، الطلبات). دلوقتي تركيزنا في الـ 21 يوم الجايين هيكون على (لوحة التحكم، تخزين R2، والذكاء الاصطناعي).
+الأسبوع 1: البنية التحتية ولوحة التحكم (Infrastructure & Admin)
+اليوم 1: تلميع الملف الشخصي (Profile Page)
+- إضافة بيانات المستخدم.
+- إضافة روابط سريعة لطلباتي (My Orders).
+- إضافة صفحة إدارة العناوين (Addresses).
+- DoD: صفحة بروفايل كاملة.
+اليوم 2: تجهيز Cloudflare R2
+- إعداد الـ Worker وقواعد الأمان.
+- كتابة الـ Logic الخاص بـ Signed URLs في التطبيق.
+- DoD: القدرة على طلب Upload URL من السيرفر.
+اليوم 3: إعداد لوحة التحكم (Admin Dashboard - Flutter Web)
+- إنشاء المشروع (Flutter Web).
+- إعداد نظام الدخول (Roles / Permissions).
+- DoD: شاشة دخول للأدمن فقط.
+اليوم 4: إدارة المنتجات في لوحة التحكم
+- عرض قائمة المنتجات.
+- إضافة/تعديل منتج مع رفع الصور لـ R2.
+- DoD: إضافة منتج جديد من الويب بنجاح.
+اليوم 5: إدارة الطلبات في لوحة التحكم
+- عرض قائمة الطلبات الحالية.
+- تغيير حالة الطلب (Pending -> Delivered).
+- DoD: تحديث حالة طلب وتسميعه عند المستخدم فوراً.
+اليوم 6: إحصائيات بسيطة للأدمن
+- عرض إجمالي المبيعات، والمنتجات الأكثر مبيعاً.
+- DoD: شاشة Dashboard توضح أداء المتجر.
+اليوم 7: مراجعة وتحسين الأمان
+- مراجعة Firestore Rules للتأكد إن الأدمن بس اللي يقدر يعدل المنتجات.
+- DoD: قواعد حماية كاملة للمشروع.
+---
+الأسبوع 2: تتبع السلوك وتوصيات الذكاء الاصطناعي (AI & Tracking)
+اليوم 8: تتبع الأحداث العميق (Deep Tracking)
+- تسجيل مشاهدة المنتجات (logProductView).
+- تسجيل الإضافة للسلة (logAddToCart).
+- تسجيل الشراء (logPurchase).
+- DoD: قاعدة بيانات فيها اهتمامات كل مستخدم.
+اليوم 9: موديل تفضيلات المستخدم (User Preferences)
+- تحليل الداتا السابقة (أي عطور بيحبها؟ أي ماركات؟).
+- DoD: وجود وثيقة (Doc) لكل مستخدم فيها "خريطة اهتماماته".
+اليوم 10: منطق التوصيات (Recommendation Logic)
+- عمل Query تجيب منتجات مشابهة لاهتمامات المستخدم.
+- DoD: دالة برمجية ترجع "منتجات قد تعجبك".
+اليوم 11: واجهة "من أجلك" (For You UI)
+- إضافة قسم "For You" في الصفحة الرئيسية.
+- DoD: ظهور منتجات مخصصة لكل مستخدم في الـ Home.
+اليوم 12: البحث الذكي وتلميع الـ UX
+- تحسين عملية البحث بناءً على اهتمامات المستخدم السابقة.
+- DoD: نتائج بحث أذكى.
+اليوم 13: الإشعارات (Push Notifications)
+- إرسال إشعار عند تغيير حالة الطلب.
+- DoD: استلام إشعار على الموبايل عند شحن الطلب.
+اليوم 14: مراجعة الـ AI Features
+- التأكد من دقة التوصيات وتجربة المستخدم.
+- DoD: نظام توصيات شغال 100%.
+---
+الأسبوع 3: بوت الذكاء الاصطناعي والإطلاق (AI Chatbot & Launch)
+اليوم 15: برمجيات الشات بوت (Chatbot Backend)
+- الربط مع API (GPT/Gemini).
+- حماية الـ API Key من خلال Cloud Worker.
+- DoD: شات بوت بيرد على الأسئلة برمجياً.
+اليوم 16: واجهة الشات (Chat UI)
+- زر عائم (Floating Action Button) للشات.
+- واجهة محادثة سلسة وتاريخ الرسائل.
+- DoD: صفحة شات كاملة وزر دخول سهل.
+اليوم 17: ذكاء الشات (Product Discovery)
+- ربط الشات بقاعدة بيانات المنتجات عشان يرشح عطور بعينها.
+- DoD: الشات بوت يقول "أرشحلك عطر X لنه مناسب لذوقك" مع لينك المنتج.
+اليوم 18: اختبارات شاملة (End-to-End Testing)
+- تجربة سيناريو الشراء كامل من البداية للنهاية.
+- DoD: نظام خالي من الـ Critical Bugs.
+اليوم 20: تحسين الـ Caching وتقليل حجم الصور.
+- DoD: تطبيق صاروخي في السرعة.
+اليوم 20: المرحلة الأخيرة (Hardening)
+- التعامل مع حالات فقدان الاتصال (Offline Support).
+- تحسين رسائل الخطأ للمستخدم.
+- DoD: تطبيق ثابت (Stable).
+اليوم 21: المراجعة النهائية والإطلاق 🏁
+- مراجعة كل الـ TodoList.
+- التحقق من جاهزية الـ Production Environment.
+- DoD: Congratulations! Project Finished.

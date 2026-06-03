@@ -1,0 +1,1 @@
+enum AIChatBudgetPolicy { flexible, strict }

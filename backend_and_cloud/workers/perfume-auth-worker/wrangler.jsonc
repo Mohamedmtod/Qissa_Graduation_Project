@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "perfume-auth-worker",
+  "main": "src/index.js",
+  "compatibility_date": "2025-12-01",
+  "workers_dev": true,
+  "vars": {
+    "FIREBASE_PROJECT_ID": "perfume-app-9999",
+    "RESEND_FROM": "Qissa <otp@qessa-suez.site>",
+    "ALLOWED_ORIGINS": "http://localhost:8080,http://localhost:3000,https://qessa-suez.site,https://www.qessa-suez.site"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "PASSWORD_RESET_KV",
+      "id": "4c5c567db8db449ca7bed371c7d56237"
+    }
+  ]
+}

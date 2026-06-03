@@ -1,0 +1,47 @@
+workflows:
+  ios_sideload_unsigned:
+    name: iOS Sideload Unsigned IPA
+    working_directory: mobile_app
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
+        - $CM_BUILD_DIR/mobile_app/.dart_tool
+
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+
+      - name: Install iOS pods
+        script: |
+          cd ios
+          pod install
+
+      - name: Static analysis
+        script: flutter analyze
+
+      - name: Build unsigned iOS app
+        script: flutter build ios --release --no-codesign
+
+      - name: Package IPA
+        script: |
+          rm -rf build/ios/ipa
+          mkdir -p build/ios/ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app build/ios/ipa/Payload/Runner.app
+          cd build/ios/ipa
+          zip -qry Runner.ipa Payload
+          mkdir -p "$CM_BUILD_DIR/build/ios/ipa"
+          cp Runner.ipa "$CM_BUILD_DIR/build/ios/ipa/Runner.ipa"
+
+    artifacts:
+      - mobile_app/build/ios/ipa/Runner.ipa
+      - build/ios/ipa/Runner.ipa
+      - /tmp/xcodebuild_logs/*.log

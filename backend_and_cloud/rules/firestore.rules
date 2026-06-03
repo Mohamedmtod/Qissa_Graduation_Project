@@ -1,0 +1,887 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return signedIn() && userDoc().data.role == "admin";
+    }
+
+    function isEmployeeOrAdmin() {
+      return signedIn() && (
+        userDoc().data.role == "admin" ||
+        userDoc().data.role == "employee"
+      );
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function validAnalysisStatus(value) {
+      return value in ['pending', 'completed', 'failed', 'pending_retry'];
+    }
+
+    function validSentiment(value) {
+      return value in ['positive', 'neutral', 'negative'];
+    }
+
+    function ownsSession(sessionId) {
+      return signedIn()
+        && get(/databases/$(database)/documents/ai_chat_sessions/$(sessionId)).data.userId == request.auth.uid;
+    }
+
+    function ownsFeedback(feedbackId) {
+      return signedIn()
+        && get(/databases/$(database)/documents/ai_feedback/$(feedbackId)).data.userId == request.auth.uid;
+    }
+
+    function feedbackSessionMatches(feedbackId, sessionId) {
+      return get(/databases/$(database)/documents/ai_feedback/$(feedbackId)).data.sessionId == sessionId;
+    }
+
+    function changesStock() {
+      return request.resource.data.diff(resource.data).changedKeys().hasAny(["stock"]);
+    }
+
+    // USERS
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isAdmin();
+
+      allow create: if isSelf(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.role == "user"
+        && request.resource.data.keys().hasOnly([
+          "uid",
+          "firstName",
+          "lastName",
+          "phone",
+          "email",
+          "role",
+          "preferredPaymentMethod",
+          "createdAt",
+          "updatedAt"
+        ]);
+
+      // Prevent identity, role, and creation-date tampering.
+      allow update: if isSelf(uid)
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly([
+          "firstName",
+          "lastName",
+          "phone",
+          "preferredPaymentMethod",
+          "updatedAt"
+        ]);
+
+      allow delete: if false;
+    }
+
+    // ACCOUNT DELETION REQUESTS
+    match /account_deletion_requests/{uid} {
+      allow create: if isSelf(uid)
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == "pending"
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp
+        && request.resource.data.keys().hasOnly([
+          "userId",
+          "email",
+          "status",
+          "reason",
+          "createdAt",
+          "updatedAt"
+        ]);
+      allow read: if isSelf(uid) || isAdmin();
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly([
+          "status",
+          "reviewedAt",
+          "reviewedBy",
+          "updatedAt"
+        ]);
+      allow delete: if false;
+    }
+
+    // CART
+    match /users/{uid}/cart/{itemId} {
+      allow read, write: if isSelf(uid);
+    }
+
+    // WISHLIST
+    match /users/{uid}/wishlist/{wishlistId} {
+      allow read, write: if isSelf(uid);
+    }
+
+    // ADDRESSES
+    match /users/{uid}/addresses/{addressId} {
+      allow read, write: if isSelf(uid);
+    }
+
+    // PRODUCTS
+    match /products/{productId} {
+      allow read: if true;
+
+      // Client-side stock changes are blocked.
+      // Stock must be mutated by backend logic only (Worker/Admin SDK).
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() && !changesStock();
+    }
+
+    // FREQUENT RECOMMENDATIONS
+    match /frequent_recommendations/{productId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // PUBLIC PRODUCT SALES STATS
+    // Read-only to clients. Backend order transitions update these incrementally.
+    match /product_public_stats/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ADMIN FINANCE ROLLUPS
+    // Written by backend workers/Admin SDK, read by admin dashboard to avoid
+    // capped client-side finance scans.
+    match /admin_finance_aggregates/{docId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    match /admin_finance_monthly_rollups/{docId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    match /admin_finance_aggregate_markers/{orderId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // BANNERS
+    match /banner/{bannerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // EVENTS
+    match /events/{eventId} {
+      // Allow create if signed in and userId matches.
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // CATEGORIES
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ORDERS
+    match /orders/{orderId} {
+      // Read by owner, plus staff dashboards.
+      allow read: if signedIn() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+
+      // All order writes must come from backend logic (Worker/Admin SDK), not client SDK.
+      allow create, update, delete: if false;
+    }
+
+    // Backend helper collection.
+    match /order_idempotency/{docId} {
+      allow read, write: if false;
+    }
+
+    // Backend-only order code reservations.
+    match /order_codes/{code} {
+      allow read, write: if false;
+    }
+
+    // RESTOCK REQUESTS
+    match /restock_requests/{docId} {
+      allow create: if signedIn()
+        && request.resource.data.id == docId
+        && request.resource.data.productId is string
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.contactMethod in ["email", "phone"]
+        && request.resource.data.contactValue is string
+        && request.resource.data.contactValue.size() > 0
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp
+        && (
+          !('notifiedAt' in request.resource.data) ||
+          request.resource.data.notifiedAt == null
+        )
+        && request.resource.data.status == "pending"
+        && docId == request.auth.uid + "_" + request.resource.data.productId
+        && exists(/databases/$(database)/documents/products/$(request.resource.data.productId))
+        && request.resource.data.keys().hasOnly([
+          "id",
+          "productId",
+          "userId",
+          "contactMethod",
+          "contactValue",
+          "updatedAt",
+          "createdAt",
+          "status",
+          "notifiedAt"
+        ]);
+
+      allow read: if signedIn() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+
+      allow update: if false;
+
+      allow delete: if false;
+    }
+
+    // AI CHAT EVENTS
+    match /ai_chat_events/{eventId} {
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.eventType in [
+          'message_sent',
+          'request_intent_parsing_started',
+          'request_started',
+          'request_catalog_cache_hit',
+          'request_catalog_cache_miss',
+          'request_model_error',
+          'request_fallback_local',
+          'modifier_patch_applied',
+          'recommendation_shown',
+          'recommendation_answer_shown',
+          'recommendation_no_match_shown',
+          'recommendation_clarifying_question_shown',
+          'recommendation_hard_filter_blocked',
+          'recommendation_score_fallback_used',
+          'recommendation_model_fallback_reason',
+          'conversion_upsell_section_shown',
+          'conversion_upsell_product_rendered',
+          'conversion_upsell_reason_used',
+          'conversion_product_clicked',
+          'conversion_upsell_product_clicked',
+          'conversion_notify_requested',
+          'availability_check',
+          'availability_found',
+          'availability_not_found_unknown',
+          'availability_not_found_known_profile',
+          'availability_ambiguous_name',
+          'availability_out_of_stock',
+          'availability_substitute_shown',
+          'availability_followup_substitute',
+          'availability_catalog_found',
+          'availability_catalog_out_of_stock_substitute',
+          'perfume_knowledge_hit',
+          'perfume_knowledge_miss',
+          'perfume_knowledge_external_lookup_success',
+          'perfume_knowledge_external_lookup_failed',
+          'perfume_knowledge_saved_needs_review',
+          'availability_external_substitute_shown',
+          'availability_external_unknown_asked',
+          'feedback_submitted',
+          'product_click'
+        ]
+        && request.resource.data.eventType is string
+        && request.resource.data.sessionId is string
+        && request.resource.data.sessionId.size() > 0
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.metadata is map
+        && !('message' in request.resource.data.metadata)
+        && request.resource.data.keys().hasOnly([
+          'eventType',
+          'userId',
+          'sessionId',
+          'metadata',
+          'createdAt'
+        ]);
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    // PERFUME KNOWLEDGE CACHE
+    match /perfume_knowledge/{profileId} {
+      allow read: if signedIn();
+
+      allow create: if isAdmin()
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 90
+        && request.resource.data.brand is string
+        && request.resource.data.brand.size() <= 60
+        && request.resource.data.aliases is list
+        && request.resource.data.aliases.size() <= 12
+        && request.resource.data.searchKeys is list
+        && request.resource.data.searchKeys.size() > 0
+        && request.resource.data.searchKeys.size() <= 16
+        && request.resource.data.accords is list
+        && request.resource.data.accords.size() <= 12
+        && request.resource.data.topNotes is list
+        && request.resource.data.topNotes.size() <= 10
+        && request.resource.data.middleNotes is list
+        && request.resource.data.middleNotes.size() <= 10
+        && request.resource.data.baseNotes is list
+        && request.resource.data.baseNotes.size() <= 10
+        && request.resource.data.fragranceFamily is string
+        && request.resource.data.fragranceFamily.size() <= 80
+        && request.resource.data.lookupConfidence is number
+        && request.resource.data.lookupConfidence >= 0
+        && request.resource.data.lookupConfidence <= 1
+        && request.resource.data.extractionMethod in ['curated', 'fragrantica_arabia', 'model']
+        && request.resource.data.status == 'needsReview'
+        && request.resource.data.usageCount is int
+        && request.resource.data.usageCount >= 0
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp
+        && request.resource.data.lastUsedAt is timestamp
+        && request.resource.data.keys().hasOnly([
+          'displayName',
+          'brand',
+          'aliases',
+          'searchKeys',
+          'accords',
+          'topNotes',
+          'middleNotes',
+          'baseNotes',
+          'fragranceFamily',
+          'genderHint',
+          'seasonHint',
+          'occasionHint',
+          'timeHint',
+          'intensityHint',
+          'sourceName',
+          'sourceUrl',
+          'extractionMethod',
+          'lookupConfidence',
+          'status',
+          'usageCount',
+          'createdAt',
+          'updatedAt',
+          'lastUsedAt'
+        ]);
+
+      allow update: if isAdmin()
+        && resource.data.status in ['needsReview', 'approved']
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly([
+          'lastUsedAt',
+          'usageCount',
+          'updatedAt'
+        ])
+        && request.resource.data.usageCount is int
+        && request.resource.data.usageCount >= resource.data.usageCount
+        && request.resource.data.lastUsedAt is timestamp
+        && request.resource.data.updatedAt is timestamp;
+
+      allow delete: if false;
+    }
+
+    // ADMIN AUDIT LOGS
+    match /admin_audit_logs/{traceId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.traceId == traceId
+        && request.resource.data.action is string
+        && request.resource.data.actorId is string
+        && request.resource.data.actorRole is string
+        && request.resource.data.targetId is string
+        && request.resource.data.occurredAt is timestamp
+        && request.resource.data.outcome in ["success", "blocked", "failed"]
+        && request.resource.data.keys().hasOnly([
+          "traceId",
+          "action",
+          "actorId",
+          "actorRole",
+          "targetId",
+          "occurredAt",
+          "outcome",
+          "details"
+        ]);
+      allow update, delete: if false;
+    }
+
+    // ADMIN AI OPERATIONS
+    match /ai_model_training_jobs/{jobId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.status == "queued"
+        && request.resource.data.source == "admin_dashboard"
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.keys().hasOnly([
+          "status",
+          "source",
+          "createdAt"
+        ]);
+      allow update, delete: if false;
+    }
+
+    match /ai_session_annotations/{annotationId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.sessionId is string
+        && request.resource.data.sessionId.size() > 0
+        && request.resource.data.note is string
+        && request.resource.data.note.size() > 0
+        && request.resource.data.note.size() <= 2000
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.keys().hasOnly([
+          "sessionId",
+          "note",
+          "createdAt",
+          "createdBy"
+        ]);
+      allow update, delete: if false;
+    }
+
+    // AI CHAT DEBUG LOGS (temporary investigation logs)
+    match /ai_chat_debug_logs/{logId} {
+      allow create: if signedIn()
+        && request.resource.data._schemaVersion == 1
+        && request.resource.data.id == logId
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.sessionId is string
+        && request.resource.data.sessionId.size() > 0
+        && request.resource.data.requestId is string
+        && request.resource.data.requestId.size() > 0
+        && request.resource.data.phase in [
+          'turn_started',
+          'local_candidates_ranked',
+          'worker_reply_received',
+          'final_reply_rendered',
+          'fallback_rendered'
+        ]
+        && request.resource.data.phase is string
+        && request.resource.data.language is string
+        && request.resource.data.messageText is string
+        && request.resource.data.detectedIntent is string
+        && request.resource.data.responseSource is string
+        && request.resource.data.createdAt is timestamp
+        && (!('issueCode' in request.resource.data) ||
+            request.resource.data.issueCode == null ||
+            request.resource.data.issueCode is string)
+        && (!('reasonCode' in request.resource.data) ||
+            request.resource.data.reasonCode == null ||
+            request.resource.data.reasonCode is string)
+        && (!('preferencesSnapshot' in request.resource.data) ||
+            request.resource.data.preferencesSnapshot is map)
+        && (!('availabilityContextSnapshot' in request.resource.data) ||
+            request.resource.data.availabilityContextSnapshot is map)
+        && (!('recommendationMemorySnapshot' in request.resource.data) ||
+            request.resource.data.recommendationMemorySnapshot is map)
+        && (!('candidateSummary' in request.resource.data) ||
+            request.resource.data.candidateSummary is map)
+        && (!('recommendedProducts' in request.resource.data) ||
+            request.resource.data.recommendedProducts is list)
+        && (!('workerReplySummary' in request.resource.data) ||
+            request.resource.data.workerReplySummary is map)
+        && request.resource.data.keys().hasOnly([
+          '_schemaVersion',
+          'id',
+          'sessionId',
+          'requestId',
+          'userId',
+          'createdAt',
+          'phase',
+          'language',
+          'messageText',
+          'detectedIntent',
+          'responseSource',
+          'issueCode',
+          'reasonCode',
+          'preferencesSnapshot',
+          'availabilityContextSnapshot',
+          'recommendationMemorySnapshot',
+          'candidateSummary',
+          'recommendedProducts',
+          'workerReplySummary'
+        ]);
+
+      allow read: if signedIn() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      allow update, delete: if false;
+    }
+
+    // AI CHAT SESSIONS
+    match /ai_chat_sessions/{sessionId} {
+      allow create: if signedIn()
+        && request.resource.data._schemaVersion == 1
+        && request.resource.data.id == sessionId
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.language is string
+        && request.resource.data.status in ['active', 'ended']
+        && request.resource.data.startedAt is timestamp
+        && (!('endedAt' in request.resource.data) ||
+            request.resource.data.endedAt == null ||
+            request.resource.data.endedAt is timestamp)
+        && request.resource.data.messageCount is int
+        && (!('finalRecommendationMessageId' in request.resource.data) ||
+            request.resource.data.finalRecommendationMessageId == null ||
+            request.resource.data.finalRecommendationMessageId is string)
+        && request.resource.data.keys().hasOnly([
+          '_schemaVersion',
+          'id',
+          'userId',
+          'language',
+          'status',
+          'startedAt',
+          'endedAt',
+          'messageCount',
+          'finalRecommendationMessageId'
+        ]);
+
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data._schemaVersion == 1
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.language == resource.data.language
+        && request.resource.data.startedAt == resource.data.startedAt
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status',
+          'endedAt',
+          'messageCount',
+          'finalRecommendationMessageId'
+        ])
+        && request.resource.data.status in ['active', 'ended']
+        && (!('endedAt' in request.resource.data) ||
+            request.resource.data.endedAt == null ||
+            request.resource.data.endedAt is timestamp)
+        && request.resource.data.messageCount is int
+        && (!('finalRecommendationMessageId' in request.resource.data) ||
+            request.resource.data.finalRecommendationMessageId == null ||
+            request.resource.data.finalRecommendationMessageId is string);
+
+      allow read: if signedIn() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+
+      allow delete: if false;
+    }
+
+    // AI CHAT MESSAGES
+    match /ai_chat_messages/{messageDocId} {
+      allow create: if signedIn()
+        && request.resource.data._schemaVersion == 1
+        && request.resource.data.id is string
+        && request.resource.data.sessionId is string
+        && ownsSession(request.resource.data.sessionId)
+        && request.resource.data.role in ['user', 'assistant', 'system']
+        && request.resource.data.content is string
+        && request.resource.data.messageType in ['text', 'recommendation', 'availability', 'loading', 'error']
+        && request.resource.data.productIds is list
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.keys().hasOnly([
+          '_schemaVersion',
+          'id',
+          'sessionId',
+          'role',
+          'content',
+          'messageType',
+          'productIds',
+          'createdAt'
+        ]);
+
+      allow update: if signedIn()
+        && request.resource.data._schemaVersion == resource.data._schemaVersion
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.sessionId == resource.data.sessionId
+        && ownsSession(resource.data.sessionId)
+        && request.resource.data.role in ['user', 'assistant', 'system']
+        && request.resource.data.content is string
+        && request.resource.data.messageType in ['text', 'recommendation', 'availability', 'loading', 'error']
+        && request.resource.data.productIds is list
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.keys().hasOnly([
+          '_schemaVersion',
+          'id',
+          'sessionId',
+          'role',
+          'content',
+          'messageType',
+          'productIds',
+          'createdAt'
+        ]);
+
+      allow read: if signedIn() && (
+        ownsSession(resource.data.sessionId) ||
+        isAdmin()
+      );
+
+      allow delete: if false;
+    }
+
+    // AI FEEDBACK
+    match /ai_feedback/{feedbackId} {
+      allow create: if signedIn()
+        && request.resource.data._schemaVersion == 1
+        && request.resource.data.id == feedbackId
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.sessionId is string
+        && ownsSession(request.resource.data.sessionId)
+        && request.resource.data.feedbackScope in ['message', 'session']
+        && (
+          request.resource.data.feedbackScope == 'message'
+            ? request.resource.data.targetMessageId is string
+              && request.resource.data.targetMessageId.size() > 0
+              && request.resource.data.rating == null
+            : request.resource.data.targetMessageId == null
+              && request.resource.data.rating is int
+              && request.resource.data.rating >= 1
+              && request.resource.data.rating <= 5
+        )
+        && request.resource.data.isHelpful is bool
+        && request.resource.data.submittedAt is timestamp
+        && (!('comment' in request.resource.data) ||
+            request.resource.data.comment == null ||
+            (request.resource.data.comment is string &&
+             request.resource.data.comment.size() <= 280))
+        && (!('analysisStatus' in request.resource.data) ||
+            request.resource.data.analysisStatus == null ||
+            validAnalysisStatus(request.resource.data.analysisStatus))
+        && request.resource.data.keys().hasOnly([
+          '_schemaVersion',
+          'id',
+          'userId',
+          'sessionId',
+          'feedbackScope',
+          'targetMessageId',
+          'rating',
+          'isHelpful',
+          'comment',
+          'submittedAt',
+          'analysisStatus'
+        ]);
+
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data._schemaVersion == 1
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.sessionId == resource.data.sessionId
+        && ownsSession(resource.data.sessionId)
+        && request.resource.data.feedbackScope == resource.data.feedbackScope
+        && (
+          request.resource.data.feedbackScope == 'message'
+            ? request.resource.data.targetMessageId == resource.data.targetMessageId
+              && request.resource.data.rating == null
+            : request.resource.data.targetMessageId == null
+              && request.resource.data.rating == resource.data.rating
+              && request.resource.data.rating is int
+              && request.resource.data.rating >= 1
+              && request.resource.data.rating <= 5
+        )
+        && request.resource.data.isHelpful is bool
+        && request.resource.data.submittedAt is timestamp
+        && (!('comment' in request.resource.data) ||
+            request.resource.data.comment == null ||
+            (request.resource.data.comment is string &&
+             request.resource.data.comment.size() <= 280))
+        && (!('analysisStatus' in request.resource.data) ||
+            request.resource.data.analysisStatus == null ||
+            validAnalysisStatus(request.resource.data.analysisStatus))
+        && request.resource.data.keys().hasOnly([
+          '_schemaVersion',
+          'id',
+          'userId',
+          'sessionId',
+          'feedbackScope',
+          'targetMessageId',
+          'rating',
+          'isHelpful',
+          'comment',
+          'submittedAt',
+          'analysisStatus'
+        ]);
+
+      allow read: if signedIn() && (
+        resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+
+      allow delete: if false;
+    }
+
+    // AI FEEDBACK ANALYSIS
+    match /ai_feedback_analysis/{analysisId} {
+      allow create: if signedIn()
+        && request.resource.data._schemaVersion == 1
+        && request.resource.data.id == analysisId
+        && request.resource.data.sessionId is string
+        && request.resource.data.feedbackId is string
+        && ownsFeedback(request.resource.data.feedbackId)
+        && feedbackSessionMatches(request.resource.data.feedbackId, request.resource.data.sessionId)
+        && request.resource.data.intentUnderstood is bool
+        && request.resource.data.needSatisfied is bool
+        && request.resource.data.satisfactionScore is number
+        && request.resource.data.satisfactionScore >= 0
+        && request.resource.data.satisfactionScore <= 1
+        && validSentiment(request.resource.data.sentiment)
+        && (!('analysisSummary' in request.resource.data) ||
+            request.resource.data.analysisSummary == null ||
+            request.resource.data.analysisSummary is string)
+        && (!('failureReason' in request.resource.data) ||
+            request.resource.data.failureReason == null ||
+            request.resource.data.failureReason is string)
+        && (!('improvementSuggestion' in request.resource.data) ||
+            request.resource.data.improvementSuggestion == null ||
+            request.resource.data.improvementSuggestion is string)
+        && request.resource.data.missingNeeds is list
+        && request.resource.data.rawInput is map
+        && request.resource.data.rawModelOutput is map
+        && request.resource.data.metadata is map
+        && request.resource.data.metadata.keys().hasOnly([
+          'provider',
+          'modelId',
+          'promptVersion',
+          'requestId'
+        ])
+        && request.resource.data.analyzedAt is timestamp
+        && validAnalysisStatus(request.resource.data.status)
+        && request.resource.data.keys().hasOnly([
+          '_schemaVersion',
+          'id',
+          'sessionId',
+          'feedbackId',
+          'intentUnderstood',
+          'needSatisfied',
+          'satisfactionScore',
+          'sentiment',
+          'analysisSummary',
+          'failureReason',
+          'improvementSuggestion',
+          'missingNeeds',
+          'rawInput',
+          'rawModelOutput',
+          'metadata',
+          'analyzedAt',
+          'status'
+        ]);
+
+      allow update: if signedIn()
+        && request.resource.data._schemaVersion == resource.data._schemaVersion
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.sessionId == resource.data.sessionId
+        && request.resource.data.feedbackId == resource.data.feedbackId
+        && ownsFeedback(resource.data.feedbackId)
+        && feedbackSessionMatches(resource.data.feedbackId, resource.data.sessionId)
+        && request.resource.data.intentUnderstood is bool
+        && request.resource.data.needSatisfied is bool
+        && request.resource.data.satisfactionScore is number
+        && request.resource.data.satisfactionScore >= 0
+        && request.resource.data.satisfactionScore <= 1
+        && validSentiment(request.resource.data.sentiment)
+        && (!('analysisSummary' in request.resource.data) ||
+            request.resource.data.analysisSummary == null ||
+            request.resource.data.analysisSummary is string)
+        && (!('failureReason' in request.resource.data) ||
+            request.resource.data.failureReason == null ||
+            request.resource.data.failureReason is string)
+        && (!('improvementSuggestion' in request.resource.data) ||
+            request.resource.data.improvementSuggestion == null ||
+            request.resource.data.improvementSuggestion is string)
+        && request.resource.data.missingNeeds is list
+        && request.resource.data.rawInput is map
+        && request.resource.data.rawModelOutput is map
+        && request.resource.data.metadata is map
+        && request.resource.data.metadata.keys().hasOnly([
+          'provider',
+          'modelId',
+          'promptVersion',
+          'requestId'
+        ])
+        && request.resource.data.analyzedAt is timestamp
+        && validAnalysisStatus(request.resource.data.status)
+        && request.resource.data.keys().hasOnly([
+          '_schemaVersion',
+          'id',
+          'sessionId',
+          'feedbackId',
+          'intentUnderstood',
+          'needSatisfied',
+          'satisfactionScore',
+          'sentiment',
+          'analysisSummary',
+          'failureReason',
+          'improvementSuggestion',
+          'missingNeeds',
+          'rawInput',
+          'rawModelOutput',
+          'metadata',
+          'analyzedAt',
+          'status'
+        ]);
+
+      allow read: if signedIn() && (
+        ownsFeedback(resource.data.feedbackId) ||
+        isAdmin()
+      );
+
+      allow delete: if false;
+    }
+
+    // SETTINGS (admin dashboard business config)
+    match /settings/{settingId} {
+      allow read, write: if isAdmin();
+    }
+
+    // SHIPPING ZONES CONFIG (admin writes, client reads publicly)
+    match /config/shipping_zones {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // PUBLIC BUSINESS INFO CONFIG (admin writes, client reads publicly)
+    match /config/business_info {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // RECIPES
+    match /recipes/{recipeId} {
+      allow read: if isEmployeeOrAdmin();
+      allow write: if isEmployeeOrAdmin();
+    }
+
+    // POS SALES
+    match /pos_sales/{saleId} {
+      allow read: if isEmployeeOrAdmin();
+      allow write: if false; // REST API writes only
+    }
+
+    // POS PAYMENTS
+    match /pos_payments/{paymentId} {
+      allow read: if isEmployeeOrAdmin();
+      allow write: if false; // REST API writes only
+    }
+
+    // STOCK MOVEMENTS
+    match /stock_movements/{movementId} {
+      allow read: if isEmployeeOrAdmin();
+      allow write: if false; // REST API writes only
+    }
+
+    // POS IDEMPOTENCY
+    match /pos_idempotency/{docId} {
+      allow read, write: if false; // Worker-only internal collection
+    }
+
+    // POS CASH SESSIONS
+    match /pos_cash_sessions/{sessionId} {
+      allow read: if isEmployeeOrAdmin();
+      allow write: if false; // REST API writes only
+    }
+  }
+}

@@ -1,0 +1,464 @@
+{
+  "catalog_refresh_10": {
+    "trigger_product_id": "catalog_refresh_10",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_20",
+        "confidence": 0.5,
+        "support": 0.0312,
+        "lift": 4.8
+      },
+      {
+        "product_id": "catalog_refresh_25",
+        "confidence": 0.5,
+        "support": 0.0312,
+        "lift": 3.6923
+      },
+      {
+        "product_id": "catalog_refresh_12",
+        "confidence": 0.3333,
+        "support": 0.0208,
+        "lift": 3.2
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_11": {
+    "trigger_product_id": "catalog_refresh_11",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_15",
+        "confidence": 0.4286,
+        "support": 0.0312,
+        "lift": 4.1143
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_07": {
+    "trigger_product_id": "catalog_refresh_07",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_09",
+        "confidence": 0.4286,
+        "support": 0.0312,
+        "lift": 3.7403
+      },
+      {
+        "product_id": "catalog_refresh_17",
+        "confidence": 0.2857,
+        "support": 0.0208,
+        "lift": 2.7429
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_26": {
+    "trigger_product_id": "catalog_refresh_26",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_29",
+        "confidence": 0.4,
+        "support": 0.0417,
+        "lift": 3.4909
+      },
+      {
+        "product_id": "catalog_refresh_15",
+        "confidence": 0.3,
+        "support": 0.0312,
+        "lift": 2.88
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_12": {
+    "trigger_product_id": "catalog_refresh_12",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_13",
+        "confidence": 0.4,
+        "support": 0.0417,
+        "lift": 2.7429
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_19": {
+    "trigger_product_id": "catalog_refresh_19",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_22",
+        "confidence": 0.4,
+        "support": 0.0208,
+        "lift": 2.2588
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_04": {
+    "trigger_product_id": "catalog_refresh_04",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_22",
+        "confidence": 0.375,
+        "support": 0.0312,
+        "lift": 2.1176
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_29": {
+    "trigger_product_id": "catalog_refresh_29",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_26",
+        "confidence": 0.3636,
+        "support": 0.0417,
+        "lift": 3.4909
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_30": {
+    "trigger_product_id": "catalog_refresh_30",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_27",
+        "confidence": 0.3333,
+        "support": 0.0208,
+        "lift": 5.3333
+      },
+      {
+        "product_id": "catalog_refresh_15",
+        "confidence": 0.3333,
+        "support": 0.0208,
+        "lift": 3.2
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_27": {
+    "trigger_product_id": "catalog_refresh_27",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_30",
+        "confidence": 0.3333,
+        "support": 0.0208,
+        "lift": 5.3333
+      },
+      {
+        "product_id": "bleu_de_chanel",
+        "confidence": 0.3333,
+        "support": 0.0208,
+        "lift": 2.6667
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "bleu_de_chanel": {
+    "trigger_product_id": "bleu_de_chanel",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_13",
+        "confidence": 0.3333,
+        "support": 0.0417,
+        "lift": 2.2857
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_03": {
+    "trigger_product_id": "catalog_refresh_03",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_13",
+        "confidence": 0.3333,
+        "support": 0.0312,
+        "lift": 2.2857
+      },
+      {
+        "product_id": "catalog_refresh_06",
+        "confidence": 0.2222,
+        "support": 0.0208,
+        "lift": 1.9394
+      },
+      {
+        "product_id": "catalog_refresh_22",
+        "confidence": 0.2222,
+        "support": 0.0208,
+        "lift": 1.2549
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_20": {
+    "trigger_product_id": "catalog_refresh_20",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_10",
+        "confidence": 0.3,
+        "support": 0.0312,
+        "lift": 4.8
+      },
+      {
+        "product_id": "catalog_refresh_16",
+        "confidence": 0.3,
+        "support": 0.0312,
+        "lift": 2.6182
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_15": {
+    "trigger_product_id": "catalog_refresh_15",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_11",
+        "confidence": 0.3,
+        "support": 0.0312,
+        "lift": 4.1143
+      },
+      {
+        "product_id": "catalog_refresh_26",
+        "confidence": 0.3,
+        "support": 0.0312,
+        "lift": 2.88
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_24": {
+    "trigger_product_id": "catalog_refresh_24",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_28",
+        "confidence": 0.2857,
+        "support": 0.0208,
+        "lift": 3.0476
+      },
+      {
+        "product_id": "catalog_refresh_22",
+        "confidence": 0.2857,
+        "support": 0.0208,
+        "lift": 1.6134
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_13": {
+    "trigger_product_id": "catalog_refresh_13",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_12",
+        "confidence": 0.2857,
+        "support": 0.0417,
+        "lift": 2.7429
+      },
+      {
+        "product_id": "bleu_de_chanel",
+        "confidence": 0.2857,
+        "support": 0.0417,
+        "lift": 2.2857
+      },
+      {
+        "product_id": "catalog_refresh_03",
+        "confidence": 0.2143,
+        "support": 0.0312,
+        "lift": 2.2857
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_02": {
+    "trigger_product_id": "catalog_refresh_02",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_18",
+        "confidence": 0.2857,
+        "support": 0.0208,
+        "lift": 2.7429
+      },
+      {
+        "product_id": "catalog_refresh_13",
+        "confidence": 0.2857,
+        "support": 0.0208,
+        "lift": 1.9592
+      },
+      {
+        "product_id": "catalog_refresh_22",
+        "confidence": 0.2857,
+        "support": 0.0208,
+        "lift": 1.6134
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_14": {
+    "trigger_product_id": "catalog_refresh_14",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_08",
+        "confidence": 0.2857,
+        "support": 0.0208,
+        "lift": 2.2857
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_09": {
+    "trigger_product_id": "catalog_refresh_09",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_07",
+        "confidence": 0.2727,
+        "support": 0.0312,
+        "lift": 3.7403
+      },
+      {
+        "product_id": "catalog_refresh_21",
+        "confidence": 0.2727,
+        "support": 0.0312,
+        "lift": 2.1818
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_16": {
+    "trigger_product_id": "catalog_refresh_16",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_20",
+        "confidence": 0.2727,
+        "support": 0.0312,
+        "lift": 2.6182
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_06": {
+    "trigger_product_id": "catalog_refresh_06",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_21",
+        "confidence": 0.2727,
+        "support": 0.0312,
+        "lift": 2.1818
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_01": {
+    "trigger_product_id": "catalog_refresh_01",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_05",
+        "confidence": 0.25,
+        "support": 0.0104,
+        "lift": 4.8
+      },
+      {
+        "product_id": "catalog_refresh_10",
+        "confidence": 0.25,
+        "support": 0.0104,
+        "lift": 4.0
+      },
+      {
+        "product_id": "catalog_refresh_11",
+        "confidence": 0.25,
+        "support": 0.0104,
+        "lift": 3.4286
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_23": {
+    "trigger_product_id": "catalog_refresh_23",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_20",
+        "confidence": 0.25,
+        "support": 0.0208,
+        "lift": 2.4
+      },
+      {
+        "product_id": "catalog_refresh_06",
+        "confidence": 0.25,
+        "support": 0.0208,
+        "lift": 2.1818
+      },
+      {
+        "product_id": "catalog_refresh_08",
+        "confidence": 0.25,
+        "support": 0.0208,
+        "lift": 2.0
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_21": {
+    "trigger_product_id": "catalog_refresh_21",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_06",
+        "confidence": 0.25,
+        "support": 0.0312,
+        "lift": 2.1818
+      },
+      {
+        "product_id": "catalog_refresh_09",
+        "confidence": 0.25,
+        "support": 0.0312,
+        "lift": 2.1818
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_08": {
+    "trigger_product_id": "catalog_refresh_08",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_22",
+        "confidence": 0.25,
+        "support": 0.0312,
+        "lift": 1.4118
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_25": {
+    "trigger_product_id": "catalog_refresh_25",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_10",
+        "confidence": 0.2308,
+        "support": 0.0312,
+        "lift": 3.6923
+      }
+    ],
+    "source": "fp_growth_v1"
+  },
+  "catalog_refresh_28": {
+    "trigger_product_id": "catalog_refresh_28",
+    "recommended_products": [
+      {
+        "product_id": "catalog_refresh_24",
+        "confidence": 0.2222,
+        "support": 0.0208,
+        "lift": 3.0476
+      },
+      {
+        "product_id": "catalog_refresh_15",
+        "confidence": 0.2222,
+        "support": 0.0208,
+        "lift": 2.1333
+      },
+      {
+        "product_id": "catalog_refresh_20",
+        "confidence": 0.2222,
+        "support": 0.0208,
+        "lift": 2.1333
+      }
+    ],
+    "source": "fp_growth_v1"
+  }
+}

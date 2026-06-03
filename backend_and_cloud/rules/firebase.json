@@ -1,0 +1,35 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "firestore": {
+      "host": "127.0.0.1",
+      "port": 8085
+    }
+  },
+  "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "perfume-app-9999",
+                    "appId": "1:480328445067:android:468cfed2ec771e87ab788e",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "perfume-app-9999",
+                    "configurations": {
+                        "android": "1:480328445067:android:468cfed2ec771e87ab788e",
+                        "ios": "1:480328445067:ios:ea4abf8d22e91571ab788e",
+                        "macos": "1:480328445067:ios:ea4abf8d22e91571ab788e",
+                        "web": "1:480328445067:web:8333a351918d53e8ab788e",
+                        "windows": "1:480328445067:web:05725308826d9170ab788e"
+                    }
+                }
+            }
+        }
+    }
+}

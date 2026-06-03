@@ -1,0 +1,25 @@
+{
+  "name": "perfume-orders-worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "node --experimental-default-type=module --test tests/*.test.js",
+    "test:e2e:h22h24": "node scripts/e2e_h22_h24.js",
+    "cleanup:e2e:firestore": "node scripts/cleanup_e2e_firestore.js",
+    "firestore:update:sauvage": "node scripts/update_sauvage_firestore.js",
+    "admin:claim:grant": "node scripts/set_admin_claim.js --grant",
+    "admin:claim:revoke": "node scripts/set_admin_claim.js --revoke"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.6.0",
+    "jose": "^5.9.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "typescript": "^6.0.2",
+    "wrangler": "^4.76.0"
+  }
+}

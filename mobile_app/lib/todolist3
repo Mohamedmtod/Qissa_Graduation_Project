@@ -1,0 +1,287 @@
+# TodoList 3 (Updated)
+
+Last review: 2026-03-23  
+Merged sources:
+- `lib/TodoList`
+- `lib/todolist2.md`
+- previous `lib/todolist3`
+
+Legend:
+- [x] 🟢 Done in current code
+- [ ] 🔴 Not done yet
+- [~] 🟡 Partially done
+
+Status format used in this TODO:
+- `[x]` = completed
+- `[~]` = partially completed
+- `[ ]` = not completed yet
+
+## 1) Worker Plan (H1 -> H24)
+
+- 🟢 H1-H2 Base setup (Worker + secrets + `/health`)
+- 🟢 H2-H4 API contract + state machine
+- 🟢 H4-H8 Auth + authorization (401/403 behavior)
+- 🟢 H8-H13 Atomic `POST /orders` + idempotency + stock deduction
+- 🟢 H13-H15 Customer cancel (`pending` only) + atomic restock
+- 🟢 H15-H18 Admin status endpoint + valid transitions + 409 for invalid
+- 🟢 H18-H20 Flutter integration (`OrderRepo.createOrder` -> Worker)
+- 🟢 H20-H22 Firestore rules hardening against client bypass
+- 🟢 H22-H24 Final testing (7 scenarios pass + logs)
+
+## 2) Current App Status (Important)
+
+- 🟢 Checkout now creates orders via Worker (not direct Firestore write).
+- 🟢 My Orders stream remains Firestore-based (query side).
+- 🟢 Cancel order button added on My Orders for `pending` orders only.
+- 🟢 Cancel flow calls Worker endpoint `/orders/:id/cancel`.
+- 🟢 Firestore rules block direct client writes to `orders`.
+- 🟢 Firestore rules block direct client stock mutation.
+- 🟢 Worker + docs + consolidated project report are in place.
+
+## 3) Merged Detailed Plan (Ordered + Explained)
+
+This section merges old detailed plans with the current real state.
+Duplicate items were consolidated here.
+Order is from MVP hardening -> quality baseline -> scale features.
+
+### Phase A: Customer App Core (Historical + Current Reality)
+
+#### A1) Shopping core (deduplicated)
+- 🟢 Product details flow is complete:
+  - route + navigation
+  - live details state
+  - full details UI + add-to-cart safety
+- 🟢 Search/discovery is complete:
+  - search results + pagination
+  - categories from Firestore
+  - event logging for search/product_view/add_to_cart
+- 🟢 Cart core is complete:
+  - quantity update/remove/clear
+  - stock-aware behavior
+  - race-condition hardening
+
+Why this matters:
+- This is the full "browse -> discover -> add" journey.
+
+Definition of Done:
+- User can discover products and add to cart with correct stock logic.
+
+#### A2) Checkout + orders lifecycle (backend-driven)
+- 🟢 Checkout creates order request through Worker.
+- 🟢 Worker validates stock and writes order atomically.
+- 🟢 `MyOrders` reads from Firestore stream (query side).
+- 🟢 Cancel pending order from My Orders is implemented and routed through Worker.
+- 🟢 Admin status transition endpoint is implemented in Worker with valid state machine.
+- 🟢 Idempotency and concurrency protections are implemented and tested.
+
+Why this matters:
+- This is the core business flow and already production-oriented.
+
+Definition of Done:
+- User order lifecycle is truthful, atomic, and protected from duplicate effects.
+
+#### A3) Security + deployment baseline
+- 🟢 Firestore rules hardened to block direct client writes to `orders`.
+- 🟢 Firestore rules block direct client mutation of `products.stock`.
+- 🟢 Worker authz/authn integrated with Firebase tokens and admin checks.
+- 🟢 Worker docs, contract, report, and E2E scripts exist.
+- 🟢 E2E data cleanup from Firestore is implemented via cleanup script.
+
+Why this matters:
+- Prevents client bypass and enforces server truth.
+
+Definition of Done:
+- Sensitive writes are backend-only.
+
+### Phase B: MVP Hardening (Next Required Work)
+
+#### B1) Remove user-facing placeholders
+- 🔴 Payment Methods page: either implement storage/logic or hide from menu.
+- 🔴 Language page: either implement real locale switching or hide from menu.
+- 🔴 Biometric option: implement real auth flow or hide option.
+- 🔴 Pickup tab: implement end-to-end behavior or remove/hide it.
+
+Why this is next:
+- Placeholder UI reduces trust in an otherwise working commerce flow.
+
+Definition of Done:
+- No visible feature in customer app is fake or dead-end.
+
+#### B2) Profile consistency
+- 🟡 Core profile actions exist (orders, wishlist, address, edit profile, change password).
+- 🔴 Review and remove any non-functional profile entry points.
+- 🔴 Ensure all profile routes return cleanly and consistently.
+
+Definition of Done:
+- Profile shows only actionable items.
+
+### Phase C: Quality Baseline
+
+#### C1) Test coverage
+- 🟢 Worker E2E suite exists (7/7 scenarios pass).
+- 🟡 Flutter app tests expanded:
+  - 🟢 Search pagination (search_cubit_test.dart)
+  - 🟢 Cart stock & clear logic (cart_cubit_test.dart)
+  - 🟢 Order creation & error states (order_repo_test.dart, order_cubit_test.dart)
+  - 🟢 Address default switching (address_cubit_test.dart)
+
+Definition of Done:
+- Minimum safety net exists for app-side regressions.
+
+#### C2) Analyzer and cleanup
+- 🟢 Full project clean (flutter analyze returns 0 issues).
+- 🟢 Removed technical debt markers (e.g., placeholder "0000" in ProductRepo).
+
+Definition of Done:
+- Full project analysis returns zero issues.
+
+#### C3) Project docs alignment
+- 🟢 Worker-side docs are complete.
+- 🟢 Main app `README.md` now includes consolidated setup/run/test flow aligned with Worker architecture.
+- 🟢 Smoke test report is linked from main docs (`docs/smoke_test_report.md`).
+
+Definition of Done:
+- New developer can bootstrap full stack from docs only.
+
+### Phase D: Scale Features (After B + C)
+
+#### D1) Admin dashboard
+- 🔴 Role-gated admin app/web.
+- 🔴 Product management (CRUD).
+- 🔴 Order management and transitions from dashboard UI.
+- 🔴 Banner/category management.
+
+#### D2) Cloudflare R2 upload flow
+- 🔴 Signed URL backend flow.
+- 🔴 Flutter upload client flow.
+- 🔴 Save and manage uploaded URLs in Firestore.
+
+#### D3) Smart features and growth
+- 🔴 Recommendations / For You.
+- 🔴 AI chatbot.
+- 🔴 Push notifications.
+
+Definition of Done for Phase D:
+- Growth features build on stable data and trusted operations, not before.
+
+## 4) Next Step (Actionable Execution)
+
+### Next step now (single focus):
+- Finish placeholders in Profile + Address flow (implement or hide).
+
+Deferred by decision (2026-04-04):
+- Hide `Payment Methods` from Profile/menu.
+- Hide/disable `Language` until real locale switching is implemented.
+- Hide `Biometric` option until real secure auth flow is implemented.
+- Hide/remove `Pickup` tab until full end-to-end flow is implemented.
+- These items are intentionally postponed to keep momentum on core delivery.
+
+### Detailed execution order:
+1. Payment Methods: hide now or implement persistence.
+2. Language: hide now or implement locale switch.
+3. Biometric: hide now or implement real secure auth gate.
+4. Pickup tab: hide now or complete full flow.
+5. Run smoke test:
+   - browse -> add to cart -> checkout -> my orders -> cancel pending
+
+### Completion criteria:
+- Every visible settings/profile action works end-to-end.
+- No placeholder text remains in customer-facing critical pages.
+
+## 5) Project App Flow Alignment (from `lib/project app flow`)
+
+This section maps your defined app flow to current implementation status.
+
+### 1) Authentication
+- 🟢 Register/login exists.
+- 🟢 `users/{uid}` creation with base profile exists.
+
+### 2) Browse & Discovery (MainLayout)
+- 🟢 Main tabs structure exists (Home, AI Chat, Cart, Profile).
+- 🟡 Home/Cart/Profile are functional.
+- 🔴 AI Chat tab is still placeholder (not real feature flow yet).
+
+### 3) Search & Product Discovery
+- 🟢 Search and category-based discovery exist.
+- 🟢 Product details navigation works.
+
+### 4) Product Details
+- 🟢 Product details screen is implemented with core data.
+- 🟢 Add-to-cart from details exists with stock safety.
+- 🟢 Product events (product_view, add_to_cart) logging exists.
+
+### 5) Cart
+- 🟢 Increase/decrease/remove exists.
+- 🟢 Stock validation before quantity increase exists.
+
+### 6) Address & Checkout
+- 🟢 Address selection and map picker flow exist.
+- 🟢 Checkout summary + notes + payment method selection UI exist.
+- 🟢 Place Order action now goes through Worker.
+
+### 7) Order Processing
+- 🟢 Order starts as `pending`.
+- 🟢 Backend Worker validates stock, deducts, and persists state.
+- 🟢 My Orders tracking is live via Firestore stream.
+- 🟢 "Cart cleared after success" is implemented in checkout after successful order creation.
+
+### 8) Profile
+- 🟢 Core profile actions exist (orders, address, edit profile, logout).
+- 🟡 Preference management is partially implemented (some screens are placeholder only).
+
+### 9) AI Chat Feature
+- 🟡 Real chat session flow is implemented inside `MainLayout` with persistent state.
+- 🟡 Qualifying questions + recommendation conversation logic is implemented (`ask` / `recommend` / follow-up / compare).
+- 🟡 Catalog-aware recommendation pipeline is implemented (local catalog filtering/ranking + Worker response), with remaining parser edge-cases before marking fully done.
+
+### 10) AI Feedback Feature
+- 🔴 Post-chat feedback sheet and feedback storage not implemented yet.
+
+### 11) AI Feedback Analysis
+- 🔴 Worker-based transcript analysis pipeline not implemented yet.
+- 🔴 Structured AI analysis fields (`intentUnderstood`, `needSatisfied`, etc.) are not implemented yet.
+
+### 12) Admin Dashboard
+- 🔴 Admin dashboard (products/orders/banners/stats + AI analytics) not implemented as completed product flow.
+- some important features
+  1. قسم التحليل المالي (The Business Brain) 📊
+  هنا هتطبق اللي الدكتور طلبه منك:
+
+  [ ] حساب نقطة التعادل (Break-Even Point): برمجة معادلة تاخد (تكاليف السيرفرات + تكلفة تصنيع العطور) وتقارنها بالمبيعات عشان تطلع للمدير "إحنا بعنا كام إزازة ومحتاجين نبيع كام عشان نبدأ نكسب".
+
+  [ ] لوحة الـ Pro Forma: جدول تقديري يظهر توقعات المبيعات للشهر الجاي بناءً على أداء الشهر الحالي.
+
+  [ ] مؤشرات الأداء (Ratio Analysis): عرض "نسبة الربح" لكل عطر، و"معدل تحويل العميل" (كم واحد دخل الشات واشترى فعلاً).
+
+  2. إدارة المخزون والطلبات (Inventory & Restock) 📦
+  [ ] سجل "أبلغني عند التوفر" (Notify Me Logs): شاشة تظهر للمدير قائمة بالمنتجات اللي العملاء طلبوا تنبيه ليها، مرتبة حسب الأكثر طلباً (عشان يعرف إيه اللي محتاج يوفره فوراً).
+
+  [ ] تنبيهات النقص (Low Stock Alerts): نظام يغير لون المنتج للأحمر لما الكمية تقل عن حد معين.
+
+  [ ] تحديث حالة المخزون: إمكانية إضافة كميات جديدة بضغطة زر وتحديثها في الـ Real-time Database.
+
+  3. إدارة مستخدمي الذكاء الاصطناعي (AI Insights) 🤖
+  [ ] سجل المحادثات (Chat Logs): (بدون انتهاك خصوصية) لمراجعة هل الـ AI بيرشح العطور صح ولا العميل بيقفل المحادثة وهو مش فاهم.
+
+  [ ] خريطة التفضيلات (Preferences Analytics): إحصائية توريك أكتر "نوتات عطرية" (Notes) أو "فصول" (Seasons) العملاء بيسألوا عنها في السويس، عشان توفر عطور صيفية مثلاً لو الطلب عليها عالي.
+
+  4. التقارير المالية (Financial Reporting) 💰
+  [ ] زر تصدير التقارير (Export to PDF/Excel): عشان المدير (والدك مثلاً في مشروع المحل) يقدر يطبع تقرير المبيعات الشهري في ثانية.
+
+  [ ] تتبع المصاريف: مكان لإدخال تكاليف التشغيل (زي فاتورة الكهرباء للمحل أو اشتراك السيرفر) عشان حسابات الـ Break-even تكون دقيقة.
+
+## 6) Updated Next Steps (Based on Your Defined Flow)
+
+To keep your architecture clean and aligned with the target flow, execute in this order:
+
+1. 🔴 Finish all customer-facing placeholders (Profile + Address related settings).
+2. 🟢 Lock quality baseline (full analyze clean + minimum Flutter tests).
+3. 🔴 Implement AI Chat core (session + messages + basic catalog-grounded responses).
+4. 🔴 Implement AI feedback collection after each chat session.
+5. 🔴 Implement AI feedback analysis worker + storage schema.
+6. 🔴 Build admin dashboard views for operational data, then add AI analytics panels.
+
+Definition of Done for this sequence:
+- Customer app has no fake entry points.
+- AI flow exists end-to-end: chat -> feedback -> analysis.
+- Admin can see and act on operational + AI quality signals.

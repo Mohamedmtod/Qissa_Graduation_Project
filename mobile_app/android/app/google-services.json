@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "480328445067",
+    "project_id": "perfume-app-9999",
+    "storage_bucket": "perfume-app-9999.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:480328445067:android:468cfed2ec771e87ab788e",
+        "android_client_info": {
+          "package_name": "com.example.perfume_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABrp7kD7jUX4ZHWRmjyfg02qgRKFKH0m4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
