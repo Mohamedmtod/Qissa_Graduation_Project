@@ -1,3 +1,6 @@
+# Internal agent instruction files (not for public repos)
+AGENTS.md
+
 # Secrets / private config
 .env
 .env.*
