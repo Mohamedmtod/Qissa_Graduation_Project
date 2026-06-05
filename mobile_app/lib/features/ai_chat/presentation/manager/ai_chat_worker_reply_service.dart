@@ -29,15 +29,24 @@ class AIChatWorkerReplyService {
   static const Duration workerHardTimeout = Duration(
     seconds: _workerHardTimeoutSeconds,
   );
+  static const int _appSoftTimeoutSeconds = int.fromEnvironment(
+    'AI_CHAT_APP_SOFT_TIMEOUT_SECONDS',
+    defaultValue: 2,
+  );
+  static const Duration appSoftTimeoutDefault = Duration(
+    seconds: _appSoftTimeoutSeconds,
+  );
 
   final AIChatRepo aiChatRepo;
   final MissingFoundationalSlotsPredicate hasMissingFoundationalDiscoverySlots;
   final Duration workerTimeout;
+  final Duration appSoftTimeout;
 
   const AIChatWorkerReplyService({
     required this.aiChatRepo,
     required this.hasMissingFoundationalDiscoverySlots,
     this.workerTimeout = workerHardTimeout,
+    this.appSoftTimeout = appSoftTimeoutDefault,
   });
 
   Future<AIChatWorkerReplyContext> fetchAndNormalize({
@@ -50,6 +59,10 @@ class AIChatWorkerReplyService {
   }) async {
     AIChatReply? reply;
     String? failureReasonCode;
+    var appSoftTimeoutHit = false;
+    var fallbackFromCandidates = false;
+    String? latencyPolicyReason;
+    var workerLateResultIgnored = false;
     final effectiveLastAskQuestion =
         lastAskQuestion ?? _lastAssistantQuestionFrom(currentMessages);
     final compactContext = AIChatExperimentConfig.sendCompactContext
@@ -64,24 +77,116 @@ class AIChatWorkerReplyService {
           )
         : null;
     try {
-      final request = compactContext == null
-          ? aiChatRepo.fetchAIRecommendation(
-              currentMessage: incoming.trimmed,
-              preferences: discovery.localPreferences,
-              candidates: recommendationContext.candidatesList,
-              responseLanguage: incoming.responseLanguage,
-              requestId: incoming.requestId,
-            )
-          : aiChatRepo.fetchAIRecommendationWithContext(
-              currentMessage: incoming.trimmed,
-              preferences: discovery.localPreferences,
-              candidates: recommendationContext.candidatesList,
-              localRecommendations: recommendationContext.localCandidatesRefs,
-              compactContext: compactContext,
-              responseLanguage: incoming.responseLanguage,
-              requestId: incoming.requestId,
+      final canUseCandidateFallback = _canUseSoftCandidateFallback(
+        incoming: incoming,
+        discovery: discovery,
+        recommendationContext: recommendationContext,
+        currentPreferences: currentPreferences,
+      );
+      String? responseSourceOverride;
+      if (canUseCandidateFallback &&
+          _looksLikeBroadChoiceHelp(incoming.trimmed)) {
+        fallbackFromCandidates = true;
+        latencyPolicyReason = 'safe_candidates_preemptive_fallback';
+        failureReasonCode = 'app_preemptive_candidate_fallback';
+        responseSourceOverride = 'local_candidate_preemptive_fallback';
+        reply = buildRecommendReplyFromLocalCandidates(
+          recommendationContext.localCandidatesRefs,
+          updatedPreferences: discovery.localPreferences,
+          requestId: incoming.requestId,
+          promptVersion: 'local_preemptive_candidate_fallback_v1',
+          provider: 'local',
+          modelId: 'candidate_fallback',
+        );
+      } else {
+        final request = compactContext == null
+            ? aiChatRepo.fetchAIRecommendation(
+                currentMessage: incoming.trimmed,
+                preferences: discovery.localPreferences,
+                candidates: recommendationContext.candidatesList,
+                responseLanguage: incoming.responseLanguage,
+                requestId: incoming.requestId,
+              )
+            : aiChatRepo.fetchAIRecommendationWithContext(
+                currentMessage: incoming.trimmed,
+                preferences: discovery.localPreferences,
+                candidates: recommendationContext.candidatesList,
+                localRecommendations:
+                    recommendationContext.localCandidatesRefs,
+                compactContext: compactContext,
+                responseLanguage: incoming.responseLanguage,
+                requestId: incoming.requestId,
+              );
+        if (canUseCandidateFallback) {
+          try {
+            reply = await request.timeout(appSoftTimeout);
+          } on TimeoutException {
+            appSoftTimeoutHit = true;
+            fallbackFromCandidates = true;
+            workerLateResultIgnored = true;
+            latencyPolicyReason = 'safe_candidates_soft_timeout';
+            failureReasonCode = 'app_soft_timeout';
+            unawaited(
+              request
+                  .then(
+                    (_) => aiChatRepo.logAIChatEvent(
+                      eventType: 'ai_worker_late_result_ignored',
+                      sessionId: incoming.activeSessionId,
+                      metadata: {
+                        'requestId': incoming.requestId,
+                        'timeoutMs': appSoftTimeout.inMilliseconds,
+                        'candidateCount':
+                            recommendationContext.candidatesList.length,
+                        'safeCandidateCount':
+                            recommendationContext.localCandidatesRefs.length,
+                      },
+                    ),
+                  )
+                  .catchError((Object _) {}),
             );
-      reply = await request.timeout(workerTimeout);
+            unawaited(
+              aiChatRepo.logAIChatEvent(
+                eventType: 'ai_worker_app_soft_timeout',
+                sessionId: incoming.activeSessionId,
+                metadata: {
+                  'requestId': incoming.requestId,
+                  'timeoutMs': appSoftTimeout.inMilliseconds,
+                  'candidateCount':
+                      recommendationContext.candidatesList.length,
+                  'safeCandidateCount':
+                      recommendationContext.localCandidatesRefs.length,
+                },
+              ),
+            );
+            reply = buildRecommendReplyFromLocalCandidates(
+              recommendationContext.localCandidatesRefs,
+              updatedPreferences: discovery.localPreferences,
+              requestId: incoming.requestId,
+              promptVersion: 'local_soft_timeout_v1',
+              provider: 'local',
+              modelId: 'candidate_fallback',
+            );
+          }
+        } else {
+          reply = await request.timeout(workerTimeout);
+        }
+      }
+      var responseSource = responseSourceOverride ??
+          (appSoftTimeoutHit ? 'local_candidate_soft_timeout' : 'ai_worker');
+      return await _normalizeWorkerReply(
+        incoming: incoming,
+        discovery: discovery,
+        recommendationContext: recommendationContext,
+        currentPreferences: currentPreferences,
+        lastAskQuestion: lastAskQuestion,
+        reply: reply,
+        failureReasonCode: failureReasonCode,
+        responseSource: responseSource,
+        appSoftTimeoutHit: appSoftTimeoutHit,
+        fallbackFromCandidates: fallbackFromCandidates,
+        latencyPolicyReason: latencyPolicyReason,
+        workerLateResultIgnored: workerLateResultIgnored,
+      );
     } on TimeoutException {
       failureReasonCode = 'worker_timeout';
       unawaited(
@@ -97,10 +202,42 @@ class AIChatWorkerReplyService {
       );
       reply = null;
     }
+    return await _normalizeWorkerReply(
+      incoming: incoming,
+      discovery: discovery,
+      recommendationContext: recommendationContext,
+      currentPreferences: currentPreferences,
+      lastAskQuestion: lastAskQuestion,
+      reply: reply,
+      failureReasonCode: failureReasonCode,
+      responseSource: appSoftTimeoutHit
+          ? 'local_candidate_soft_timeout'
+          : 'ai_worker',
+      appSoftTimeoutHit: appSoftTimeoutHit,
+      fallbackFromCandidates: fallbackFromCandidates,
+      latencyPolicyReason: latencyPolicyReason,
+      workerLateResultIgnored: workerLateResultIgnored,
+    );
+  }
+
+  Future<AIChatWorkerReplyContext> _normalizeWorkerReply({
+    required AIChatTurnContext incoming,
+    required AIChatDiscoveryContext discovery,
+    required AIChatRecommendationContext recommendationContext,
+    required SessionPreferences currentPreferences,
+    required String? lastAskQuestion,
+    required AIChatReply? reply,
+    required String? failureReasonCode,
+    required String responseSource,
+    required bool appSoftTimeoutHit,
+    required bool fallbackFromCandidates,
+    required String? latencyPolicyReason,
+    required bool workerLateResultIgnored,
+  }) async {
     failureReasonCode ??= reply == null
         ? aiChatRepo.lastWorkerFailureReasonCode ?? 'worker_empty_reply'
         : null;
-    var responseSource = 'ai_worker';
+    var normalizedResponseSource = responseSource;
 
     if (reply != null &&
         discovery.isFollowUpOrCompare &&
@@ -110,7 +247,7 @@ class AIChatWorkerReplyService {
         answer: recommendationContext.localFallbackAnswer!,
         updatedPreferences: currentPreferences,
       );
-      responseSource = 'forced_answer';
+      normalizedResponseSource = 'forced_answer';
     }
 
     if (reply != null) {
@@ -177,18 +314,18 @@ class AIChatWorkerReplyService {
       }
 
       if (!normalizedAsk.isAsk) {
-        responseSource = 'ask_override';
+        normalizedResponseSource = 'ask_override';
         reply = normalizedAsk;
       } else if (normalizedAsk.question != reply.question &&
           !_shouldPreserveWorkerAsk(incoming.trimmed)) {
-        responseSource = 'ask_retarget';
+        normalizedResponseSource = 'ask_retarget';
         reply = normalizedAsk;
       } else if (_shouldRecoverFoundationalAskWithCandidateList(
         normalizedAsk,
         recommendationContext.candidatesList,
         discovery.effectiveHasRecommendationContext,
       )) {
-        responseSource = 'ask_override';
+        normalizedResponseSource = 'ask_override';
         reply = AIChatReply.recommend(
           productIds: recommendationContext.candidatesList
               .take(3)
@@ -205,9 +342,9 @@ class AIChatWorkerReplyService {
     }
 
     if (_shouldRewriteSimilarityNoMatch(incoming.trimmed, reply)) {
-      responseSource = responseSource.contains('ai_worker')
+      normalizedResponseSource = normalizedResponseSource.contains('ai_worker')
           ? 'ai_worker_similarity_not_found_rewrite'
-          : responseSource;
+          : normalizedResponseSource;
       reply = AIChatReply.answer(
         answer: incoming.responseLanguage == AIChatLanguage.arabic
             ? '\u0627\u0644\u0627\u0633\u0645 \u062f\u0647 \u0645\u0634 \u0639\u0646\u062f\u064a\u060c \u0648\u0645\u0634 \u0647\u062e\u0645\u0646 \u0648\u0635\u0641\u0647. \u0627\u0648\u0635\u0641 \u0644\u064a \u0627\u0644\u0637\u0627\u0628\u0639 \u0627\u0644\u0644\u064a \u0642\u0627\u0635\u062f\u0647 \u0648\u0623\u062f\u0648\u0631 \u0644\u0643 \u0639\u0644\u0649 \u0628\u062f\u064a\u0644 \u0645\u0646\u0627\u0633\u0628.'
@@ -230,7 +367,7 @@ class AIChatWorkerReplyService {
         language: incoming.responseLanguage.code,
         messageText: incoming.trimmed,
         detectedIntent: incoming.intent.name,
-        responseSource: responseSource,
+        responseSource: normalizedResponseSource,
         workerReplySummary: {
           'isNull': reply == null,
           'type': reply == null
@@ -262,15 +399,117 @@ class AIChatWorkerReplyService {
           ...?failureReasonCode == null
               ? null
               : {'failureReasonCode': failureReasonCode},
+          if (appSoftTimeoutHit) 'appSoftTimeoutHit': true,
+          if (fallbackFromCandidates) 'fallbackFromCandidates': true,
+          ...?latencyPolicyReason == null
+              ? null
+              : {'latencyPolicyReason': latencyPolicyReason},
+          if (workerLateResultIgnored) 'workerLateResultIgnored': true,
         },
       ),
     );
 
     return AIChatWorkerReplyContext(
       reply: reply,
-      responseSource: responseSource,
+      responseSource: normalizedResponseSource,
       failureReasonCode: failureReasonCode,
+      appSoftTimeoutHit: appSoftTimeoutHit,
+      fallbackFromCandidates: fallbackFromCandidates,
+      latencyPolicyReason: latencyPolicyReason,
+      workerLateResultIgnored: workerLateResultIgnored,
     );
+  }
+
+  bool _canUseSoftCandidateFallback({
+    required AIChatTurnContext incoming,
+    required AIChatDiscoveryContext discovery,
+    required AIChatRecommendationContext recommendationContext,
+    required SessionPreferences currentPreferences,
+  }) {
+    if (appSoftTimeout <= Duration.zero) return false;
+    if (recommendationContext.localCandidatesRefs.isEmpty) return false;
+    final normalized = LocalIntentParser.normalizeInput(incoming.trimmed);
+    if (_looksLikeExactAvailability(normalized)) return false;
+    if (_looksLikeBusinessQuestion(normalized)) return false;
+    if (_looksLikeAnswerOnlyCatalogQuestion(normalized)) return false;
+    if (_looksLikeExternalSimilarity(normalized)) return false;
+    if (_looksLikeSafetyOrAllergy(normalized)) return false;
+    if (discovery.localPreferences.medicalExcludedNotes.isNotEmpty ||
+        currentPreferences.medicalExcludedNotes.isNotEmpty) {
+      return false;
+    }
+    return true;
+  }
+
+  bool _looksLikeExactAvailability(String normalized) {
+    if (normalized.isEmpty) return false;
+    return normalized.contains('do you have') ||
+        normalized.contains('is there') ||
+        normalized.contains('available');
+  }
+
+  bool _looksLikeBusinessQuestion(String normalized) {
+    if (normalized.isEmpty) return false;
+    return normalized.contains('payment') ||
+        normalized.contains('delivery') ||
+        normalized.contains('shipping') ||
+        normalized.contains('return') ||
+        normalized.contains('original') ||
+        normalized.contains('\u0627\u0644\u062f\u0641\u0639') ||
+        normalized.contains('\u0627\u0644\u062a\u0648\u0635\u064a\u0644') ||
+        normalized.contains('\u0627\u0644\u0634\u062d\u0646') ||
+        normalized.contains('\u0627\u0644\u0627\u0635\u0627\u0644\u0629') ||
+        normalized.contains('\u0627\u0635\u0644\u064a');
+  }
+
+  bool _looksLikeAnswerOnlyCatalogQuestion(String normalized) {
+    if (normalized.isEmpty) return false;
+    return normalized.contains('50ml') ||
+        normalized.contains('100ml') ||
+        normalized.contains(' ml') ||
+        normalized.contains('edp') ||
+        normalized.contains('edt') ||
+        normalized.contains('size') ||
+        normalized.contains('\u0627\u0644\u062d\u062c\u0645') ||
+        normalized.contains('\u062d\u062c\u0645') ||
+        normalized.contains('\u062a\u0631\u0643\u064a\u0632') ||
+        normalized.contains('\u0645\u0644');
+  }
+
+  bool _looksLikeExternalSimilarity(String normalized) {
+    if (normalized.isEmpty) return false;
+    return normalized.contains('something like') ||
+        normalized.contains('similar to') ||
+        normalized.contains('smells like') ||
+        normalized.contains('like sauvage') ||
+        normalized.contains('\u0634\u0628\u0647') ||
+        normalized.contains('\u0632\u064a ');
+  }
+
+  bool _looksLikeSafetyOrAllergy(String normalized) {
+    if (normalized.isEmpty) return false;
+    return normalized.contains('allergy') ||
+        normalized.contains('allergic') ||
+        normalized.contains('sensitive skin') ||
+        normalized.contains('medical') ||
+        normalized.contains('\u062d\u0633\u0627\u0633\u064a\u0629') ||
+        normalized.contains(
+          '\u0628\u0634\u0631\u062a\u064a \u062d\u0633\u0627\u0633\u0629',
+        ) ||
+        normalized.contains('\u062d\u0633\u0627\u0633');
+  }
+
+  bool _looksLikeBroadChoiceHelp(String text) {
+    final normalized = LocalIntentParser.normalizeInput(text);
+    if (normalized.isEmpty) return false;
+    return normalized.contains('\u0645\u0634 \u0639\u0627\u0631\u0641') ||
+        normalized.contains('\u0645\u062d\u062a\u0627\u0631') ||
+        normalized.contains('\u0633\u0627\u0639\u062f\u0646\u064a') ||
+        normalized.contains('not sure') ||
+        normalized.contains('cannot choose') ||
+        normalized.contains('cant choose') ||
+        normalized.contains('can t choose') ||
+        normalized.contains('help me choose');
   }
 
   AIChatReply _preserveLocalNoteConstraintPatch(

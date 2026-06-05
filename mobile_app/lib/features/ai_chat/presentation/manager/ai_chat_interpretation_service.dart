@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:perfume_app/features/ai_chat/data/models/ai_chat_interpretation_result.dart';
@@ -30,6 +31,13 @@ class AIChatInterpretationService {
 
   static const AIChatRouteOwnershipPolicy _ownershipPolicy =
       AIChatRouteOwnershipPolicy();
+  static const int _interpretationTimeoutSeconds = int.fromEnvironment(
+    'AI_CHAT_INTERPRETATION_TIMEOUT_SECONDS',
+    defaultValue: 1,
+  );
+  static const Duration interpretationTimeout = Duration(
+    seconds: _interpretationTimeoutSeconds,
+  );
 
   Future<AIChatInterpretationApplication?> interpretIfUseful({
     required AIChatTurnContext incoming,
@@ -39,17 +47,39 @@ class AIChatInterpretationService {
   }) async {
     if (!_shouldInterpret(incoming, turnDecision)) return null;
 
-    final result = await _aiChatRepo.fetchAIInterpretation(
-      currentMessage: incoming.trimmed,
-      currentPreferences: state.preferences,
-      responseLanguage: incoming.responseLanguage,
-      hasRecommendationContext: incoming
-          .effectiveRecommendationMemory
-          .lastRecommendedProducts
-          .isNotEmpty,
-      hasAvailabilityContext: state.availabilityContext.hasContext,
-      requestId: incoming.requestId,
-    );
+    AIChatInterpretationResult? result;
+    try {
+      result = await _aiChatRepo
+          .fetchAIInterpretation(
+            currentMessage: incoming.trimmed,
+            currentPreferences: state.preferences,
+            responseLanguage: incoming.responseLanguage,
+            hasRecommendationContext: incoming
+                .effectiveRecommendationMemory
+                .lastRecommendedProducts
+                .isNotEmpty,
+            hasAvailabilityContext: state.availabilityContext.hasContext,
+            requestId: incoming.requestId,
+          )
+          .timeout(interpretationTimeout);
+    } on TimeoutException {
+      log(
+        'Interpretation timed out | requestId=${incoming.requestId} | '
+        'timeoutMs=${interpretationTimeout.inMilliseconds}',
+        name: 'AIChatInterpretationService',
+      );
+      unawaited(
+        _aiChatRepo.logAIChatEvent(
+          eventType: 'ai_interpretation_app_timeout',
+          sessionId: incoming.activeSessionId,
+          metadata: {
+            'requestId': incoming.requestId,
+            'timeoutMs': interpretationTimeout.inMilliseconds,
+          },
+        ),
+      );
+      return null;
+    }
     if (result == null) return null;
 
     final rejection = _rejectionReason(

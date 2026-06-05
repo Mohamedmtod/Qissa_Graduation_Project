@@ -25,6 +25,9 @@ class AIChatDebugSessionTurn {
     this.finalProductIds = const <String>[],
     this.noMatchReason,
     this.failureReason,
+    this.retargetAllowed,
+    this.retargetProofSource,
+    this.retargetBlockedReason,
     this.feedbackReason,
   });
 
@@ -50,6 +53,9 @@ class AIChatDebugSessionTurn {
   final List<String> finalProductIds;
   final String? noMatchReason;
   final String? failureReason;
+  final bool? retargetAllowed;
+  final String? retargetProofSource;
+  final String? retargetBlockedReason;
   final String? feedbackReason;
 
   Map<String, Object?> toJson() {
@@ -76,6 +82,9 @@ class AIChatDebugSessionTurn {
       'finalProductIds': finalProductIds.take(5).toList(growable: false),
       'noMatchReason': noMatchReason,
       'failureReason': failureReason,
+      'retargetAllowed': retargetAllowed,
+      'retargetProofSource': retargetProofSource,
+      'retargetBlockedReason': retargetBlockedReason,
       'feedbackReason': feedbackReason,
     }..removeWhere((_, value) {
         if (value == null) return true;
@@ -171,6 +180,9 @@ class AIChatDebugSessionBuilder {
               : products,
           noMatchReason: trace?.noMatchReason,
           failureReason: trace?.failureReason ?? message.workerFailureReason,
+          retargetAllowed: trace?.retargetAllowed,
+          retargetProofSource: trace?.retargetProofSource,
+          retargetBlockedReason: trace?.retargetBlockedReason,
         ),
       );
       pendingUser = null;

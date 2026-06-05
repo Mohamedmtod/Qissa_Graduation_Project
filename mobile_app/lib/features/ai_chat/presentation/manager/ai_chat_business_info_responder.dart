@@ -102,6 +102,8 @@ class AIChatBusinessInfoResponder {
         normalized.contains('مفتوحين دلوقتي');
     if (asksHours) return 'hours';
 
+    if (_looksLikeBlindBuyingAdvice(normalized)) return null;
+
     final asksPayment =
         normalized.contains('payment') ||
         normalized.contains('pay') ||
@@ -111,6 +113,18 @@ class AIChatBusinessInfoResponder {
         normalized.contains('card') ||
         normalized.contains('visa') ||
         normalized.contains('mastercard') ||
+        normalized.contains('\u0627\u0644\u062f\u0641\u0639') ||
+        normalized.contains(
+          '\u0637\u0631\u064a\u0642\u0629 \u0627\u0644\u062f\u0641\u0639',
+        ) ||
+        normalized.contains(
+          '\u0637\u0631\u0642 \u0627\u0644\u062f\u0641\u0639',
+        ) ||
+        normalized.contains('\u0623\u0648\u0646\u0644\u0627\u064a\u0646') ||
+        normalized.contains('\u0627\u0648\u0646\u0644\u0627\u064a\u0646') ||
+        normalized.contains(
+          '\u0639\u0646\u062f \u0627\u0644\u0627\u0633\u062a\u0644\u0627\u0645',
+        ) ||
         normalized.contains('طريقة الدفع') ||
         normalized.contains('طرق الدفع') ||
         normalized.contains('وسائل الدفع') ||
@@ -131,10 +145,26 @@ class AIChatBusinessInfoResponder {
         normalized.contains('delivery') ||
         normalized.contains('shipping') ||
         normalized.contains('deliver') ||
+        normalized.contains('\u0627\u0644\u062a\u0648\u0635\u064a\u0644') ||
+        normalized.contains('\u062a\u0648\u0635\u064a\u0644') ||
+        normalized.contains('\u0627\u0644\u0634\u062d\u0646') ||
+        normalized.contains('\u0634\u062d\u0646') ||
         normalized.contains('توصيل') ||
         normalized.contains('شحن') ||
         normalized.contains('دليفري');
     if (asksDelivery) return 'delivery';
+
+    final asksAuthenticity =
+        normalized.contains('authentic') ||
+        normalized.contains('original') ||
+        normalized.contains('genuine') ||
+        normalized.contains('\u0623\u0635\u0644\u064a') ||
+        normalized.contains('\u0627\u0635\u0644\u064a') ||
+        normalized.contains('\u0623\u0635\u0644\u064a\u0629') ||
+        normalized.contains('\u0627\u0635\u0644\u064a\u0629') ||
+        normalized.contains('\u0623\u0635\u0644\u064a\u064a\u0646') ||
+        normalized.contains('\u0627\u0635\u0644\u064a\u064a\u0646');
+    if (asksAuthenticity) return 'authenticity';
 
     return null;
   }
@@ -153,6 +183,9 @@ class AIChatBusinessInfoResponder {
       }
       if (request == 'contact') {
         return _buildUnavailableContactAnswer(language);
+      }
+      if (request == 'authenticity') {
+        return _buildAuthenticityAnswer(language);
       }
       return _translate(
         language,
@@ -198,6 +231,8 @@ class AIChatBusinessInfoResponder {
       );
     } else if (request == 'payment') {
       return _buildPaymentMethodsAnswer(language);
+    } else if (request == 'authenticity') {
+      return _buildAuthenticityAnswer(language);
     }
 
     if (lines.isEmpty && info.hasContact) {
@@ -227,11 +262,42 @@ class AIChatBusinessInfoResponder {
     ).hasMatch(normalized);
   }
 
+  bool _looksLikeBlindBuyingAdvice(String normalized) {
+    final online =
+        normalized.contains('online') ||
+        normalized.contains('\u0623\u0648\u0646\u0644\u0627\u064a\u0646') ||
+        normalized.contains('\u0627\u0648\u0646\u0644\u0627\u064a\u0646');
+    final blind =
+        normalized.contains('blind buy') ||
+        normalized.contains('without smelling') ||
+        normalized.contains(
+          '\u0645\u0646 \u063a\u064a\u0631 \u0645\u0627 \u0623\u0634\u0645',
+        ) ||
+        normalized.contains(
+          '\u0645\u0646 \u063a\u064a\u0631 \u0645\u0627 \u0627\u0634\u0645',
+        );
+    final choosing =
+        normalized.contains('choose') ||
+        normalized.contains('\u0623\u062e\u062a\u0627\u0631') ||
+        normalized.contains('\u0627\u062e\u062a\u0627\u0631') ||
+        normalized.contains('\u0625\u0632\u0627\u064a') ||
+        normalized.contains('\u0627\u0632\u0627\u064a');
+    return online && (blind || choosing);
+  }
+
   String _buildPaymentMethodsAnswer(AIChatLanguage language) {
     return _translate(
       language,
       ar: 'وسيلة الدفع المتاحة حاليًا هي الدفع عند الاستلام. لو أضفت منتجات للسلة، تقدر تكمل الطلب من صفحة السلة وتختار الدفع عند الاستلام.',
       en: 'The currently available payment method is cash on delivery. After adding products to the cart, you can complete checkout from the cart page and use cash on delivery.',
+    );
+  }
+
+  String _buildAuthenticityAnswer(AIChatLanguage language) {
+    return _translate(
+      language,
+      ar: '\u0627\u0644\u0639\u0637\u0648\u0631 \u0627\u0644\u0645\u0639\u0631\u0648\u0636\u0629 \u062f\u0627\u062e\u0644 \u0627\u0644\u062a\u0637\u0628\u064a\u0642 \u0645\u0646 \u0643\u062a\u0627\u0644\u0648\u062c Qissa. \u0644\u0623\u064a \u062a\u0623\u0643\u064a\u062f \u062e\u0627\u0635 \u0628\u0627\u0644\u0623\u0635\u0627\u0644\u0629 \u0623\u0648 \u0627\u0644\u062a\u0648\u0631\u064a\u062f\u060c \u0631\u0627\u062c\u0639 \u062a\u0641\u0627\u0635\u064a\u0644 \u0627\u0644\u0645\u0646\u062a\u062c \u0623\u0648 \u062e\u062f\u0645\u0629 \u0627\u0644\u0639\u0645\u0644\u0627\u0621.',
+      en: 'The perfumes shown in the app come from the Qissa catalog. For any specific authenticity or sourcing confirmation, check the product details or contact customer support.',
     );
   }
 

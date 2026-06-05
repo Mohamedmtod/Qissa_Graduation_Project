@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:perfume_app/features/ai_chat/core/ai_chat_language.dart';
 import 'package:perfume_app/features/ai_chat/data/models/session_preferences.dart';
+import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_business_info_responder.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_input_interceptor.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_text_normalizer.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/local_intent_parser.dart';
@@ -14,6 +16,18 @@ void main() {
 
       expect(parsed.maxBudget, isNull);
       expect(parsed.occasion, anyOf('formal', 'office'));
+    });
+
+    test('does not parse requested perfume count as budget', () {
+      final parsed = LocalIntentParser.parse(
+        'i want a 3 male summer perfumes with a cheap price',
+        const SessionPreferences(),
+      );
+
+      expect(parsed.gender, 'men');
+      expect(parsed.season, 'summer');
+      expect(parsed.maxBudget, isNull);
+      expect(parsed.rankingStrategy, RankingStrategy.cheapestFirst);
     });
 
     test('maps gym request into practical fragrance hints', () {
@@ -325,5 +339,77 @@ void main() {
 
       expect(result, isNull);
     });
+    test('does not flag natural exclude-then-prefer requests', () {
+      const messages = [
+        '\u0645\u0634 \u0628\u062d\u0628 \u0627\u0644\u0639\u0637\u0648\u0631 \u0627\u0644\u0642\u0648\u064a\u0629\u060c \u0639\u0627\u064a\u0632 \u062d\u0627\u062c\u0629 \u0647\u0627\u062f\u064a\u0629.',
+        '\u0645\u0634 \u0633\u0648\u064a\u062a\u060c \u0639\u0627\u064a\u0632 \u0641\u0631\u064a\u0634.',
+        'without oud but with vanilla',
+      ];
+
+      for (final message in messages) {
+        final result = AIChatInputInterceptor.detect(
+          message,
+          const SessionPreferences(),
+        );
+
+        expect(result, isNull, reason: message);
+      }
+    });
+
+    test('flags same-note include and exclude contradictions', () {
+      const messages = [
+        'without oud but with oud',
+        '\u0628\u062f\u0648\u0646 \u0641\u0627\u0646\u064a\u0644\u064a\u0627 \u0648\u0645\u0639 \u0641\u0627\u0646\u064a\u0644\u064a\u0627',
+      ];
+
+      for (final message in messages) {
+        final result = AIChatInputInterceptor.detect(
+          message,
+          const SessionPreferences(),
+        );
+
+        expect(
+          result?.kind,
+          AIChatInterceptKind.contradictionLike,
+          reason: message,
+        );
+      }
+    });
   });
+
+  group('AIChatBusinessInfoResponder', () {
+    test('recognizes Arabic payment and authenticity questions', () {
+      const responder = AIChatBusinessInfoResponder(translate: _testTranslate);
+
+      final payment = responder.requestType(
+        LocalIntentParser.normalizeInput(
+          '\u0627\u0644\u062f\u0641\u0639 \u0623\u0648\u0646\u0644\u0627\u064a\u0646 \u0648\u0644\u0627 \u0639\u0646\u062f \u0627\u0644\u0627\u0633\u062a\u0644\u0627\u0645\u061f',
+        ),
+      );
+      final authenticity = responder.requestType(
+        LocalIntentParser.normalizeInput(
+          '\u0627\u0644\u0639\u0637\u0648\u0631 \u0623\u0635\u0644\u064a\u0629\u061f',
+        ),
+      );
+
+      expect(payment, 'payment');
+      expect(authenticity, 'authenticity');
+      expect(
+        responder.buildAnswer(
+          null,
+          request: authenticity!,
+          language: AIChatLanguage.arabic,
+        ),
+        contains('Qissa'),
+      );
+    });
+  });
+}
+
+String _testTranslate(
+  AIChatLanguage language, {
+  required String ar,
+  required String en,
+}) {
+  return language.isArabic ? ar : en;
 }

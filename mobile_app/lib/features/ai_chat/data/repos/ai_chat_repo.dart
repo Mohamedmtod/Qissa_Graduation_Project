@@ -41,6 +41,10 @@ class AIChatRepo {
     'AI_CHAT_ALLOW_GUEST_WORKER',
     defaultValue: !kReleaseMode,
   );
+  static const bool _defaultAllowGuestDebugSync = bool.fromEnvironment(
+    'AI_CHAT_ALLOW_GUEST_DEBUG_SYNC',
+    defaultValue: true,
+  );
   static const int _workerHttpTimeoutSeconds = int.fromEnvironment(
     'AI_CHAT_WORKER_HTTP_TIMEOUT_SECONDS',
     defaultValue: 30,
@@ -959,11 +963,15 @@ class AIChatRepo {
     String? requestId,
   }) async {
     try {
-      if (_workerBaseUrl.isEmpty) return false;
+      if (_workerBaseUrl.isEmpty) {
+        _lastWorkerFailureReasonCode = 'worker_url_missing';
+        return false;
+      }
 
       final headers = await _buildAuthenticatedWorkerHeaders(
         endpoint: '/api/ai-chat-turn-debug',
         requestId: requestId,
+        allowGuestOverride: _defaultAllowGuestDebugSync,
       );
       if (headers == null) return false;
 
@@ -977,16 +985,24 @@ class AIChatRepo {
         ),
       );
 
-      return response.statusCode == 200 || response.statusCode == 202;
+      final success = response.statusCode == 200 || response.statusCode == 202;
+      _lastWorkerFailureReasonCode = success
+          ? null
+          : response.statusCode == null
+          ? 'turn_debug_http_unknown'
+          : 'turn_debug_http_${response.statusCode}';
+      return success;
     } on DioException catch (dioErr) {
+      _recordWorkerFailure(dioErr, requestId: requestId);
       _logDebug(
-        'Dio networking error sending AI chat turn debug: ${dioErr.message} | requestId=$requestId',
+        'Dio networking error sending AI chat turn debug: ${dioErr.message} | requestId=$requestId | reasonCode=$_lastWorkerFailureReasonCode',
         error: dioErr,
       );
       return false;
     } catch (e) {
+      _lastWorkerFailureReasonCode = 'turn_debug_unknown_error';
       _logDebug(
-        'Unknown error sending AI chat turn debug: $e | requestId=$requestId',
+        'Unknown error sending AI chat turn debug: $e | requestId=$requestId | reasonCode=$_lastWorkerFailureReasonCode',
         error: e,
       );
       return false;
@@ -1353,10 +1369,12 @@ class AIChatRepo {
     String? requestId,
     required String endpoint,
     bool forceRefresh = false,
+    bool? allowGuestOverride,
   }) async {
+    final allowGuestRequests = allowGuestOverride ?? _allowGuestWorkerRequests;
     final user = _resolvedAuth.currentUser;
     if (user == null) {
-      if (_allowGuestWorkerRequests) {
+      if (allowGuestRequests) {
         _lastWorkerFailureReasonCode = null;
         _logDebug(
           'AI worker auth bypassed: guest_allowed | endpoint=$endpoint | requestId=$requestId',
@@ -1373,7 +1391,7 @@ class AIChatRepo {
 
     final idToken = await user.getIdToken(forceRefresh);
     if (idToken == null || idToken.trim().isEmpty) {
-      if (_allowGuestWorkerRequests) {
+      if (allowGuestRequests) {
         _lastWorkerFailureReasonCode = null;
         _logDebug(
           'AI worker auth bypassed: token_missing_guest_allowed | endpoint=$endpoint | requestId=$requestId',

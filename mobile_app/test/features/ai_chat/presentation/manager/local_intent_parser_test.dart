@@ -220,6 +220,21 @@ void main() {
       }
     });
 
+    test('sensitive skin choice is not classified as product comparison', () {
+      const messages = [
+        '\u0628\u0634\u0631\u062a\u064a \u062d\u0633\u0627\u0633\u0629\u060c \u0623\u062e\u062a\u0627\u0631 \u0625\u064a\u0647\u061f',
+        'I have sensitive skin, what should I choose?',
+      ];
+
+      for (final message in messages) {
+        expect(
+          LocalIntentParser.detectIntent(message),
+          AIChatIntent.newRecommendation,
+          reason: message,
+        );
+      }
+    });
+
     test('extracts Sauvage-style pepper and ambroxan anchors', () {
       final preferences = LocalIntentParser.parse(
         'محتاج عطر رجالي فريش حمضيات وفيه فلفل واضح وفي نهايته Ambroxan.',

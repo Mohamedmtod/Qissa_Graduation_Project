@@ -97,7 +97,7 @@ void main() {
   });
 
   blocTest<AIChatCubit, AIChatState>(
-    'social greeting delegates to worker when tool router context is enabled',
+    'social micro-turn is handled locally when tool router context is enabled',
     build: () {
       AIChatExperimentConfig.setTestOverrides(
         sendCompactContext: true,
@@ -142,7 +142,7 @@ void main() {
     },
     act: (cubit) => cubit.sendMessage('how are you'),
     verify: (_) {
-      verify(
+      verifyNever(
         () => mockAIChatRepo.fetchAIRecommendationWithContext(
           currentMessage: 'how are you',
           preferences: any(named: 'preferences'),
@@ -152,18 +152,18 @@ void main() {
           responseLanguage: any(named: 'responseLanguage'),
           requestId: any(named: 'requestId'),
         ),
-      ).called(1);
+      );
       expect(cubit.state.status, AIChatStatus.answer);
       expect(
         cubit.state.messages.last.responseSource,
-        anyOf('ai_worker', 'social_micro_turn_worker'),
+        'local_social_micro_turn',
       );
       expect(cubit.state.messages.last.content, contains('ready to help'));
     },
   );
 
   blocTest<AIChatCubit, AIChatState>(
-    'social greeting delegates to worker even when compact context is disabled',
+    'social micro-turn is handled locally when compact context is disabled',
     build: () {
       AIChatExperimentConfig.setTestOverrides(
         sendCompactContext: false,
@@ -206,7 +206,7 @@ void main() {
     },
     act: (cubit) => cubit.sendMessage('how are you'),
     verify: (_) {
-      verify(
+      verifyNever(
         () => mockAIChatRepo.fetchAIRecommendation(
           currentMessage: 'how are you',
           preferences: any(named: 'preferences'),
@@ -214,18 +214,168 @@ void main() {
           responseLanguage: any(named: 'responseLanguage'),
           requestId: any(named: 'requestId'),
         ),
-      ).called(1);
+      );
       expect(cubit.state.status, AIChatStatus.answer);
       expect(
         cubit.state.messages.last.responseSource,
-        anyOf('ai_worker', 'social_micro_turn_worker'),
+        'local_social_micro_turn',
       );
-      expect(cubit.state.messages.last.content, contains('Doing well'));
+      expect(cubit.state.messages.last.content, contains('doing well'));
     },
   );
 
   blocTest<AIChatCubit, AIChatState>(
-    'short acknowledgement after social turn is not intercepted as gibberish',
+    'arabic social micro-turn is handled locally without worker or gender ask',
+    build: () {
+      AIChatExperimentConfig.setTestOverrides(
+        sendCompactContext: true,
+        toolRouterV1: true,
+      );
+      return cubit;
+    },
+    act: (cubit) => cubit.sendMessage('كيف حالك'),
+    verify: (_) {
+      verifyNever(
+        () => mockAIChatRepo.fetchAIRecommendationWithContext(
+          currentMessage: 'كيف حالك',
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          localRecommendations: any(named: 'localRecommendations'),
+          compactContext: any(named: 'compactContext'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      );
+      verifyNever(
+        () => mockAIChatRepo.fetchAIRecommendation(
+          currentMessage: 'كيف حالك',
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      );
+      expect(cubit.state.status, AIChatStatus.answer);
+      final last = cubit.state.messages.last;
+      expect(last.responseSource, 'local_social_micro_turn');
+      expect(last.content, contains('أنا بخير'));
+      expect(last.content, isNot(contains('رجالي ولا نسائي')));
+    },
+  );
+
+  blocTest<AIChatCubit, AIChatState>(
+    'arabic social follow-up does not repeat the welcome fallback',
+    build: () {
+      AIChatExperimentConfig.setTestOverrides(toolRouterV1: false);
+      return cubit;
+    },
+    act: (cubit) async {
+      await cubit.sendMessage('اهلا');
+      await cubit.sendMessage('ازيك عامل اي');
+    },
+    verify: (_) {
+      expect(cubit.state.status, AIChatStatus.answer);
+      final last = cubit.state.messages.last;
+      expect(last.responseSource, 'local_social_micro_turn');
+      expect(last.content, contains('أنا بخير'));
+      expect(last.content, isNot(contains('تفضيلاتك مثل النوع')));
+      expect(last.content, isNot(contains('رجالي ولا نسائي')));
+    },
+  );
+
+  blocTest<AIChatCubit, AIChatState>(
+    'repeated arabic greeting is handled locally without worker latency',
+    build: () {
+      AIChatExperimentConfig.setTestOverrides(
+        sendCompactContext: true,
+        toolRouterV1: true,
+      );
+      return cubit;
+    },
+    act: (cubit) => cubit.sendMessage(
+      '\u0627\u0647\u0644\u0627 \u0627\u0647\u0644\u0627 \u0627\u0647\u0644\u0627',
+    ),
+    verify: (_) {
+      verifyNever(
+        () => mockAIChatRepo.fetchAIRecommendationWithContext(
+          currentMessage:
+              '\u0627\u0647\u0644\u0627 \u0627\u0647\u0644\u0627 \u0627\u0647\u0644\u0627',
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          localRecommendations: any(named: 'localRecommendations'),
+          compactContext: any(named: 'compactContext'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      );
+      verifyNever(
+        () => mockAIChatRepo.fetchAIRecommendation(
+          currentMessage:
+              '\u0627\u0647\u0644\u0627 \u0627\u0647\u0644\u0627 \u0627\u0647\u0644\u0627',
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      );
+      expect(cubit.state.status, AIChatStatus.answer);
+      final last = cubit.state.messages.last;
+      expect(last.responseSource, 'local_social_micro_turn');
+      expect(
+        last.content,
+        contains('\u0623\u0646\u0627 \u0628\u062e\u064a\u0631'),
+      );
+      expect(
+        last.content,
+        isNot(
+          contains(
+            '\u0631\u062c\u0627\u0644\u064a \u0648\u0644\u0627 \u0646\u0633\u0627\u0626\u064a',
+          ),
+        ),
+      );
+    },
+  );
+
+  blocTest<AIChatCubit, AIChatState>(
+    'short hey greeting is handled locally without worker latency',
+    build: () {
+      AIChatExperimentConfig.setTestOverrides(
+        sendCompactContext: true,
+        toolRouterV1: true,
+      );
+      return cubit;
+    },
+    act: (cubit) => cubit.sendMessage('hey'),
+    verify: (_) {
+      verifyNever(
+        () => mockAIChatRepo.fetchAIRecommendationWithContext(
+          currentMessage: 'hey',
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          localRecommendations: any(named: 'localRecommendations'),
+          compactContext: any(named: 'compactContext'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      );
+      verifyNever(
+        () => mockAIChatRepo.fetchAIRecommendation(
+          currentMessage: 'hey',
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      );
+      expect(cubit.state.status, AIChatStatus.answer);
+      final last = cubit.state.messages.last;
+      expect(last.responseSource, 'local_social_micro_turn');
+      expect(last.content.toLowerCase(), contains('doing well'));
+    },
+  );
+
+  blocTest<AIChatCubit, AIChatState>(
+    'short acknowledgement after social turn is not retargeted to gender',
     build: () {
       AIChatExperimentConfig.setTestOverrides(
         sendCompactContext: false,
@@ -254,12 +404,16 @@ void main() {
       await cubit.sendMessage('yes');
     },
     verify: (_) {
-      expect(cubit.state.status, AIChatStatus.ask);
+      expect(cubit.state.status, AIChatStatus.answer);
       final last = cubit.state.messages.last;
       expect(
         last.content.toLowerCase(),
         isNot(contains('could not understand')),
       );
+      expect(last.content.toLowerCase(), isNot(contains('men')));
+      expect(last.content.toLowerCase(), isNot(contains('women')));
+      expect(last.content, isNot(contains('رجالي ولا نسائي')));
+      expect(last.responseSource, 'local_dialogue_no_perfume_intent');
       expect(last.responseSource, isNot('local_interceptor'));
       verify(
         () => mockAIChatRepo.fetchAIRecommendation(
@@ -270,6 +424,213 @@ void main() {
           requestId: any(named: 'requestId'),
         ),
       ).called(1);
+    },
+  );
+
+  blocTest<AIChatCubit, AIChatState>(
+    'generic worker ask after explicit perfume request may retarget',
+    build: () {
+      AIChatExperimentConfig.setTestOverrides(
+        sendCompactContext: false,
+        toolRouterV1: true,
+        llmLedRouterV2: true,
+      );
+      when(
+        () => mockAIChatRepo.fetchAIRecommendation(
+          currentMessage: any(named: 'currentMessage'),
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).thenAnswer(
+        (_) async => AIChatReply.ask(
+          question: 'Tell me the style, notes, occasion, or budget you want.',
+          updatedPreferences: const SessionPreferences(),
+        ),
+      );
+      return cubit;
+    },
+    act: (cubit) => cubit.sendMessage('recommend me a perfume'),
+    verify: (_) {
+      expect(cubit.state.status, AIChatStatus.ask);
+      final last = cubit.state.messages.last;
+      expect(
+        last.responseSource,
+        anyOf('ask_retarget', contains('targeted_ask')),
+      );
+      expect(last.responseSource, isNot('local_dialogue_no_perfume_intent'));
+    },
+  );
+
+  blocTest<AIChatCubit, AIChatState>(
+    'short why after social turn is not retargeted to gender',
+    build: () {
+      AIChatExperimentConfig.setTestOverrides(
+        sendCompactContext: false,
+        toolRouterV1: true,
+        llmLedRouterV2: true,
+      );
+      when(
+        () => mockAIChatRepo.fetchAIRecommendation(
+          currentMessage: any(named: 'currentMessage'),
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).thenAnswer(
+        (_) async => AIChatReply.ask(
+          question: "Do you prefer a men's or women's perfume?",
+          updatedPreferences: const SessionPreferences(),
+        ),
+      );
+      return cubit;
+    },
+    act: (cubit) async {
+      await cubit.sendMessage('how are you');
+      await cubit.sendMessage('why');
+    },
+    verify: (_) {
+      expect(cubit.state.status, AIChatStatus.answer);
+      final last = cubit.state.messages.last;
+      expect(last.responseSource, 'local_dialogue_no_perfume_intent');
+      expect(last.content.toLowerCase(), isNot(contains('men')));
+      expect(last.content.toLowerCase(), isNot(contains('women')));
+    },
+  );
+
+  blocTest<AIChatCubit, AIChatState>(
+    'debug status reports remote sync only after a turn is stored',
+    build: () {
+      AIChatExperimentConfig.setTestOverrides(
+        sendCompactContext: false,
+        toolRouterV1: true,
+        analyticsEventsEnabled: true,
+        turnDebugRemoteEnabled: true,
+        debugCaptureMode: 'all',
+      );
+      when(
+        () => mockAIChatRepo.sendAIChatTurnDebug(
+          payload: any(named: 'payload'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).thenAnswer((_) async => true);
+      when(
+        () => mockAIChatRepo.fetchAIRecommendation(
+          currentMessage: any(named: 'currentMessage'),
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).thenAnswer(
+        (_) async => AIChatReply.answer(
+          answer: 'Hello. Tell me what perfume style you want.',
+          updatedPreferences: const SessionPreferences(),
+        ),
+      );
+      when(
+        () => mockAIChatRepo.fetchAIRecommendationWithContext(
+          currentMessage: any(named: 'currentMessage'),
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          localRecommendations: any(named: 'localRecommendations'),
+          compactContext: any(named: 'compactContext'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).thenAnswer(
+        (_) async => AIChatReply.answer(
+          answer: 'Hello. Tell me what perfume style you want.',
+          updatedPreferences: const SessionPreferences(),
+        ),
+      );
+      return AIChatCubit(
+        aiChatRepo: mockAIChatRepo,
+        thinkingDelay: Duration.zero,
+        cooldownDuration: Duration.zero,
+      );
+    },
+    act: (cubit) async {
+      expect(cubit.chatDebugStatus['remoteDebugSynced'], isFalse);
+      await cubit.sendMessage('hello');
+    },
+    wait: const Duration(milliseconds: 1200),
+    verify: (cubit) {
+      expect(cubit.chatDebugStatus['lastTurnDebugSendStatus'], 'success');
+      expect(cubit.chatDebugStatus['remoteDebugSynced'], isTrue);
+      expect(cubit.chatDebugStatus['remoteDebugTurnSuccessCount'], 1);
+      verify(
+        () => mockAIChatRepo.sendAIChatTurnDebug(
+          payload: any(named: 'payload'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).called(1);
+    },
+  );
+
+  blocTest<AIChatCubit, AIChatState>(
+    'debug status exposes turn debug send failure reason',
+    build: () {
+      AIChatExperimentConfig.setTestOverrides(
+        sendCompactContext: false,
+        toolRouterV1: true,
+        analyticsEventsEnabled: true,
+        turnDebugRemoteEnabled: true,
+        debugCaptureMode: 'all',
+      );
+      when(
+        () => mockAIChatRepo.sendAIChatTurnDebug(
+          payload: any(named: 'payload'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).thenAnswer((_) async => false);
+      when(
+        () => mockAIChatRepo.fetchAIRecommendation(
+          currentMessage: any(named: 'currentMessage'),
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).thenAnswer(
+        (_) async => AIChatReply.answer(
+          answer: 'Hello. Tell me what perfume style you want.',
+          updatedPreferences: const SessionPreferences(),
+        ),
+      );
+      when(
+        () => mockAIChatRepo.fetchAIRecommendationWithContext(
+          currentMessage: any(named: 'currentMessage'),
+          preferences: any(named: 'preferences'),
+          candidates: any(named: 'candidates'),
+          localRecommendations: any(named: 'localRecommendations'),
+          compactContext: any(named: 'compactContext'),
+          responseLanguage: any(named: 'responseLanguage'),
+          requestId: any(named: 'requestId'),
+        ),
+      ).thenAnswer(
+        (_) async => AIChatReply.answer(
+          answer: 'Hello. Tell me what perfume style you want.',
+          updatedPreferences: const SessionPreferences(),
+        ),
+      );
+      return AIChatCubit(
+        aiChatRepo: mockAIChatRepo,
+        thinkingDelay: Duration.zero,
+        cooldownDuration: Duration.zero,
+      );
+    },
+    act: (cubit) async => cubit.sendMessage('hello'),
+    wait: const Duration(milliseconds: 1200),
+    verify: (cubit) {
+      expect(cubit.chatDebugStatus['lastTurnDebugSendStatus'], 'failed');
+      expect(
+        cubit.chatDebugStatus['lastTurnDebugSendError'],
+        'turn_debug_send_returned_false',
+      );
+      expect(cubit.chatDebugStatus['remoteDebugSynced'], isFalse);
     },
   );
 

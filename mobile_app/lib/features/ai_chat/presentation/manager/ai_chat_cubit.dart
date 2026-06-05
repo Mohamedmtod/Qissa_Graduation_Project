@@ -36,6 +36,7 @@ import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_prefer
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_product_context_signals.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_reply_handler.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_reply_normalizer.dart';
+import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_retarget_proof_gate.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_recommendation_resolver.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_recommendation_memory_answer_builder.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_recommendation_selection_resolver.dart';
@@ -145,12 +146,16 @@ class AIChatCubit extends Cubit<AIChatState> {
       const AIChatToolResultRenderer();
   final AIChatProductContextSignals _productContextSignals =
       const AIChatProductContextSignals();
+  final AIChatRetargetProofGate _retargetProofGate =
+      const AIChatRetargetProofGate();
   late final AIChatBusinessInfoResponder _businessInfoResponder;
   final AIChatDebugSessionBuilder _debugSessionBuilder =
       const AIChatDebugSessionBuilder();
   final Set<String> _remoteDebugTurnIdsSent = <String>{};
   String _lastTurnDebugSendStatus = 'not_started';
   String? _lastTurnDebugSendError;
+  int _remoteDebugTurnAttemptCount = 0;
+  int _remoteDebugTurnSuccessCount = 0;
   final AIChatRecommendationSelectionResolver _selectionResolver =
       const AIChatRecommendationSelectionResolver();
   final AIChatPreferenceChangeDetector _preferenceChangeDetector =
@@ -518,9 +523,21 @@ class AIChatCubit extends Cubit<AIChatState> {
     List<ProductModel> catalog, {
     required bool pruneHistoricalBotMessages,
   }) async {
-    final isSocialMicroTurn =
-        incoming.isGreetingOnly || _looksLikeSocialMicroTurn(incoming.trimmed);
-    if (!isSocialMicroTurn) return false;
+    if (_looksLikeSocialMicroTurn(incoming.trimmed)) {
+      _replyHandler.handleAnswerReply(
+        AIChatReply.answer(
+          answer: buildSocialMicroTurnText(incoming.responseLanguage),
+          updatedPreferences: state.preferences,
+        ),
+        language: incoming.responseLanguage,
+        source: 'local_social_micro_turn',
+        sessionId: incoming.activeSessionId,
+        pruneHistoricalBotMessages: pruneHistoricalBotMessages,
+      );
+      return true;
+    }
+
+    if (!incoming.isGreetingOnly) return false;
 
     if (AIChatExperimentConfig.toolRouterV1) {
       final discovery = _resolveDiscoveryContext(incoming);
@@ -565,6 +582,66 @@ class AIChatCubit extends Cubit<AIChatState> {
       pruneHistoricalBotMessages: pruneHistoricalBotMessages,
       workerFailureReason:
           _aiChatRepo.lastWorkerFailureReasonCode ?? 'worker_empty_reply',
+    );
+    return true;
+  }
+
+  AIChatRetargetProofDecision _evaluateRetargetProof(
+    AIChatTurnContext incoming,
+    AIChatDiscoveryContext discovery, {
+    String? semanticIntent,
+    String? workerIntent,
+  }) {
+    return _retargetProofGate.evaluate(
+      incoming: incoming,
+      discovery: discovery,
+      semanticIntent: semanticIntent,
+      workerIntent: workerIntent,
+    );
+  }
+
+  bool _replyWithNoPerfumeIntentIfRetargetBlocked({
+    required AIChatTurnContext incoming,
+    required AIChatDiscoveryContext discovery,
+    required String source,
+    required bool pruneHistoricalBotMessages,
+    String? requestId,
+    String? semanticIntent,
+    String? workerIntent,
+    String? workerFailureReason,
+  }) {
+    final proof = _evaluateRetargetProof(
+      incoming,
+      discovery,
+      semanticIntent: semanticIntent,
+      workerIntent: workerIntent,
+    );
+    if (proof.allowed) return false;
+
+    _replyHandler.handleAnswerReply(
+      AIChatReply.answer(
+        answer: buildDialogueNoPerfumeIntentText(incoming.responseLanguage),
+        updatedPreferences: state.preferences,
+        requestId: requestId ?? incoming.requestId,
+      ),
+      language: incoming.responseLanguage,
+      source: 'local_dialogue_no_perfume_intent',
+      sessionId: incoming.activeSessionId,
+      pruneHistoricalBotMessages: pruneHistoricalBotMessages,
+      workerFailureReason: workerFailureReason,
+      retargetAllowed: false,
+      retargetBlockedReason: 'retarget_blocked_${proof.blockedReason}',
+    );
+    unawaited(
+      _aiChatRepo.logAIChatEvent(
+        eventType: 'retarget_blocked',
+        sessionId: incoming.activeSessionId,
+        metadata: {
+          'source': source,
+          'requestId': requestId ?? incoming.requestId,
+          'reasonCode': proof.blockedReason,
+        },
+      ),
     );
     return true;
   }
@@ -655,6 +732,8 @@ class AIChatCubit extends Cubit<AIChatState> {
         _remoteDebugTurnIdsSent.clear();
         _lastTurnDebugSendStatus = 'not_started';
         _lastTurnDebugSendError = null;
+        _remoteDebugTurnAttemptCount = 0;
+        _remoteDebugTurnSuccessCount = 0;
       },
       cancelCooldown: () {
         _cooldownTimer?.cancel();
@@ -721,6 +800,8 @@ class AIChatCubit extends Cubit<AIChatState> {
     _remoteDebugTurnIdsSent.clear();
     _lastTurnDebugSendStatus = 'not_started';
     _lastTurnDebugSendError = null;
+    _remoteDebugTurnAttemptCount = 0;
+    _remoteDebugTurnSuccessCount = 0;
     _aiChatRepo.setSessionId(_sessionId);
     _aiChatRepo.invalidateCatalogCache();
 
@@ -1021,6 +1102,40 @@ class AIChatCubit extends Cubit<AIChatState> {
         return;
       }
 
+      if (_handleAdviceOnlyQuestion(
+        incoming,
+        pruneHistoricalBotMessages: shouldPruneBotHistory,
+      )) {
+        recordGateShadow('advice_only_precheck');
+        return;
+      }
+
+      if (_handleContextualQualityAnswer(
+        incoming,
+        catalog: catalog,
+        pruneHistoricalBotMessages: shouldPruneBotHistory,
+      )) {
+        recordGateShadow('contextual_quality_precheck');
+        return;
+      }
+
+      if (await _handleBusinessInfoCommand(
+        incoming,
+        pruneHistoricalBotMessages: shouldPruneBotHistory,
+      )) {
+        recordGateShadow('business_info_precheck');
+        return;
+      }
+
+      if (_handleEarlyBroadChoiceCandidateFallback(
+        incoming,
+        catalog,
+        pruneHistoricalBotMessages: shouldPruneBotHistory,
+      )) {
+        recordGateShadow('broad_choice_candidate_precheck');
+        return;
+      }
+
       _setLoadingPhase(_loadingPhaseAnalyzing);
       var oldSourceForGateShadow = 'turn_decision';
       final interpretation = await _interpretationService.interpretIfUseful(
@@ -1080,6 +1195,21 @@ class AIChatCubit extends Cubit<AIChatState> {
         );
       }
       recordGateShadow(oldSourceForGateShadow);
+
+      if (_handleAdviceOnlyQuestion(
+        incoming,
+        pruneHistoricalBotMessages: shouldPruneBotHistory,
+      )) {
+        return;
+      }
+
+      if (_handleContextualQualityAnswer(
+        incoming,
+        catalog: catalog,
+        pruneHistoricalBotMessages: shouldPruneBotHistory,
+      )) {
+        return;
+      }
 
       if (await _handleBusinessInfoCommand(
         incoming,
@@ -1218,6 +1348,7 @@ class AIChatCubit extends Cubit<AIChatState> {
 
       if (_handleContextualQualityAnswer(
         incoming,
+        catalog: catalog,
         pruneHistoricalBotMessages: shouldPruneBotHistory,
       )) {
         return;
@@ -1301,10 +1432,23 @@ class AIChatCubit extends Cubit<AIChatState> {
         return;
       }
 
-      final isSocialMicroTurn =
-          incoming.isGreetingOnly ||
-          _looksLikeSocialMicroTurn(incoming.trimmed);
+      final isSocialMicroTurn = _looksLikeSocialMicroTurn(incoming.trimmed);
+      final isGreetingOnly = incoming.isGreetingOnly;
       if (!discovery.isFollowUpOrCompare && isSocialMicroTurn) {
+        _replyHandler.handleAnswerReply(
+          AIChatReply.answer(
+            answer: buildSocialMicroTurnText(incoming.responseLanguage),
+            updatedPreferences: state.preferences,
+          ),
+          language: incoming.responseLanguage,
+          source: 'local_social_micro_turn',
+          sessionId: incoming.activeSessionId,
+          pruneHistoricalBotMessages: shouldPruneBotHistory,
+        );
+        return;
+      }
+
+      if (!discovery.isFollowUpOrCompare && isGreetingOnly) {
         if (AIChatExperimentConfig.toolRouterV1) {
           final greetingContext = _buildMicroTurnRecommendationContext(
             catalog,
@@ -1451,6 +1595,22 @@ class AIChatCubit extends Cubit<AIChatState> {
         lastAskQuestion: _lastAskQuestion,
         currentMessages: state.messages,
       );
+      if (workerReply.appSoftTimeoutHit) {
+        _logDecisionTrace(
+          incoming,
+          AIChatDecisionTrace(
+            appSoftTimeoutHit: workerReply.appSoftTimeoutHit,
+            fallbackFromCandidates: workerReply.fallbackFromCandidates,
+            latencyPolicyReason: workerReply.latencyPolicyReason,
+            workerLateResultIgnored: workerReply.workerLateResultIgnored,
+            localCandidateCount:
+                recommendationContext.localCandidatesRefs.length,
+            workerCandidateCount: recommendationContext.candidatesList.length,
+            finalProductIds: workerReply.reply?.productIds ?? const <String>[],
+          ),
+          phase: 'worker_latency_policy',
+        );
+      }
       final effectiveWorkerReply = await _handleWorkerFailureFallback(
         incoming,
         discovery,
@@ -1667,6 +1827,19 @@ class AIChatCubit extends Cubit<AIChatState> {
     final normalizedMessage = LocalIntentParser.normalizeInput(
       incoming.trimmed,
     );
+    final asksPriceDifferenceExplanation =
+        (normalizedMessage.contains('why') ||
+            normalizedMessage.contains('\u0644\u064a\u0647') ||
+            normalizedMessage.contains('\u0644\u0645\u0627\u0630\u0627')) &&
+        (normalizedMessage.contains('more expensive') ||
+            normalizedMessage.contains('higher price') ||
+            normalizedMessage.contains('\u0623\u063a\u0644\u0649') ||
+            normalizedMessage.contains('\u0627\u063a\u0644\u0649') ||
+            normalizedMessage.contains('\u0627\u063a\u0644\u064a')) &&
+        (normalizedMessage.contains('than') ||
+            normalizedMessage.contains('\u0645\u0646') ||
+            normalizedMessage.contains('\u062f\u0647'));
+    if (asksPriceDifferenceExplanation) return false;
     final asksAboutVisibleRecommendations =
         normalizedMessage.contains('among them') ||
         normalizedMessage.contains('between them') ||
@@ -2176,15 +2349,87 @@ class AIChatCubit extends Cubit<AIChatState> {
   bool _looksLikeSocialMicroTurn(String message) {
     final normalized = LocalIntentParser.normalizeInput(message);
     if (normalized.isEmpty) return false;
+    const perfumeRequestTerms = <String>{
+      'perfume',
+      'fragrance',
+      'scent',
+      'recommend',
+      'budget',
+      'note',
+      'notes',
+      'style',
+      'عطر',
+      'ريحة',
+      'برفان',
+      'رشح',
+      'رشحي',
+      'عايز',
+      'عايزة',
+      'عاوزه',
+      'محتاج',
+      'ميزانية',
+      'نوتة',
+      'نوتات',
+    };
+    if (perfumeRequestTerms.any(normalized.contains)) return false;
+    if (_looksLikeRepeatedGreetingOnly(normalized)) return true;
+    if (RegExp(
+      r'^(hello|hi|hey)\s*[!.?]*$',
+      caseSensitive: false,
+    ).hasMatch(normalized)) {
+      return true;
+    }
+
     return RegExp(
           r"\b(how are you|how r you|how are u|how r u|how is it going|what'?s up|whats up)\b",
         ).hasMatch(normalized) ||
-        normalized.contains('\u0639\u0627\u0645\u0644 \u0627\u064a\u0647') ||
-        normalized.contains(
-          '\u0639\u0627\u0645\u0644\u0629 \u0627\u064a\u0647',
-        ) ||
-        normalized.contains('\u0627\u0632\u064a\u0643') ||
-        normalized.contains('\u0627\u0632\u064a\u0643\u061f');
+        normalized.contains('كيف حالك') ||
+        normalized.contains('كيفك') ||
+        normalized.contains('اخبارك') ||
+        normalized.contains('ايه الاخبار') ||
+        normalized.contains('اي الاخبار') ||
+        normalized.contains('عامل ايه') ||
+        normalized.contains('عاملة ايه') ||
+        normalized.contains('عامل اي') ||
+        normalized.contains('ازيك عامل اي') ||
+        normalized.contains('ازيك');
+  }
+
+  bool _looksLikeRepeatedGreetingOnly(String normalized) {
+    final cleaned = normalized.replaceAll(RegExp(r'[^\w\s\u0600-\u06ff]'), ' ');
+    final tokens = cleaned
+        .split(RegExp(r'\s+'))
+        .where((token) => token.trim().isNotEmpty)
+        .toList(growable: false);
+    if (tokens.length < 2 || tokens.length > 6) return false;
+
+    const greetingOnlyTokens = <String>{
+      'hello',
+      'hi',
+      'hey',
+      'welcome',
+      'اهلا',
+      'هلا',
+      'مرحبا',
+      'السلام',
+      'عليكم',
+      'وعليكم',
+      'بيك',
+      'بك',
+      'Ш§Щ‡Щ„Ш§',
+      'Щ‡Щ„Ш§',
+      'Щ…Ш±Ш­ШЁШ§',
+      'Ш§Щ„ШіЩ„Ш§Щ…',
+      'Ш№Щ„ЩЉЩѓЩ…',
+      'Щ€Ш№Щ„ЩЉЩѓЩ…',
+      'ШЁЩЉЩѓ',
+      'ШЁЩѓ',
+    };
+
+    for (final token in tokens) {
+      if (!greetingOnlyTokens.contains(token)) return false;
+    }
+    return true;
   }
 
   bool _looksLikeNoMatchAnswerText(String answer) {
@@ -2495,6 +2740,20 @@ class AIChatCubit extends Cubit<AIChatState> {
           missingSlots,
         );
         if (retargetSlot != null) {
+          final retargetDiscovery = _resolveDiscoveryContext(incoming);
+          if (_replyWithNoPerfumeIntentIfRetargetBlocked(
+            incoming: incoming,
+            discovery: retargetDiscovery,
+            source: result.source ?? 'handled_result',
+            requestId: reply.requestId,
+            pruneHistoricalBotMessages: pruneHistoricalBotMessages,
+          )) {
+            return;
+          }
+          final retargetProof = _evaluateRetargetProof(
+            incoming,
+            retargetDiscovery,
+          );
           _replyHandler.handleAskReply(
             AIChatReply.ask(
               question: buildQuestionForMissingSlot(retargetSlot, language),
@@ -2511,6 +2770,9 @@ class AIChatCubit extends Cubit<AIChatState> {
             sessionId: incoming.activeSessionId,
             availabilityContext: result.availabilityContext,
             pruneHistoricalBotMessages: pruneHistoricalBotMessages,
+            retargetAllowed: retargetProof.allowed,
+            retargetProofSource: retargetProof.proofSource,
+            retargetBlockedReason: retargetProof.blockedReason,
           );
           return;
         }
@@ -2687,6 +2949,9 @@ class AIChatCubit extends Cubit<AIChatState> {
     'traceCount': _analyticsTracker.recentTurnTraces.length,
     'lastTurnDebugSendStatus': _lastTurnDebugSendStatus,
     'lastTurnDebugSendError': _lastTurnDebugSendError,
+    'remoteDebugTurnAttemptCount': _remoteDebugTurnAttemptCount,
+    'remoteDebugTurnSuccessCount': _remoteDebugTurnSuccessCount,
+    'remoteDebugSynced': _remoteDebugTurnSuccessCount > 0,
   };
 
   static String _newSessionId() =>
@@ -2747,8 +3012,17 @@ class AIChatCubit extends Cubit<AIChatState> {
 
     _lastTurnDebugSendStatus = 'sending';
     try {
+      _remoteDebugTurnAttemptCount += 1;
       final sent = await _turnDebugRemoteSink.sendTurnDebug(turn);
       _lastTurnDebugSendStatus = sent ? 'success' : 'failed';
+      if (sent) {
+        _remoteDebugTurnSuccessCount += 1;
+        _lastTurnDebugSendError = null;
+      } else {
+        _lastTurnDebugSendError =
+            _aiChatRepo.lastWorkerFailureReasonCode ??
+            'turn_debug_send_returned_false';
+      }
     } catch (error) {
       _lastTurnDebugSendStatus = 'failed';
       _lastTurnDebugSendError = error.toString();

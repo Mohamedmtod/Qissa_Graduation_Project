@@ -66,12 +66,22 @@ class AIChatTurnDecisionEngine {
     }
 
     if (ownershipDecision?.semanticIntent ==
-        AIChatSemanticIntent.subjectiveVisibleQuestion) {
+            AIChatSemanticIntent.subjectiveVisibleQuestion ||
+        ownershipDecision?.semanticIntent ==
+            AIChatSemanticIntent.businessInfo ||
+        ownershipDecision?.semanticIntent ==
+            AIChatSemanticIntent.catalogRanking) {
       return AIChatTurnDecision(
-        route: AIChatTurnDecisionRoute.recommendation,
+        route:
+            ownershipDecision!.semanticIntent ==
+                    AIChatSemanticIntent.businessInfo ||
+                ownershipDecision.semanticIntent ==
+                    AIChatSemanticIntent.catalogRanking
+            ? AIChatTurnDecisionRoute.localCommand
+            : AIChatTurnDecisionRoute.recommendation,
         confidence: AIChatTurnDecisionConfidence.high,
         reasonCode:
-            'llm_led_router_v2_${ownershipDecision!.semanticIntent!.name}',
+            'llm_led_router_v2_${ownershipDecision.semanticIntent!.name}',
         shouldAllowAvailability: false,
         decisionOwner: ownershipDecision.ownershipClass.name,
         ownershipClass: ownershipDecision.ownershipClass.name,

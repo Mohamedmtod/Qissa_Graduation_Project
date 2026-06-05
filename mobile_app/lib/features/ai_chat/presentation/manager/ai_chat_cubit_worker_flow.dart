@@ -201,6 +201,16 @@ extension AIChatCubitWorkerFlow on AIChatCubit {
         discovery.localPreferences,
         discovery.localMissingSlots,
       );
+      if (_replyWithNoPerfumeIntentIfRetargetBlocked(
+        incoming: incoming,
+        discovery: discovery,
+        source: 'local_fallback',
+        pruneHistoricalBotMessages: pruneHistoricalBotMessages,
+        workerFailureReason: failureReasonCode,
+      )) {
+        return null;
+      }
+      final retargetProof = _evaluateRetargetProof(incoming, discovery);
       _replyHandler.handleAskReply(
         AIChatReply.ask(
           question: buildQuestionForMissingSlot(
@@ -216,6 +226,9 @@ extension AIChatCubitWorkerFlow on AIChatCubit {
         sessionId: incoming.activeSessionId,
         pruneHistoricalBotMessages: pruneHistoricalBotMessages,
         workerFailureReason: failureReasonCode,
+        retargetAllowed: retargetProof.allowed,
+        retargetProofSource: retargetProof.proofSource,
+        retargetBlockedReason: retargetProof.blockedReason,
       );
       return null;
     }
@@ -1007,6 +1020,23 @@ extension AIChatCubitWorkerFlow on AIChatCubit {
         'requestId=${incoming.requestId}',
       );
 
+      final askNeedsRetargetProof =
+          askedSlot != null ||
+          looksLikeGenericPreferenceAsk(reply.question ?? '') ||
+          responseSource.contains('ask_retarget') ||
+          responseSource.contains('_targeted_ask');
+      if (askNeedsRetargetProof &&
+          _replyWithNoPerfumeIntentIfRetargetBlocked(
+            incoming: incoming,
+            discovery: discovery,
+            source: responseSource,
+            requestId: reply.requestId,
+            pruneHistoricalBotMessages: effectivePruneHistoricalBotMessages,
+            workerFailureReason: workerFailureReason,
+          )) {
+        return;
+      }
+
       // Step 1: standard ask recovery (existing logic).
       final askRecoveryProducts = _buildAskRecoveryProducts(
         reply.updatedPreferences,
@@ -1186,6 +1216,7 @@ extension AIChatCubitWorkerFlow on AIChatCubit {
           missingSlots,
         );
         if (retargetSlot != null) {
+          final retargetProof = _evaluateRetargetProof(incoming, discovery);
           _replyHandler.handleAskReply(
             AIChatReply.ask(
               question: buildQuestionForMissingSlot(
@@ -1203,6 +1234,9 @@ extension AIChatCubitWorkerFlow on AIChatCubit {
             sessionId: incoming.activeSessionId,
             pruneHistoricalBotMessages: effectivePruneHistoricalBotMessages,
             workerFailureReason: workerFailureReason,
+            retargetAllowed: retargetProof.allowed,
+            retargetProofSource: retargetProof.proofSource,
+            retargetBlockedReason: retargetProof.blockedReason,
           );
           return;
         }

@@ -41,6 +41,9 @@ class AIChatAnalyticsEvent {
     this.proofLevel,
     this.shadowGateProofReasons = const <String>[],
     this.ambiguityReasons = const <String>[],
+    this.retargetAllowed,
+    this.retargetProofSource,
+    this.retargetBlockedReason,
   }) : sessionIdHash = hashSessionId(sessionId),
        finalProductIds = finalProductIds.take(5).toList(growable: false);
 
@@ -96,6 +99,9 @@ class AIChatAnalyticsEvent {
   final String? proofLevel;
   final List<String> shadowGateProofReasons;
   final List<String> ambiguityReasons;
+  final bool? retargetAllowed;
+  final String? retargetProofSource;
+  final String? retargetBlockedReason;
 
   static String hashSessionId(String sessionId) {
     const int fnvOffset = 0x811c9dc5;
@@ -152,6 +158,9 @@ class AIChatAnalyticsEvent {
           'proofLevel': proofLevel,
           'shadowGateProofReasons': shadowGateProofReasons,
           'ambiguityReasons': ambiguityReasons,
+          'retargetAllowed': retargetAllowed,
+          'retargetProofSource': retargetProofSource,
+          'retargetBlockedReason': retargetBlockedReason,
         }..removeWhere((_, value) {
           if (value == null) return true;
           if (value is Iterable && value.isEmpty) return true;
@@ -189,6 +198,9 @@ class AIChatTurnTrace {
     this.guardBlockedCount,
     this.noMatchReason,
     this.failureReason,
+    this.retargetAllowed,
+    this.retargetProofSource,
+    this.retargetBlockedReason,
   }) : sessionIdHash = sessionIdHash.trim(),
        finalProductIds = finalProductIds.take(5).toList(growable: false);
 
@@ -215,6 +227,9 @@ class AIChatTurnTrace {
       guardBlockedCount: event.guardBlockedCount,
       noMatchReason: event.noMatchReason,
       failureReason: event.failureReason,
+      retargetAllowed: event.retargetAllowed,
+      retargetProofSource: event.retargetProofSource,
+      retargetBlockedReason: event.retargetBlockedReason,
     );
   }
 
@@ -239,6 +254,9 @@ class AIChatTurnTrace {
   final int? guardBlockedCount;
   final String? noMatchReason;
   final String? failureReason;
+  final bool? retargetAllowed;
+  final String? retargetProofSource;
+  final String? retargetBlockedReason;
 
   Map<String, Object?> toJson() {
     final data =
@@ -264,6 +282,9 @@ class AIChatTurnTrace {
           'guardBlockedCount': guardBlockedCount,
           'noMatchReason': noMatchReason,
           'failureReason': failureReason,
+          'retargetAllowed': retargetAllowed,
+          'retargetProofSource': retargetProofSource,
+          'retargetBlockedReason': retargetBlockedReason,
         }..removeWhere((_, value) {
           if (value == null) return true;
           if (value is String && value.trim().isEmpty) return true;
@@ -482,6 +503,9 @@ class AIChatAnalyticsTracker {
     String? proofLevel,
     List<String> shadowGateProofReasons = const <String>[],
     List<String> ambiguityReasons = const <String>[],
+    bool? retargetAllowed,
+    String? retargetProofSource,
+    String? retargetBlockedReason,
   }) {
     if (!_enabled) return;
     final started = requestId == null ? null : _turnStarts[requestId];
@@ -528,6 +552,9 @@ class AIChatAnalyticsTracker {
       proofLevel: proofLevel,
       shadowGateProofReasons: shadowGateProofReasons,
       ambiguityReasons: ambiguityReasons,
+      retargetAllowed: retargetAllowed,
+      retargetProofSource: retargetProofSource,
+      retargetBlockedReason: retargetBlockedReason,
     );
     _rememberTrace(event);
     _sink.record(event);

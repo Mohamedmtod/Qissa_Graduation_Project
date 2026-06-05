@@ -277,6 +277,36 @@ class AIChatRecommendationResolver {
       suitabilityPolicyEnabled: AIChatExperimentConfig.useSuitabilityPolicy,
     );
 
+    final sensitiveSkinCandidates = _sensitiveSkinLocalCandidates(
+      incoming,
+      discovery,
+      localCandidatesRefs,
+      catalog,
+    );
+    if (sensitiveSkinCandidates.isNotEmpty) {
+      return RecommendationResolverResult(
+        trace: trace.copyWith(
+          finalGuardDecision: 'local_sensitive_skin_choice',
+          localCandidateCount: sensitiveSkinCandidates.length,
+          workerCandidateCount: sensitiveSkinCandidates.length,
+          candidateSource: 'sensitiveSkinLocal',
+          noMatchReason: null,
+        ),
+        handledResult: AIChatHandledResult(
+          handled: true,
+          reply: buildRecommendReplyFromLocalCandidates(
+            sensitiveSkinCandidates,
+            updatedPreferences: discovery.localPreferences.copyWith(
+              intensity: 'light',
+            ),
+          ),
+          recommendedProducts: sensitiveSkinCandidates,
+          source: 'local_sensitive_skin_choice',
+          pruneHistoricalBotMessages: discovery.shouldPruneBotHistory,
+        ),
+      );
+    }
+
     final referenceCheaperResult = resolveReferenceCheaperCandidates(
       message: incoming.trimmed,
       catalog: catalog,
@@ -352,6 +382,23 @@ class AIChatRecommendationResolver {
           ),
           recommendedProducts: localCandidatesRefs,
           source: 'local_best_match',
+          pruneHistoricalBotMessages: discovery.shouldPruneBotHistory,
+        ),
+      );
+    }
+
+    if (_shouldRecommendSinglePickLocally(incoming, localCandidatesRefs)) {
+      final singleCandidate = localCandidatesRefs.take(1).toList(growable: false);
+      return RecommendationResolverResult(
+        trace: trace.copyWith(finalGuardDecision: 'local_single_pick'),
+        handledResult: AIChatHandledResult(
+          handled: true,
+          reply: buildRecommendReplyFromLocalCandidates(
+            singleCandidate,
+            updatedPreferences: discovery.localPreferences,
+          ),
+          recommendedProducts: singleCandidate,
+          source: 'local_single_pick',
           pruneHistoricalBotMessages: discovery.shouldPruneBotHistory,
         ),
       );
@@ -1030,6 +1077,100 @@ class AIChatRecommendationResolver {
         normalized.contains('رشح أفضل') ||
         normalized.contains('اقترح افضل') ||
         normalized.contains('اقترح أفضل');
+  }
+
+  bool _shouldRecommendSinglePickLocally(
+    AIChatTurnContext incoming,
+    List<RecommendedProduct> localCandidatesRefs,
+  ) {
+    if (localCandidatesRefs.isEmpty) return false;
+    if (incoming.intent != AIChatIntent.newRecommendation) return false;
+    final normalized = LocalIntentParser.normalizeInput(incoming.trimmed);
+    if (normalized.isEmpty) return false;
+    final asksForRecommendation =
+        normalized.contains('recommend') ||
+        normalized.contains('\u0631\u0634\u062d') ||
+        normalized.contains('\u0627\u0642\u062a\u0631\u062d');
+    if (!asksForRecommendation) return false;
+    return normalized.contains('recommend one') ||
+        normalized.contains('one perfume') ||
+        normalized.contains('one option') ||
+        normalized.contains('single recommendation') ||
+        normalized.contains('\u0639\u0637\u0631 \u0648\u0627\u062d\u062f') ||
+        normalized.contains('\u0627\u062e\u062a\u064a\u0627\u0631 \u0648\u0627\u062d\u062f') ||
+        normalized.contains('\u0648\u0627\u062d\u062f \u0648\u062e\u0644\u0627\u0635');
+  }
+
+  List<RecommendedProduct> _sensitiveSkinLocalCandidates(
+    AIChatTurnContext incoming,
+    AIChatDiscoveryContext discovery,
+    List<RecommendedProduct> localCandidatesRefs,
+    List<ProductModel> catalog,
+  ) {
+    if (incoming.intent != AIChatIntent.newRecommendation) {
+      return const [];
+    }
+    final normalized = LocalIntentParser.normalizeInput(incoming.trimmed);
+    if (normalized.isEmpty) return const [];
+    final hasSensitiveSignal =
+        normalized.contains('sensitive skin') ||
+        (normalized.contains('\u0628\u0634\u0631') &&
+            normalized.contains('\u062d\u0633\u0627\u0633'));
+    if (!hasSensitiveSignal) return const [];
+    final asksForChoice = normalized.contains('choose') ||
+        normalized.contains('pick') ||
+        normalized.contains('recommend') ||
+        normalized.contains('\u0627\u062e\u062a\u0627\u0631') ||
+        normalized.contains('\u0623\u062e\u062a\u0627\u0631') ||
+        normalized.contains('\u0631\u0634\u062d');
+    if (!asksForChoice) return const [];
+    if (localCandidatesRefs.isNotEmpty) {
+      return localCandidatesRefs.take(3).toList(growable: false);
+    }
+    if (catalog.isEmpty) return const [];
+    final filtered = LocalCandidateFilter.getTopRecommendations(
+      catalog: catalog,
+      preferences: discovery.localPreferences.copyWith(intensity: 'light'),
+    ).take(3).toList(growable: false);
+    if (filtered.isNotEmpty) return filtered;
+
+    final fallbackCatalog = catalog.where((product) => product.stock > 0).toList(
+      growable: false,
+    )..sort((a, b) {
+        final aScore = _sensitiveSkinFallbackScore(a);
+        final bScore = _sensitiveSkinFallbackScore(b);
+        if (aScore != bScore) return bScore.compareTo(aScore);
+        return a.effectivePrice.compareTo(b.effectivePrice);
+      });
+    return fallbackCatalog
+        .take(3)
+        .map(
+          (product) => RecommendedProduct(
+            product: product,
+            matchScore: _sensitiveSkinFallbackScore(product).toDouble(),
+            matchLabel: 'Safe catalog fallback',
+            matchReason: 'Lightweight catalog option.',
+            candidateSource: RecommendedCandidateSource.strict,
+          ),
+        )
+        .toList(growable: false);
+  }
+
+  int _sensitiveSkinFallbackScore(ProductModel product) {
+    final terms =
+        <String>{
+          product.intensity,
+          product.fragranceFamily,
+          ...product.notes,
+          ...product.tags,
+        }.map((term) => LocalIntentParser.normalizeInput(term)).join(' ');
+    var score = 0;
+    if (terms.contains('light')) score += 4;
+    if (terms.contains('fresh')) score += 3;
+    if (terms.contains('soft')) score += 3;
+    if (terms.contains('clean')) score += 2;
+    if (terms.contains('musk')) score += 1;
+    return score;
   }
 
   String _candidateSource(

@@ -70,8 +70,6 @@ class LocalIntentParser {
 
   static const Set<String> revertModifiers = parser_keywords.revertModifiers;
 
-  static const Set<String> _compareKeywords = parser_keywords.compareKeywords;
-
   static const Set<String> _followUpKeywords = parser_keywords.followUpKeywords;
 
   static const Set<String> _availabilitySubstituteFollowUpKeywords =
@@ -971,7 +969,10 @@ class LocalIntentParser {
     if (_looksLikeScentBlendRequest(normalized)) {
       return AIChatIntent.newRecommendation;
     }
-    if (containsAny(normalized, _compareKeywords)) {
+    if (_looksLikeSensitiveSkinChoice(normalized)) {
+      return AIChatIntent.newRecommendation;
+    }
+    if (_looksLikeExplicitCompareRequest(normalized)) {
       return AIChatIntent.compareProducts;
     }
     if (looksLikeRankingRequest(normalized)) {
@@ -1048,6 +1049,29 @@ class LocalIntentParser {
         normalized.contains('\u0641\u064a\u0647\u0627');
   }
 
+  static bool _looksLikeSensitiveSkinChoice(String normalized) {
+    if (normalized.isEmpty) return false;
+    final hasSensitiveCue =
+        normalized.contains('sensitive skin') ||
+        normalized.contains('skin sensitive') ||
+        normalized.contains(
+          '\u0628\u0634\u0631\u062a\u064a \u062d\u0633\u0627\u0633\u0629',
+        ) ||
+        normalized.contains(
+          '\u0628\u0634\u0631\u0629 \u062d\u0633\u0627\u0633\u0629',
+        ) ||
+        normalized.contains('\u062d\u0633\u0627\u0633\u064a\u0629') ||
+        normalized.contains('\u062d\u0633\u0627\u0633');
+    if (!hasSensitiveCue) return false;
+    return normalized.contains('choose') ||
+        normalized.contains('pick') ||
+        normalized.contains('recommend') ||
+        normalized.contains('\u0627\u062e\u062a\u0627\u0631') ||
+        normalized.contains('\u0623\u062e\u062a\u0627\u0631') ||
+        normalized.contains('\u0627\u0631\u0634\u062d') ||
+        normalized.contains('\u0631\u0634\u062d');
+  }
+
   static bool _looksLikeNoteOnlyAvailabilityPatch(
     String normalized,
     _ExtractedNotes extractedNotes,
@@ -1067,6 +1091,40 @@ class LocalIntentParser {
       normalized,
       _extractNotes(normalized),
     );
+  }
+
+  static bool _looksLikeExplicitCompareRequest(String normalized) {
+    if (normalized.isEmpty) return false;
+    final explicitCompare =
+        normalized.contains('compare') ||
+        normalized.contains('versus') ||
+        normalized.contains(' vs ') ||
+        normalized.contains('\u0642\u0627\u0631\u0646') ||
+        normalized.contains('\u0645\u0642\u0627\u0631\u0646\u0629');
+    if (explicitCompare) return true;
+
+    final asksBetter =
+        normalized.contains('which is better') ||
+        normalized.contains('which one is better') ||
+        normalized.contains('\u0645\u064a\u0646 \u0623\u062d\u0633\u0646') ||
+        normalized.contains('\u0645\u064a\u0646 \u0627\u062d\u0633\u0646') ||
+        normalized.contains(
+          '\u0623\u064a\u0647\u0645 \u0623\u062d\u0633\u0646',
+        ) ||
+        normalized.contains(
+          '\u0627\u064a\u0647\u0645 \u0627\u062d\u0633\u0646',
+        );
+    if (!asksBetter) return false;
+
+    final hasComparisonAnchor =
+        normalized.contains('between') ||
+        normalized.contains('\u0628\u064a\u0646') ||
+        RegExp(r'\b[12]\b').hasMatch(normalized) ||
+        normalized.contains('\u0627\u0644\u0623\u0648\u0644') ||
+        normalized.contains('\u0627\u0644\u0627\u0648\u0644') ||
+        normalized.contains('\u0627\u0644\u062b\u0627\u0646\u064a') ||
+        normalized.contains('\u0627\u0644\u062a\u0627\u0646\u064a');
+    return hasComparisonAnchor;
   }
 
   static bool _looksLikeScentBlendRequest(String normalized) {

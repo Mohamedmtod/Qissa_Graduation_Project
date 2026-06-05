@@ -16,6 +16,7 @@ enum AIChatSemanticIntent {
   subjectiveVisibleQuestion,
   externalReference,
   productAvailability,
+  catalogRanking,
   businessInfo,
   social,
   clarification,
@@ -60,6 +61,42 @@ class AIChatRouteOwnershipPolicy {
       );
     }
 
+    if (_looksLikeExternalReference(normalized)) {
+      return const AIChatRouteOwnershipDecision(
+        ownershipClass: AIChatRouteOwnershipClass.llmSemantic,
+        semanticIntent: AIChatSemanticIntent.externalReference,
+        localSkippedReason: 'external_reference_requires_semantic_anchor',
+        llmRouteReason: 'external_reference_language',
+      );
+    }
+
+    if (_looksLikeTrendPerfumeRequest(normalized)) {
+      return const AIChatRouteOwnershipDecision(
+        ownershipClass: AIChatRouteOwnershipClass.llmSemantic,
+        semanticIntent: AIChatSemanticIntent.recommendationRefinement,
+        localSkippedReason: 'trend_perfume_request_requires_recommendation',
+        llmRouteReason: 'trend_recommendation_language',
+      );
+    }
+
+    if (_looksLikeSoftNoteGapPerfumeRequest(normalized)) {
+      return const AIChatRouteOwnershipDecision(
+        ownershipClass: AIChatRouteOwnershipClass.llmSemantic,
+        semanticIntent: AIChatSemanticIntent.noteSearch,
+        localSkippedReason: 'soft_note_gap_request_requires_catalog_caveat',
+        llmRouteReason: 'note_gap_recommendation_language',
+      );
+    }
+
+    if (_looksLikeHotelOrAestheticPerfumeRequest(normalized)) {
+      return const AIChatRouteOwnershipDecision(
+        ownershipClass: AIChatRouteOwnershipClass.llmSemantic,
+        semanticIntent: AIChatSemanticIntent.vibeSearch,
+        localSkippedReason: 'vibe_request_requires_recommendation',
+        llmRouteReason: 'vibe_recommendation_language',
+      );
+    }
+
     final availabilityProduct =
         AvailabilityIntentUtils.extractAvailabilityProductQuery(normalized);
     if (LocalIntentParser.containsAny(
@@ -70,6 +107,10 @@ class AIChatRouteOwnershipPolicy {
         !AvailabilityIntentUtils.isGenericAvailabilityCandidate(
           availabilityProduct,
         ) &&
+        !_looksLikeBusinessInfo(normalized) &&
+        !_looksLikeCatalogRanking(normalized) &&
+        !_looksLikeKnownNotePreference(normalized) &&
+        !_looksLikeNotePatch(normalized) &&
         !LocalIntentParser.looksLikeNoteOnlyAvailabilityPatch(normalized)) {
       return const AIChatRouteOwnershipDecision(
         ownershipClass: AIChatRouteOwnershipClass.localDeterministic,
@@ -77,16 +118,31 @@ class AIChatRouteOwnershipPolicy {
       );
     }
 
-    if (_looksLikeExternalReference(normalized)) {
+    if (_looksLikeBusinessInfo(normalized)) {
+      return const AIChatRouteOwnershipDecision(
+        ownershipClass: AIChatRouteOwnershipClass.localDeterministic,
+        semanticIntent: AIChatSemanticIntent.businessInfo,
+      );
+    }
+
+    if (_looksLikeSurprisePerfumeRequest(normalized)) {
       return const AIChatRouteOwnershipDecision(
         ownershipClass: AIChatRouteOwnershipClass.llmSemantic,
-        semanticIntent: AIChatSemanticIntent.externalReference,
-        localSkippedReason: 'external_reference_requires_semantic_anchor',
-        llmRouteReason: 'external_reference_language',
+        semanticIntent: AIChatSemanticIntent.recommendationRefinement,
+        localSkippedReason: 'surprise_perfume_request_requires_recommendation',
+        llmRouteReason: 'surprise_recommendation_language',
+      );
+    }
+
+    if (_looksLikeCatalogRanking(normalized)) {
+      return const AIChatRouteOwnershipDecision(
+        ownershipClass: AIChatRouteOwnershipClass.localDeterministic,
+        semanticIntent: AIChatSemanticIntent.catalogRanking,
       );
     }
 
     if (LocalIntentParser.looksLikeNoteOnlyAvailabilityPatch(normalized) ||
+        _looksLikeKnownNotePreference(normalized) ||
         _looksLikeNotePatch(normalized)) {
       return const AIChatRouteOwnershipDecision(
         ownershipClass: AIChatRouteOwnershipClass.llmSemantic,
@@ -141,7 +197,176 @@ class AIChatRouteOwnershipPolicy {
         normalized.contains('like sauvage') ||
         normalized.contains('like bleu de chanel') ||
         normalized.contains('like aventus') ||
-        normalized.contains('like baccarat rouge');
+        normalized.contains('like baccarat rouge') ||
+        normalized.contains('\u0634\u0628\u0647 ') ||
+        normalized.contains('\u0632\u064a ') ||
+        normalized.contains('\u0646\u0641\u0633 ');
+  }
+
+  bool _looksLikeBusinessInfo(String normalized) {
+    return normalized.contains('payment') ||
+        normalized.contains('pay online') ||
+        normalized.contains('cash on delivery') ||
+        normalized.contains('delivery') ||
+        normalized.contains('shipping') ||
+        normalized.contains('authentic') ||
+        normalized.contains('original') ||
+        normalized.contains('genuine') ||
+        normalized.contains('return policy') ||
+        normalized.contains('\u0627\u0644\u062f\u0641\u0639') ||
+        normalized.contains('\u0627\u062f\u0641\u0639') ||
+        normalized.contains('\u0623\u0648\u0646\u0644\u0627\u064a\u0646') ||
+        normalized.contains('\u0627\u0648\u0646\u0644\u0627\u064a\u0646') ||
+        normalized.contains(
+          '\u0639\u0646\u062f \u0627\u0644\u0627\u0633\u062a\u0644\u0627\u0645',
+        ) ||
+        normalized.contains('\u0627\u0644\u062a\u0648\u0635\u064a\u0644') ||
+        normalized.contains('\u0627\u0644\u0634\u062d\u0646') ||
+        normalized.contains('\u0623\u0635\u0644\u064a') ||
+        normalized.contains('\u0627\u0635\u0644\u064a') ||
+        normalized.contains('\u0623\u0635\u0644\u064a\u0629') ||
+        normalized.contains('\u0627\u0635\u0644\u064a\u0629') ||
+        normalized.contains('\u0623\u0635\u0644\u064a\u064a\u0646') ||
+        normalized.contains('\u0627\u0635\u0644\u064a\u064a\u0646') ||
+        normalized.contains(
+          '\u0627\u0644\u0627\u0633\u062a\u0631\u062c\u0627\u0639',
+        );
+  }
+
+  bool _looksLikeCatalogRanking(String normalized) {
+    return LocalIntentParser.looksLikeRankingRequest(normalized) ||
+        normalized.contains('best seller') ||
+        normalized.contains('best-selling') ||
+        normalized.contains('most selling') ||
+        normalized.contains('most popular') ||
+        normalized.contains('longest lasting') ||
+        normalized.contains('best longevity') ||
+        normalized.contains('strongest projection') ||
+        normalized.contains(
+          '\u0623\u0643\u062a\u0631 \u0639\u0637\u0631 \u062b\u0627\u0628\u062a',
+        ) ||
+        normalized.contains(
+          '\u0627\u0643\u062a\u0631 \u0639\u0637\u0631 \u062b\u0627\u0628\u062a',
+        ) ||
+        normalized.contains(
+          '\u0623\u0643\u062b\u0631 \u0627\u0644\u0639\u0637\u0648\u0631 \u0645\u0628\u064a\u0639',
+        ) ||
+        normalized.contains(
+          '\u0627\u0643\u062b\u0631 \u0627\u0644\u0639\u0637\u0648\u0631 \u0645\u0628\u064a\u0639',
+        ) ||
+        normalized.contains(
+          '\u0623\u0643\u062b\u0631 \u0645\u0628\u064a\u0639',
+        ) ||
+        normalized.contains(
+          '\u0627\u0643\u062b\u0631 \u0645\u0628\u064a\u0639',
+        ) ||
+        normalized.contains('\u0645\u0628\u064a\u0639') ||
+        normalized.contains('\u0627\u0644\u062b\u0628\u0627\u062a') ||
+        normalized.contains('\u062b\u0627\u0628\u062a') ||
+        normalized.contains('\u0623\u062b\u0628\u062a') ||
+        normalized.contains('\u0627\u062b\u0628\u062a') ||
+        normalized.contains('\u0627\u0644\u0641\u0648\u062d\u0627\u0646');
+  }
+
+  bool _looksLikeSurprisePerfumeRequest(String normalized) {
+    final hasPerfumeProof =
+        normalized.contains('perfume') ||
+        normalized.contains('fragrance') ||
+        normalized.contains('\u0639\u0637\u0631') ||
+        normalized.contains('\u0639\u0637\u0648\u0631');
+    if (!hasPerfumeProof) return false;
+    return normalized.contains('surprise me') ||
+        normalized.contains('\u0641\u0627\u062c') ||
+        normalized.contains('\u0641\u0627\u062c\u0626\u0646\u064a') ||
+        normalized.contains('\u0641\u0627\u062c\u064a\u0646\u064a');
+  }
+
+  bool _looksLikeTrendPerfumeRequest(String normalized) {
+    final hasPerfumeProof =
+        normalized.contains('perfume') ||
+        normalized.contains('fragrance') ||
+        normalized.contains('\u0639\u0637\u0631') ||
+        normalized.contains('\u0639\u0637\u0648\u0631');
+    if (!hasPerfumeProof) return false;
+    return normalized.contains('tiktok') ||
+        normalized.contains('tik tok') ||
+        normalized.contains('viral') ||
+        normalized.contains('trend') ||
+        normalized.contains('trending') ||
+        normalized.contains('popular') ||
+        normalized.contains('\u062a\u064a\u0643 \u062a\u0648\u0643') ||
+        normalized.contains('\u062a\u064a\u0643\u062a\u0648\u0643') ||
+        normalized.contains('\u062a\u0631\u064a\u0646\u062f') ||
+        normalized.contains('\u0645\u0634\u0647\u0648\u0631');
+  }
+
+  bool _looksLikeSoftNoteGapPerfumeRequest(String normalized) {
+    final hasPerfumeOrScentPreference =
+        normalized.contains('perfume') ||
+        normalized.contains('fragrance') ||
+        normalized.contains('\u0639\u0637\u0631') ||
+        normalized.contains('\u0639\u0637\u0648\u0631') ||
+        normalized.contains('\u0628\u062d\u0628 \u0631\u064a\u062d\u0629') ||
+        normalized.contains('\u0628\u062d\u0628 \u0631\u064a\u062d\u0647') ||
+        normalized.contains('love the smell') ||
+        normalized.contains('like the smell');
+    if (!hasPerfumeOrScentPreference) return false;
+    final hasScentPhrase =
+        normalized.contains('scent') ||
+        normalized.contains('smell') ||
+        normalized.contains('note') ||
+        normalized.contains('with ') ||
+        normalized.contains('\u0631\u064a\u062d\u0629') ||
+        normalized.contains('\u0631\u064a\u062d\u0647') ||
+        normalized.contains('\u0631\u064a\u062d\u062a\u0647') ||
+        normalized.contains('\u0641\u064a\u0647') ||
+        normalized.contains('\u0646\u0648\u062a\u0629');
+    if (!hasScentPhrase) return false;
+    return normalized.contains('coffee') ||
+        normalized.contains('tea') ||
+        normalized.contains('coconut') ||
+        normalized.contains('tobacco') ||
+        normalized.contains('soapy') ||
+        normalized.contains('soap') ||
+        normalized.contains('\u0642\u0647\u0648\u0629') ||
+        normalized.contains('\u0642\u0647\u0648\u0647') ||
+        normalized.contains('\u0634\u0627\u064a') ||
+        normalized.contains(
+          '\u062c\u0648\u0632 \u0627\u0644\u0647\u0646\u062f',
+        ) ||
+        normalized.contains('\u062a\u0628\u063a') ||
+        normalized.contains('\u0635\u0627\u0628\u0648\u0646') ||
+        normalized.contains('\u0635\u0627\u0628\u0648\u0646\u0629');
+  }
+
+  bool _looksLikeHotelOrAestheticPerfumeRequest(String normalized) {
+    final hasPerfumeProof =
+        normalized.contains('perfume') ||
+        normalized.contains('fragrance') ||
+        normalized.contains('\u0639\u0637\u0631') ||
+        normalized.contains('\u0639\u0637\u0648\u0631');
+    if (!hasPerfumeProof) return false;
+    final hotelClean =
+        (normalized.contains('hotel') ||
+            normalized.contains('lobby') ||
+            normalized.contains('\u0641\u0646\u062f\u0642') ||
+            normalized.contains('\u0644\u0648\u0628\u064a')) &&
+        (normalized.contains('clean') ||
+            normalized.contains('fresh') ||
+            normalized.contains('\u0646\u0638\u064a\u0641') ||
+            normalized.contains('\u0646\u0636\u064a\u0641') ||
+            normalized.contains('\u0645\u0646\u0639\u0634'));
+    final aesthetic =
+        normalized.contains('aesthetic') ||
+        normalized.contains('creator') ||
+        normalized.contains('content') ||
+        normalized.contains('bottle') ||
+        normalized.contains('\u0634\u0643\u0644\u0647') ||
+        normalized.contains('\u0628\u0648\u062a\u0644') ||
+        normalized.contains(
+          '\u0635\u0627\u0646\u0639 \u0645\u062d\u062a\u0648\u0649',
+        );
+    return hotelClean || aesthetic;
   }
 
   bool _looksLikeSocialTurn(String normalized) {
@@ -164,6 +389,31 @@ class AIChatRouteOwnershipPolicy {
         normalized.contains('ريحة') ||
         normalized.contains('نوتة') ||
         normalized.contains('فيه');
+  }
+
+  bool _looksLikeKnownNotePreference(String normalized) {
+    final hasPreferenceCue =
+        normalized.contains('love ') ||
+        normalized.contains('like ') ||
+        normalized.contains('prefer ') ||
+        normalized.contains('with ') ||
+        normalized.contains('\u0628\u062d\u0628') ||
+        normalized.contains('\u062d\u0628') ||
+        normalized.contains('\u0639\u0627\u064a\u0632') ||
+        normalized.contains('\u0639\u0627\u0648\u0632') ||
+        normalized.contains('\u0641\u064a\u0647') ||
+        normalized.contains('\u0645\u0639');
+    if (!hasPreferenceCue) return false;
+    return normalized.contains('vanilla') ||
+        normalized.contains('oud') ||
+        normalized.contains('musk') ||
+        normalized.contains('rose') ||
+        normalized.contains('amber') ||
+        normalized.contains('\u0641\u0627\u0646\u064a\u0644\u064a\u0627') ||
+        normalized.contains('\u0639\u0648\u062f') ||
+        normalized.contains('\u0645\u0633\u0643') ||
+        normalized.contains('\u0648\u0631\u062f') ||
+        normalized.contains('\u0639\u0646\u0628\u0631');
   }
 
   bool _looksSubjectiveVisibleQuestion(String normalized) {
@@ -199,6 +449,20 @@ class AIChatRouteOwnershipPolicy {
         normalized.contains('university') ||
         normalized.contains('office') ||
         normalized.contains('not too strong') ||
+        normalized.contains('\u0647\u0627\u062f\u064a') ||
+        normalized.contains('\u0647\u0627\u062f\u064a\u0629') ||
+        normalized.contains('\u0645\u0634 \u0642\u0648\u064a') ||
+        normalized.contains('\u0645\u0634 \u0642\u0648\u064a\u0629') ||
+        normalized.contains('\u0645\u0634 \u0633\u0648\u064a\u062a') ||
+        normalized.contains('\u0645\u0634 \u0645\u0633\u0643\u0631') ||
+        normalized.contains('\u0643\u0648\u064a\u0633\u0629') ||
+        normalized.contains(
+          '\u0633\u0639\u0631\u0647\u0627 \u0642\u0644\u064a\u0644',
+        ) ||
+        normalized.contains(
+          '\u0628\u0634\u0631\u062a\u064a \u062d\u0633\u0627\u0633\u0629',
+        ) ||
+        normalized.contains('\u062d\u0633\u0627\u0633\u0629') ||
         normalized.contains('مش خانقة') ||
         normalized.contains('شيك') ||
         normalized.contains('لطيفة');

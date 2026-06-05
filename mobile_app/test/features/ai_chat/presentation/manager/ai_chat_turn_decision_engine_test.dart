@@ -265,6 +265,38 @@ void main() {
       },
     );
 
+    test('V2 blocks availability for 30-run route ownership gaps', () {
+      AIChatExperimentConfig.setTestOverrides(llmLedRouterV2: true);
+
+      final ranking = _decide(
+        '\u0625\u064a\u0647 \u0623\u0643\u062a\u0631 \u0639\u0637\u0631 \u062b\u0627\u0628\u062a \u0639\u0646\u062f\u0643\u0645\u061f',
+      );
+      expect(ranking.route, AIChatTurnDecisionRoute.localCommand);
+      expect(ranking.shouldAllowAvailability, isFalse);
+      expect(ranking.semanticIntent, 'catalogRanking');
+
+      final business = _decide(
+        '\u0627\u0644\u062f\u0641\u0639 \u0623\u0648\u0646\u0644\u0627\u064a\u0646 \u0648\u0644\u0627 \u0639\u0646\u062f \u0627\u0644\u0627\u0633\u062a\u0644\u0627\u0645\u061f',
+      );
+      expect(business.route, AIChatTurnDecisionRoute.localCommand);
+      expect(business.shouldAllowAvailability, isFalse);
+      expect(business.semanticIntent, 'businessInfo');
+
+      final note = _decide(
+        '\u0628\u062d\u0628 \u0627\u0644\u0641\u0627\u0646\u064a\u0644\u064a\u0627\u060c \u0639\u0646\u062f\u0643\u0645 \u0625\u064a\u0647\u061f',
+      );
+      expect(note.route, AIChatTurnDecisionRoute.recommendation);
+      expect(note.shouldAllowAvailability, isFalse);
+      expect(note.semanticIntent, anyOf('noteSearch', 'vibeSearch'));
+
+      final external = _decide(
+        '\u0639\u0646\u062f\u0643\u0645 \u0639\u0637\u0631 \u0634\u0628\u0647 Sauvage\u061f',
+      );
+      expect(external.route, AIChatTurnDecisionRoute.recommendation);
+      expect(external.shouldAllowAvailability, isFalse);
+      expect(external.semanticIntent, 'externalReference');
+    });
+
     test('V2 routes subjective visible question to semantic owner', () {
       AIChatExperimentConfig.setTestOverrides(llmLedRouterV2: true);
 

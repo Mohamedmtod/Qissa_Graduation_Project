@@ -20,6 +20,18 @@ String buildSocialGreetingFallbackText(AIChatLanguage language) {
       : 'Hello! Tell me your preferences like gender, notes, or budget, and I will suggest the best fit.';
 }
 
+String buildSocialMicroTurnText(AIChatLanguage language) {
+  return language.isArabic
+      ? 'أنا بخير، جاهز أساعدك تختار عطر مناسب. قلّي بتحب ريحة منعشة، حلوة، قوية، أو ميزانية معينة؟'
+      : 'I am doing well and ready to help you choose a perfume. Tell me if you want something fresh, sweet, strong, soft, or a specific budget.';
+}
+
+String buildDialogueNoPerfumeIntentText(AIChatLanguage language) {
+  return language.isArabic
+      ? 'أنا جاهز أساعدك تختار عطر مناسب. قلّي بتحب ريحة منعشة، قوية، حلوة، أو ميزانية معينة؟'
+      : 'I can help you choose a perfume. Tell me the style, notes, occasion, or budget you want.';
+}
+
 String buildCompareWithoutContextClarificationText(AIChatLanguage language) {
   return language.isArabic
       ? 'حدّد لي المنتجين اللذين تريد مقارنتهما، مثل: قارن بين 1 و2.'

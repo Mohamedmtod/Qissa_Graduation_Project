@@ -154,6 +154,9 @@ class AIChatReplyHandler {
     AvailabilityContext? availabilityContext,
     bool pruneHistoricalBotMessages = false,
     String? workerFailureReason,
+    bool? retargetAllowed,
+    String? retargetProofSource,
+    String? retargetBlockedReason,
   }) {
     _removeLoadingMessage();
     _onAskQuestion(reply.question);
@@ -253,6 +256,9 @@ class AIChatReplyHandler {
       workerUsed: source.contains('worker'),
       fallbackUsed: workerFailureReason != null,
       failureReason: workerFailureReason,
+      retargetAllowed: retargetAllowed,
+      retargetProofSource: retargetProofSource,
+      retargetBlockedReason: retargetBlockedReason,
     );
     unawaited(
       _aiChatRepo.logAIChatEvent(
@@ -388,6 +394,9 @@ class AIChatReplyHandler {
     AvailabilityContext? availabilityContext,
     bool pruneHistoricalBotMessages = false,
     String? workerFailureReason,
+    bool? retargetAllowed,
+    String? retargetProofSource,
+    String? retargetBlockedReason,
   }) {
     _removeLoadingMessage();
     final currentState = _getState();
@@ -525,6 +534,9 @@ class AIChatReplyHandler {
       fallbackUsed: workerFailureReason != null,
       clarificationType: clarificationType,
       failureReason: workerFailureReason,
+      retargetAllowed: retargetAllowed,
+      retargetProofSource: retargetProofSource,
+      retargetBlockedReason: retargetBlockedReason,
     );
     _analyticsTracker.record(
       eventType: 'turn_completed',
@@ -540,6 +552,9 @@ class AIChatReplyHandler {
       fallbackUsed: workerFailureReason != null,
       clarificationType: clarificationType,
       failureReason: workerFailureReason,
+      retargetAllowed: retargetAllowed,
+      retargetProofSource: retargetProofSource,
+      retargetBlockedReason: retargetBlockedReason,
     );
     unawaited(
       _aiChatRepo.logAIChatEvent(

@@ -40,7 +40,26 @@ extension AIChatCubitRecommendationFlow on AIChatCubit {
     if (discovery.isFollowUpOrCompare) return false;
     if (!discovery.localReadyForRecommendation) return false;
     if (AIChatExperimentConfig.catalogSearchShadow) return false;
+    if (_looksLikeSensitiveSkinChoiceForWorkerFirst(incoming.trimmed)) {
+      return false;
+    }
     return incoming.intent == AIChatIntent.newRecommendation;
+  }
+
+  bool _looksLikeSensitiveSkinChoiceForWorkerFirst(String message) {
+    final normalized = LocalIntentParser.normalizeInput(message);
+    if (normalized.isEmpty) return false;
+    final hasSensitiveSignal =
+        normalized.contains('sensitive skin') ||
+        (normalized.contains('\u0628\u0634\u0631') &&
+            normalized.contains('\u062d\u0633\u0627\u0633'));
+    if (!hasSensitiveSignal) return false;
+    return normalized.contains('choose') ||
+        normalized.contains('pick') ||
+        normalized.contains('recommend') ||
+        normalized.contains('\u0627\u062e\u062a\u0627\u0631') ||
+        normalized.contains('\u0623\u062e\u062a\u0627\u0631') ||
+        normalized.contains('\u0631\u0634\u062d');
   }
 
   void _logWorkerFirstExperimentUsage({

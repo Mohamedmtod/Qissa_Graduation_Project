@@ -194,6 +194,15 @@ class AIChatInputInterceptor {
     if (_containsAny(message, _compromiseTerms)) {
       return false;
     }
+    if (_hasSameNoteIncludeExclude(message)) {
+      return true;
+    }
+    if (_isNaturalExcludeThenPreferRequest(message)) {
+      return false;
+    }
+    if (_isMultiScentPairRequest(message)) {
+      return false;
+    }
 
     final wantsVeryLight =
         message.contains('light') ||
@@ -230,6 +239,119 @@ class AIChatInputInterceptor {
 
     return (wantsVeryLight && wantsVeryStrong) ||
         (wantsUnnoticed && wantsVeryStrong);
+  }
+
+  static bool _hasSameNoteIncludeExclude(String message) {
+    const notes = {
+      'oud': ['oud', '\u0639\u0648\u062f'],
+      'vanilla': ['vanilla', '\u0641\u0627\u0646\u064a\u0644\u064a\u0627'],
+    };
+    final hasExcludeCue =
+        message.contains('without ') ||
+        message.contains('avoid ') ||
+        message.contains('no ') ||
+        message.contains('\u0628\u062f\u0648\u0646 ') ||
+        message.contains('\u0645\u0634 ');
+    final hasIncludeCue =
+        message.contains('with ') ||
+        message.contains('and ') ||
+        message.contains('\u0645\u0639 ') ||
+        message.contains('\u0648\u0645\u0639 ') ||
+        message.contains('\u0648\u0641\u064a\u0647 ');
+    if (!hasExcludeCue || !hasIncludeCue) return false;
+
+    for (final aliases in notes.values) {
+      final hasNote = aliases.any(message.contains);
+      if (!hasNote) continue;
+      final excludes = aliases.any(
+        (note) =>
+            message.contains('without $note') ||
+            message.contains('avoid $note') ||
+            message.contains('no $note') ||
+            message.contains('\u0628\u062f\u0648\u0646 $note') ||
+            message.contains('\u0645\u0634 $note'),
+      );
+      final includes = aliases.any(
+        (note) =>
+            message.contains('with $note') ||
+            message.contains('and $note') ||
+            message.contains('\u0645\u0639 $note') ||
+            message.contains('\u0648\u0645\u0639 $note') ||
+            message.contains('\u0648\u0641\u064a\u0647 $note'),
+      );
+      if (excludes && includes) return true;
+    }
+    return false;
+  }
+
+  static bool _isNaturalExcludeThenPreferRequest(String message) {
+    final excludesStrong =
+        message.contains("don't like strong") ||
+        message.contains('do not like strong') ||
+        message.contains('not strong') ||
+        message.contains('not too strong') ||
+        message.contains('\u0645\u0634 \u0628\u062d\u0628') &&
+            (message.contains('\u0642\u0648\u064a') ||
+                message.contains('\u0642\u0648\u064a\u0629')) ||
+        message.contains('\u0645\u0634 \u0642\u0648\u064a') ||
+        message.contains('\u0645\u0634 \u0642\u0648\u064a\u0629');
+    final prefersCalm =
+        message.contains('soft') ||
+        message.contains('calm') ||
+        message.contains('quiet') ||
+        message.contains('light') ||
+        message.contains('\u0647\u0627\u062f\u064a') ||
+        message.contains('\u0647\u0627\u062f\u064a\u0629') ||
+        message.contains('\u062e\u0641\u064a\u0641');
+    if (excludesStrong && prefersCalm) return true;
+
+    final excludesSweet =
+        message.contains('not sweet') ||
+        message.contains('not sugary') ||
+        message.contains('\u0645\u0634 \u0633\u0648\u064a\u062a') ||
+        message.contains('\u0645\u0634 \u0645\u0633\u0643\u0631');
+    final prefersFresh =
+        message.contains('fresh') ||
+        message.contains('\u0641\u0631\u064a\u0634') ||
+        message.contains('\u0645\u0646\u0639\u0634');
+    if (excludesSweet && prefersFresh) return true;
+
+    final excludesOud =
+        message.contains('without oud') ||
+        message.contains('avoid oud') ||
+        message.contains('\u0628\u062f\u0648\u0646 \u0639\u0648\u062f') ||
+        message.contains('\u0645\u0634 \u0639\u0648\u062f');
+    final prefersDifferentNote =
+        message.contains('vanilla') ||
+        message.contains('\u0641\u0627\u0646\u064a\u0644\u064a\u0627') ||
+        message.contains('musk') ||
+        message.contains('\u0645\u0633\u0643');
+    return excludesOud && prefersDifferentNote;
+  }
+
+  static bool _isMultiScentPairRequest(String message) {
+    final asksForMultiple =
+        message.contains('two perfumes') ||
+        message.contains('two scents') ||
+        message.contains('2 perfumes') ||
+        message.contains('\u0639\u0637\u0631\u064a\u0646') ||
+        message.contains('\u0639\u0637\u0631\u064a\u0646') ||
+        message.contains('\u0627\u062a\u0646\u064a\u0646') ||
+        message.contains('\u0627\u062b\u0646\u064a\u0646');
+    if (!asksForMultiple) return false;
+    final hasSplitUse =
+        message.contains('one ') ||
+        message.contains('\u0648\u0627\u062d\u062f') ||
+        message.contains('\u0648\u0627\u062d\u062f\u0629');
+    final hasLightAndStrong =
+        (message.contains('soft') ||
+            message.contains('calm') ||
+            message.contains('\u0647\u0627\u062f\u064a') ||
+            message.contains('\u0647\u0627\u062f\u064a\u0629')) &&
+        (message.contains('strong') ||
+            message.contains('\u0642\u0648\u064a') ||
+            message.contains('\u0642\u0648\u064a\u0629'));
+    return hasSplitUse && hasLightAndStrong;
   }
 
   static bool _isGibberishLike(String message) {

@@ -149,12 +149,15 @@ void main() {
         final outputDir = Directory(
           '../test_artifacts/ai_chat_legacy_488_scenario_bank',
         )..createSync(recursive: true);
-        File(
-          '${outputDir.path}/summary.md',
-        ).writeAsStringSync(audit.toMarkdown());
-        File(
-          '${outputDir.path}/results.json',
-        ).writeAsStringSync(audit.toJson());
+        _writeUtf8ReportSync(
+          File('${outputDir.path}/summary.md'),
+          audit.toMarkdown(),
+          includeBom: true,
+        );
+        _writeUtf8ReportSync(
+          File('${outputDir.path}/results.json'),
+          audit.toJson(),
+        );
 
         expect(audit.totalPairs, 488);
         expect(audit.totalVariants, 976);
@@ -194,17 +197,21 @@ void main() {
         final outputDir = Directory(
           '../test_artifacts/ai_chat_legacy_488_runtime_audit',
         )..createSync(recursive: true);
-        File(
-          '${outputDir.path}/summary.md',
-        ).writeAsStringSync(report.toMarkdown());
-        File(
-          '${outputDir.path}/results.json',
-        ).writeAsStringSync(report.toJson());
+        _writeUtf8ReportSync(
+          File('${outputDir.path}/summary.md'),
+          report.toMarkdown(),
+          includeBom: true,
+        );
+        _writeUtf8ReportSync(
+          File('${outputDir.path}/results.json'),
+          report.toJson(),
+        );
 
         expect(report.totalVariants, 976);
         expect(report.completedVariants, 976);
         expect(report.issueCounts, isEmpty);
         expect(report.issueCounts['mojibake'] ?? 0, 0);
+        expect(report.previewMojibakeScenarioIds, isEmpty);
         final triagedCaveats = report.caveatCounts.entries
             .where(
               (entry) =>
@@ -220,6 +227,18 @@ void main() {
       timeout: const Timeout(Duration(minutes: 15)),
     );
   });
+}
+
+void _writeUtf8ReportSync(
+  File file,
+  String contents, {
+  bool includeBom = false,
+}) {
+  final bytes = utf8.encode(contents);
+  file.writeAsBytesSync(
+    includeBom ? <int>[0xEF, 0xBB, 0xBF, ...bytes] : bytes,
+    flush: true,
+  );
 }
 
 File _legacyScenarioFile() {
@@ -846,9 +865,7 @@ List<String> _runtimeIssuesFor(
   ].join('\n').toLowerCase();
   final lower = content.toLowerCase();
   if (content.trim().isEmpty) issues.add('empty_bot_reply');
-  if (RegExp(
-    r'[\u00d8\u00d9\u00c3\u00c2\u0400-\u04ff\ufffd]',
-  ).hasMatch(content)) {
+  if (_containsMojibakeMarkers(content)) {
     issues.add('mojibake');
   }
   if (_containsAny(lower, const [
@@ -890,6 +907,12 @@ List<String> _runtimeIssuesFor(
     issues.add('ungrounded_availability_language');
   }
   return issues;
+}
+
+bool _containsMojibakeMarkers(String value) {
+  return RegExp(
+    r'[\u00d8\u00d9\u00c3\u00c2\u0400-\u04ff\ufffd]',
+  ).hasMatch(value);
 }
 
 String? _recommendationNoMatchTriageFor(
@@ -1450,6 +1473,7 @@ class _LegacyRuntimeReport {
     required this.statusCounts,
     required this.languageIssueCounts,
     required this.noMatchTriageCounts,
+    required this.previewMojibakeScenarioIds,
     required this.topProblemScenarios,
     required this.avgElapsedMs,
     required this.maxElapsedMs,
@@ -1462,6 +1486,7 @@ class _LegacyRuntimeReport {
   final Map<String, int> statusCounts;
   final Map<String, int> languageIssueCounts;
   final Map<String, int> noMatchTriageCounts;
+  final List<String> previewMojibakeScenarioIds;
   final List<_LegacyRuntimeResult> topProblemScenarios;
   final double avgElapsedMs;
   final int maxElapsedMs;
@@ -1494,6 +1519,10 @@ class _LegacyRuntimeReport {
     }
 
     final elapsed = results.map((item) => item.elapsedMs).toList();
+    final previewMojibakeScenarioIds = results
+        .where((item) => _containsMojibakeMarkers(item.contentPreview))
+        .map((item) => item.id)
+        .toList(growable: false);
     final topProblems =
         results
             .where((item) => item.issues.isNotEmpty || item.caveats.isNotEmpty)
@@ -1512,6 +1541,7 @@ class _LegacyRuntimeReport {
       statusCounts: _sorted(statusCounts),
       languageIssueCounts: _sorted(languageIssueCounts),
       noMatchTriageCounts: _sorted(noMatchTriageCounts),
+      previewMojibakeScenarioIds: previewMojibakeScenarioIds,
       topProblemScenarios: topProblems.take(80).toList(growable: false),
       avgElapsedMs: elapsed.isEmpty
           ? 0
@@ -1590,6 +1620,25 @@ class _LegacyRuntimeReport {
     }
     buffer
       ..writeln()
+      ..writeln('## Preview Mojibake Check')
+      ..writeln()
+      ..writeln('| Metric | Value |')
+      ..writeln('|---|---:|')
+      ..writeln(
+        '| previewMojibakeScenarioCount | ${previewMojibakeScenarioIds.length} |',
+      )
+      ..writeln()
+      ..writeln('| Scenario ID |')
+      ..writeln('|---|');
+    if (previewMojibakeScenarioIds.isEmpty) {
+      buffer.writeln('| none |');
+    } else {
+      for (final id in previewMojibakeScenarioIds.take(120)) {
+        buffer.writeln('| $id |');
+      }
+    }
+    buffer
+      ..writeln()
       ..writeln('## Recommendation No-match Triage')
       ..writeln()
       ..writeln('| Triage Cause | Count |')
@@ -1642,6 +1691,7 @@ class _LegacyRuntimeReport {
       'statusCounts': statusCounts,
       'languageIssueCounts': languageIssueCounts,
       'noMatchTriageCounts': noMatchTriageCounts,
+      'previewMojibakeScenarioIds': previewMojibakeScenarioIds,
       'avgElapsedMs': avgElapsedMs,
       'maxElapsedMs': maxElapsedMs,
       'topProblemScenarios': topProblemScenarios

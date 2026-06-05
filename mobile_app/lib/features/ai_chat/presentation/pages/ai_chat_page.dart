@@ -26,6 +26,8 @@ class AIChatPage extends StatefulWidget {
 }
 
 class _AIChatPageState extends State<AIChatPage> {
+  static const String _aiChatUiVersion = 'v0.2.6';
+
   static final RegExp _arabicRegex = RegExp(r'[\u0600-\u06FF]');
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -206,22 +208,41 @@ class _AIChatPageState extends State<AIChatPage> {
   Future<void> _copyChatDebugId() async {
     final status = context.read<AIChatCubit>().chatDebugStatus;
     final chatDebugId = status['chatDebugId']?.toString() ?? '';
-    await Clipboard.setData(ClipboardData(text: chatDebugId));
-    if (!mounted) return;
     final analytics = status['analyticsEventsEnabled'] == true ? 'ON' : 'OFF';
     final remote = status['turnDebugRemoteEnabled'] == true ? 'ON' : 'OFF';
     final mode = status['debugCaptureMode']?.toString() ?? 'unknown';
     final traces = status['traceCount']?.toString() ?? '0';
     final last = status['lastTurnDebugSendStatus']?.toString() ?? 'unknown';
+    final syncedTurns =
+        int.tryParse(
+          status['remoteDebugTurnSuccessCount']?.toString() ?? '0',
+        ) ??
+        0;
     final error = status['lastTurnDebugSendError']?.toString();
     final errorSuffix = error == null || error.trim().isEmpty
         ? ''
         : '\nerror=${error.length > 70 ? '${error.substring(0, 70)}...' : error}';
+    if (status['turnDebugRemoteEnabled'] == true &&
+        mode == 'all' &&
+        syncedTurns <= 0) {
+      if (!mounted) return;
+      AppSnackBar.showWarning(
+        context,
+        'Debug ID is not in D1 yet.\n'
+        'Send a chat message and wait for sync success.\n'
+        'analytics=$analytics remote=$remote mode=$mode traces=$traces last=$last'
+        '$errorSuffix',
+      );
+      return;
+    }
+
+    await Clipboard.setData(ClipboardData(text: chatDebugId));
+    if (!mounted) return;
     AppSnackBar.showInfo(
       context,
       'Debug ID copied:\n'
       '$chatDebugId\n'
-      'analytics=$analytics remote=$remote mode=$mode traces=$traces last=$last'
+      'analytics=$analytics remote=$remote mode=$mode traces=$traces last=$last synced=$syncedTurns'
       '$errorSuffix',
     );
   }
@@ -699,6 +720,7 @@ class _AIChatPageState extends State<AIChatPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final language = context.watch<AIChatCubit>().state.language;
 
     return PopScope(
       canPop: false,
@@ -709,10 +731,7 @@ class _AIChatPageState extends State<AIChatPage> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          title: Text(
-            l10n.labelAIChatTitle,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+          title: _buildVersionedTitle(context, l10n.labelAIChatTitle, language),
           centerTitle: true,
           backgroundColor: Theme.of(context).colorScheme.surface,
           elevation: 0,
@@ -916,6 +935,43 @@ class _AIChatPageState extends State<AIChatPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildVersionedTitle(
+    BuildContext context,
+    String title,
+    AIChatLanguage language,
+  ) {
+    final versionBadge = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.20),
+        ),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        _aiChatUiVersion,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0,
+        ),
+      ),
+    );
+
+    final titleText = Text(
+      title,
+      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    );
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      textDirection: language.isArabic ? TextDirection.rtl : TextDirection.ltr,
+      children: [versionBadge, const SizedBox(width: 8), titleText],
     );
   }
 

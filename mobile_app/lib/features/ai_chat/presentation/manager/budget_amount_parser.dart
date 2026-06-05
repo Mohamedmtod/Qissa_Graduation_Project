@@ -150,6 +150,7 @@ class BudgetAmountParser {
 
     final hasAgeContext = _ageTerms.any((keyword) => around.contains(keyword));
     if (hasAgeContext) return null;
+    if (_looksLikeCountRequestNumber(message, match, value)) return null;
 
     final hasBudgetContext = budgetContextKeywords.any(
       (keyword) => parser_matchers.findTermMatches(around, keyword).isNotEmpty,
@@ -176,6 +177,40 @@ class BudgetAmountParser {
       );
     }
     return null;
+  }
+
+  static bool _looksLikeCountRequestNumber(
+    String message,
+    RegExpMatch match,
+    double value,
+  ) {
+    if (value < 1 || value > 20 || value != value.roundToDouble()) {
+      return false;
+    }
+
+    final beforeStart = (match.start - 18).clamp(0, message.length);
+    final afterEnd = (match.end + 32).clamp(0, message.length);
+    final before = message.substring(beforeStart, match.start);
+    final after = message.substring(match.end, afterEnd);
+    final around =
+        '$before ${message.substring(match.start, match.end)} $after';
+
+    final afterLooksLikeItemCount = RegExp(
+      r'^\s*(?:male\s+|men\s+|mens\s+|women\s+|female\s+|summer\s+|winter\s+|fresh\s+|cheap\s+|affordable\s+){0,6}'
+      r'(?:perfumes?|fragrances?|scents?|options?|choices?|recommendations?|picks?)\b',
+      caseSensitive: false,
+    ).hasMatch(after);
+    if (afterLooksLikeItemCount) return true;
+
+    final beforeLooksLikeCountCommand = RegExp(
+      r'\b(?:top|show|give|recommend|suggest|pick|choose|عايز|عايزة|رشح|رشحلي|هات)\s*$',
+      caseSensitive: false,
+    ).hasMatch(before);
+    final aroundHasCountNoun = RegExp(
+      r'\b(?:perfumes?|fragrances?|scents?|options?|choices?|recommendations?|picks?)\b',
+      caseSensitive: false,
+    ).hasMatch(around);
+    return beforeLooksLikeCountCommand && aroundHasCountNoun;
   }
 
   static double? _parseNumber(String raw) {

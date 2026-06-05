@@ -595,7 +595,7 @@ void main() {
     expect(cubit.state.status, AIChatStatus.answer);
     expect(
       cubit.state.messages.last.responseSource,
-      anyOf('ai_worker', 'social_micro_turn_worker'),
+      anyOf('ai_worker', 'social_micro_turn_worker', 'local_social_micro_turn'),
     );
     expect(cubit.state.messages.last.content, contains('ready to help'));
 

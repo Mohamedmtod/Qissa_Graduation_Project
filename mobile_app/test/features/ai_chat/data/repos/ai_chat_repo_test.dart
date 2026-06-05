@@ -288,6 +288,61 @@ void main() {
     );
 
     test(
+      'allows guest turn debug sync by default even when guest worker calls are disabled',
+      () async {
+        final auth = MockFirebaseAuth();
+        when(() => auth.currentUser).thenReturn(null);
+
+        final seenHeaders = <String, dynamic>{};
+        final seenPaths = <String>[];
+        final dio = Dio()
+          ..interceptors.add(
+            InterceptorsWrapper(
+              onRequest: (options, handler) {
+                seenHeaders.addAll(options.headers);
+                seenPaths.add(options.path);
+                handler.resolve(
+                  Response(
+                    requestOptions: options,
+                    statusCode: 202,
+                    data: <String, dynamic>{
+                      'status': 'accepted',
+                      'stored': true,
+                    },
+                  ),
+                );
+              },
+            ),
+          );
+
+        final repo = AIChatRepo(
+          productRepo: MockProductRepo(),
+          auth: auth,
+          dio: dio,
+          workerBaseUrl: 'https://worker.example.test',
+          allowGuestWorkerRequests: false,
+        );
+
+        final sent = await repo.sendAIChatTurnDebug(
+          requestId: 'req-debug',
+          payload: <String, Object?>{
+            'schemaVersion': 1,
+            'eventType': 'ai_chat_turn_debug',
+            'chatDebugId': 'chat_dbg_test123',
+            'turnId': 'turn_0001',
+            'sessionIdHash': 'hash123',
+          },
+        );
+
+        expect(sent, isTrue);
+        expect(seenPaths.single, endsWith('/api/ai-chat-turn-debug'));
+        expect(seenHeaders['Content-Type'], 'application/json');
+        expect(seenHeaders.containsKey('Authorization'), isFalse);
+        expect(repo.lastWorkerFailureReasonCode, isNull);
+      },
+    );
+
+    test(
       'classifies worker network timeout without throwing raw error',
       () async {
         final auth = MockFirebaseAuth();

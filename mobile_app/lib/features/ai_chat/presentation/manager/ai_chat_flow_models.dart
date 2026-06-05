@@ -140,6 +140,10 @@ class AIChatDecisionTrace {
   final String? localSkippedReason;
   final String? clarificationType;
   final String? llmEscalationReason;
+  final bool? appSoftTimeoutHit;
+  final bool? fallbackFromCandidates;
+  final String? latencyPolicyReason;
+  final bool? workerLateResultIgnored;
   final int? candidateCountBeforeGuard;
   final int? candidateCountAfterGuard;
   final List<String> finalProductIds;
@@ -181,6 +185,10 @@ class AIChatDecisionTrace {
     this.localSkippedReason,
     this.clarificationType,
     this.llmEscalationReason,
+    this.appSoftTimeoutHit,
+    this.fallbackFromCandidates,
+    this.latencyPolicyReason,
+    this.workerLateResultIgnored,
     this.candidateCountBeforeGuard,
     this.candidateCountAfterGuard,
     this.finalProductIds = const <String>[],
@@ -223,6 +231,10 @@ class AIChatDecisionTrace {
     String? localSkippedReason,
     String? clarificationType,
     String? llmEscalationReason,
+    bool? appSoftTimeoutHit,
+    bool? fallbackFromCandidates,
+    String? latencyPolicyReason,
+    bool? workerLateResultIgnored,
     int? candidateCountBeforeGuard,
     int? candidateCountAfterGuard,
     List<String>? finalProductIds,
@@ -272,6 +284,12 @@ class AIChatDecisionTrace {
       localSkippedReason: localSkippedReason ?? this.localSkippedReason,
       clarificationType: clarificationType ?? this.clarificationType,
       llmEscalationReason: llmEscalationReason ?? this.llmEscalationReason,
+      appSoftTimeoutHit: appSoftTimeoutHit ?? this.appSoftTimeoutHit,
+      fallbackFromCandidates:
+          fallbackFromCandidates ?? this.fallbackFromCandidates,
+      latencyPolicyReason: latencyPolicyReason ?? this.latencyPolicyReason,
+      workerLateResultIgnored:
+          workerLateResultIgnored ?? this.workerLateResultIgnored,
       candidateCountBeforeGuard:
           candidateCountBeforeGuard ?? this.candidateCountBeforeGuard,
       candidateCountAfterGuard:
@@ -326,11 +344,17 @@ class AIChatDecisionTrace {
       if (decisionOwner != null) 'decisionOwner': decisionOwner,
       if (ownershipClass != null) 'ownershipClass': ownershipClass,
       if (semanticIntent != null) 'semanticIntent': semanticIntent,
-      if (localSkippedReason != null)
-        'localSkippedReason': localSkippedReason,
+      if (localSkippedReason != null) 'localSkippedReason': localSkippedReason,
       if (clarificationType != null) 'clarificationType': clarificationType,
       if (llmEscalationReason != null)
         'llmEscalationReason': llmEscalationReason,
+      if (appSoftTimeoutHit != null) 'appSoftTimeoutHit': appSoftTimeoutHit,
+      if (fallbackFromCandidates != null)
+        'fallbackFromCandidates': fallbackFromCandidates,
+      if (latencyPolicyReason != null)
+        'latencyPolicyReason': latencyPolicyReason,
+      if (workerLateResultIgnored != null)
+        'workerLateResultIgnored': workerLateResultIgnored,
       if (candidateCountBeforeGuard != null)
         'candidateCountBeforeGuard': candidateCountBeforeGuard,
       if (candidateCountAfterGuard != null)
@@ -397,8 +421,7 @@ class AIChatTurnDecision {
       if (decisionOwner != null) 'decisionOwner': decisionOwner,
       if (ownershipClass != null) 'ownershipClass': ownershipClass,
       if (semanticIntent != null) 'semanticIntent': semanticIntent,
-      if (localSkippedReason != null)
-        'localSkippedReason': localSkippedReason,
+      if (localSkippedReason != null) 'localSkippedReason': localSkippedReason,
       if (clarificationType != null) 'clarificationType': clarificationType,
       if (llmEscalationReason != null)
         'llmEscalationReason': llmEscalationReason,
@@ -410,11 +433,19 @@ class AIChatWorkerReplyContext {
   final AIChatReply? reply;
   final String responseSource;
   final String? failureReasonCode;
+  final bool appSoftTimeoutHit;
+  final bool fallbackFromCandidates;
+  final String? latencyPolicyReason;
+  final bool workerLateResultIgnored;
 
   const AIChatWorkerReplyContext({
     required this.reply,
     required this.responseSource,
     this.failureReasonCode,
+    this.appSoftTimeoutHit = false,
+    this.fallbackFromCandidates = false,
+    this.latencyPolicyReason,
+    this.workerLateResultIgnored = false,
   });
 }
 

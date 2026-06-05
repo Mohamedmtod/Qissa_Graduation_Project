@@ -3,6 +3,7 @@ import 'package:perfume_app/features/ai_chat/data/models/session_preferences.dar
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_flow_models.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_state.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_experiment_config.dart';
+import 'package:perfume_app/features/ai_chat/presentation/manager/ai_chat_route_ownership_policy.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/availability_followup_detector.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/availability_intent_utils.dart';
 import 'package:perfume_app/features/ai_chat/presentation/manager/local_intent_parser.dart';
@@ -55,6 +56,9 @@ class AvailabilityRouteDecision {
 
 class AvailabilityRouteResolver {
   const AvailabilityRouteResolver();
+
+  static const AIChatRouteOwnershipPolicy _ownershipPolicy =
+      AIChatRouteOwnershipPolicy();
 
   AvailabilityRouteResult resolve({
     required AIChatTurnContext incoming,
@@ -265,6 +269,12 @@ class AvailabilityRouteResolver {
     AIChatState state,
   ) {
     final normalized = LocalIntentParser.normalizeInput(incoming.trimmed);
+    if (AIChatExperimentConfig.llmLedRouterV2) {
+      final ownership = _ownershipPolicy.classify(incoming.trimmed);
+      if (_ownershipBlocksAvailability(ownership.semanticIntent)) {
+        return true;
+      }
+    }
     if (_isLanguagePreferenceOnly(normalized)) return true;
     if (_isOpenChoiceOnly(normalized)) return true;
     if (LocalIntentParser.looksLikeNoteOnlyAvailabilityPatch(normalized)) {
@@ -352,6 +362,17 @@ class AvailabilityRouteResolver {
       }
     }
     return false;
+  }
+
+  bool _ownershipBlocksAvailability(AIChatSemanticIntent? intent) {
+    return intent == AIChatSemanticIntent.noteSearch ||
+        intent == AIChatSemanticIntent.vibeSearch ||
+        intent == AIChatSemanticIntent.recommendationRefinement ||
+        intent == AIChatSemanticIntent.subjectiveVisibleQuestion ||
+        intent == AIChatSemanticIntent.externalReference ||
+        intent == AIChatSemanticIntent.businessInfo ||
+        intent == AIChatSemanticIntent.catalogRanking ||
+        intent == AIChatSemanticIntent.social;
   }
 
   bool _allowsDirectAvailabilityIntentInCurrentMode(

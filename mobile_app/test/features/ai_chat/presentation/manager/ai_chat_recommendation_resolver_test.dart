@@ -222,6 +222,57 @@ void main() {
       },
     );
 
+    test('single-pick request returns exactly one local recommendation', () {
+      final first = _product(id: 'first', name: 'First Pick');
+      final second = _product(
+        id: 'second',
+        name: 'Second Pick',
+        notes: const ['amber'],
+      );
+      final result = _resolver().resolve(
+        incoming: _turn(
+          message:
+              '\u0631\u0634\u062d\u0644\u064a \u0639\u0637\u0631 \u0648\u0627\u062d\u062f \u0648\u062e\u0644\u0627\u0635.',
+        ),
+        discovery: _discovery(
+          preferences: const SessionPreferences(),
+          ready: true,
+        ),
+        catalog: [first, second],
+        currentPreferences: const SessionPreferences(),
+      );
+
+      expect(result.handledResult.handled, isTrue);
+      expect(result.handledResult.reply?.isRecommend, isTrue);
+      expect(result.handledResult.recommendedProducts, hasLength(1));
+      expect(result.handledResult.reply?.productIds, hasLength(1));
+      expect(result.handledResult.source, 'local_single_pick');
+      expect(result.trace.finalGuardDecision, 'local_single_pick');
+    });
+
+    test('sensitive skin choice returns catalog recommendation, not ask', () {
+      final soft = _product(id: 'soft', name: 'Soft Daily', intensity: 'light');
+      final fresh = _product(id: 'fresh', name: 'Fresh Daily');
+      final result = _resolver().resolve(
+        incoming: _turn(
+          message:
+              '\u0628\u0634\u0631\u062a\u064a \u062d\u0633\u0627\u0633\u0629\u060c \u0623\u062e\u062a\u0627\u0631 \u0625\u064a\u0647\u061f',
+        ),
+        discovery: _discovery(
+          preferences: const SessionPreferences(),
+          ready: true,
+        ),
+        catalog: [soft, fresh],
+        currentPreferences: const SessionPreferences(),
+      );
+
+      expect(result.handledResult.handled, isTrue);
+      expect(result.handledResult.reply?.isRecommend, isTrue);
+      expect(result.handledResult.recommendedProducts, isNotEmpty);
+      expect(result.handledResult.source, 'local_sensitive_skin_choice');
+      expect(result.trace.finalGuardDecision, 'local_sensitive_skin_choice');
+    });
+
     test(
       'reference cheaper request uses reference price instead of default budget',
       () {
