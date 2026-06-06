@@ -124,6 +124,29 @@ void main() {
     );
 
     test(
+      'budget-only perfume request below catalog floor returns no-match instead of gender ask',
+      () {
+        final result = _resolver().resolve(
+          incoming: _turn(message: 'I want a perfume under 500 EGP.'),
+          discovery: _discovery(
+            preferences: const SessionPreferences(maxBudget: 500),
+            ready: false,
+            missingSlots: const ['gender'],
+          ),
+          catalog: [_product(id: 'floor', name: 'Budget Floor', price: 900)],
+          currentPreferences: const SessionPreferences(),
+        );
+
+        expect(result.recommendationContext, isNull);
+        expect(result.handledResult.handled, isTrue);
+        expect(result.handledResult.isNoMatch, isTrue);
+        expect(result.handledResult.reply, isNull);
+        expect(result.handledResult.source, 'local_budget_floor');
+        expect(result.handledResult.reasonCode, 'budget_no_match');
+      },
+    );
+
+    test(
       'asks before relaxing excluded notes when relaxed candidates exist',
       () {
         final result = _resolver().resolve(

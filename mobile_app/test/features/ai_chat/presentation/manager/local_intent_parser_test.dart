@@ -509,6 +509,19 @@ void main() {
       expect(prefs.tags, isNot(contains('gift')));
     });
 
+    test('Arabic client-facing work request infers clean office context', () {
+      final prefs = LocalIntentParser.parse(
+        '\u0634\u063a\u0644\u064a \u0641\u064a\u0647 \u0645\u0642\u0627\u0628\u0644\u0629 \u0639\u0645\u0644\u0627\u0621 \u0643\u062a\u064a\u0631\u060c \u0645\u062d\u062a\u0627\u062c \u0639\u0637\u0631 \u0645\u0646\u0627\u0633\u0628.',
+        SessionPreferences.empty(),
+      );
+
+      expect(prefs.occasion, 'office');
+      expect(prefs.time, 'all_day');
+      expect(prefs.intensity, 'light');
+      expect(prefs.tags, contains('clean'));
+      expect(prefs.tags, contains('fresh'));
+    });
+
     test('Arabic explicit gift still keeps gift context', () {
       final prefs = LocalIntentParser.parse(
         '\u0639\u0627\u064a\u0632 \u0639\u0637\u0631 \u0647\u062f\u064a\u0629 \u0644\u062e\u0637\u064a\u0628\u062a\u064a \u0647\u0627\u062f\u064a',

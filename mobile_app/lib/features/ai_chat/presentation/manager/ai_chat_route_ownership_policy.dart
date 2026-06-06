@@ -97,6 +97,15 @@ class AIChatRouteOwnershipPolicy {
       );
     }
 
+    if (_looksLikeOccasionRecommendation(normalized)) {
+      return const AIChatRouteOwnershipDecision(
+        ownershipClass: AIChatRouteOwnershipClass.llmSemantic,
+        semanticIntent: AIChatSemanticIntent.recommendationRefinement,
+        localSkippedReason: 'occasion_request_requires_recommendation',
+        llmRouteReason: 'occasion_recommendation_language',
+      );
+    }
+
     final availabilityProduct =
         AvailabilityIntentUtils.extractAvailabilityProductQuery(normalized);
     if (LocalIntentParser.containsAny(
@@ -187,6 +196,45 @@ class AIChatRouteOwnershipPolicy {
   }
 
   bool _looksLikeExternalReference(String normalized) {
+    if (normalized.contains('\u0632\u064a \u0645\u062d\u0644') ||
+        normalized.contains(
+          '\u0632\u064a \u0631\u064a\u062d\u0629 \u0645\u062d\u0644',
+        ) ||
+        normalized.contains(
+          '\u0632\u064a \u0631\u064a\u062d\u0629 \u0627\u0644\u0645\u062d\u0644',
+        ) ||
+        normalized.contains(
+          '\u0632\u064a \u0631\u064a\u062d\u0629 \u0627\u0644\u0645\u062d\u0644\u0627\u062a',
+        ) ||
+        normalized.contains(
+          '\u0632\u064a \u0631\u064a\u062d\u0647 \u0645\u062d\u0644',
+        ) ||
+        normalized.contains(
+          '\u0632\u064a \u0631\u064a\u062d\u0647 \u0627\u0644\u0645\u062d\u0644',
+        ) ||
+        normalized.contains(
+          '\u0632\u064a \u0631\u064a\u062d\u0647 \u0627\u0644\u0645\u062d\u0644\u0627\u062a',
+        ) ||
+        normalized.contains(
+          '\u0634\u0628\u0647 \u0631\u064a\u062d\u0629 \u0645\u062d\u0644',
+        ) ||
+        normalized.contains(
+          '\u0634\u0628\u0647 \u0631\u064a\u062d\u0629 \u0627\u0644\u0645\u062d\u0644',
+        ) ||
+        normalized.contains(
+          '\u0634\u0628\u0647 \u0631\u064a\u062d\u0629 \u0627\u0644\u0645\u062d\u0644\u0627\u062a',
+        ) ||
+        normalized.contains(
+          '\u0634\u0628\u0647 \u0631\u064a\u062d\u0647 \u0645\u062d\u0644',
+        ) ||
+        normalized.contains(
+          '\u0634\u0628\u0647 \u0631\u064a\u062d\u0647 \u0627\u0644\u0645\u062d\u0644',
+        ) ||
+        normalized.contains(
+          '\u0634\u0628\u0647 \u0631\u064a\u062d\u0647 \u0627\u0644\u0645\u062d\u0644\u0627\u062a',
+        )) {
+      return false;
+    }
     return normalized.contains('something like') ||
         normalized.contains('similar to') ||
         normalized.contains('inspired by') ||
@@ -366,7 +414,86 @@ class AIChatRouteOwnershipPolicy {
         normalized.contains(
           '\u0635\u0627\u0646\u0639 \u0645\u062d\u062a\u0648\u0649',
         );
-    return hotelClean || aesthetic;
+    final luxuryStore =
+        normalized.contains('luxury store') ||
+        normalized.contains('brand store') ||
+        normalized.contains('designer store') ||
+        normalized.contains(
+          '\u0645\u062d\u0644 \u0628\u0631\u0627\u0646\u062f',
+        ) ||
+        normalized.contains(
+          '\u0645\u062d\u0644 \u0628\u0631\u0627\u0646\u062f\u0627\u062a',
+        ) ||
+        normalized.contains(
+          '\u0627\u0644\u0645\u062d\u0644\u0627\u062a \u0627\u0644\u0641\u062e\u0645\u0629',
+        ) ||
+        normalized.contains(
+          '\u0627\u0644\u0645\u062d\u0644\u0627\u062a \u0627\u0644\u0641\u062e\u0645\u0647',
+        ) ||
+        normalized.contains(
+          '\u0628\u0631\u0627\u0646\u062f\u0627\u062a \u0641\u062e\u0645\u0629',
+        ) ||
+        normalized.contains(
+          '\u0628\u0631\u0627\u0646\u062f\u0627\u062a \u0641\u062e\u0645\u0647',
+        );
+    return hotelClean || aesthetic || luxuryStore;
+  }
+
+  bool _looksLikeOccasionRecommendation(String normalized) {
+    final hasScentOrPerfumeRequest =
+        normalized.contains('perfume') ||
+        normalized.contains('fragrance') ||
+        normalized.contains('scent') ||
+        normalized.contains('smell') ||
+        normalized.contains('\u0639\u0637\u0631') ||
+        normalized.contains('\u0639\u0637\u0648\u0631') ||
+        normalized.contains('\u0631\u064a\u062d\u0629') ||
+        normalized.contains('\u0631\u064a\u062d\u0647');
+    final hasContextualUseCue =
+        normalized.contains(
+          '\u0623\u0633\u062a\u062e\u062f\u0645 \u0625\u064a\u0647',
+        ) ||
+        normalized.contains(
+          '\u0627\u0633\u062a\u062e\u062f\u0645 \u0627\u064a\u0647',
+        ) ||
+        normalized.contains(
+          '\u0623\u0633\u062a\u062e\u062f\u0645 \u0627\u064a\u0647',
+        ) ||
+        normalized.contains(
+          '\u0645\u062d\u062a\u0627\u062c \u0639\u0637\u0631 \u0645\u0646\u0627\u0633\u0628',
+        ) ||
+        normalized.contains(
+          '\u0623\u062e\u062a\u0627\u0631 \u0625\u064a\u0647',
+        ) ||
+        normalized.contains(
+          '\u0627\u062e\u062a\u0627\u0631 \u0627\u064a\u0647',
+        );
+    if (!hasScentOrPerfumeRequest && !hasContextualUseCue) return false;
+    return normalized.contains('interview') ||
+        normalized.contains('meeting') ||
+        normalized.contains('first day') ||
+        normalized.contains('new job') ||
+        normalized.contains('office') ||
+        normalized.contains('client') ||
+        normalized.contains('customer') ||
+        normalized.contains('\u0627\u0646\u062a\u0631\u0641\u064a\u0648') ||
+        normalized.contains('\u0645\u0642\u0627\u0628\u0644\u0629') ||
+        normalized.contains('\u0639\u0645\u0644\u0627\u0621') ||
+        normalized.contains('\u0627\u062c\u062a\u0645\u0627\u0639') ||
+        normalized.contains(
+          '\u0645\u0643\u0627\u0646 \u0645\u0641\u062a\u0648\u062d',
+        ) ||
+        normalized.contains(
+          '\u0642\u0627\u0639\u0629 \u0645\u063a\u0644\u0642\u0629',
+        ) ||
+        normalized.contains(
+          '\u0642\u0627\u0639\u0647 \u0645\u063a\u0644\u0642\u0647',
+        ) ||
+        normalized.contains('\u0645\u0646\u0627\u0633\u0628\u0629') ||
+        normalized.contains('\u0645\u0646\u0627\u0633\u0628\u0647') ||
+        normalized.contains('\u0634\u063a\u0644 \u062c\u062f\u064a\u062f') ||
+        normalized.contains('\u0623\u0648\u0644 \u064a\u0648\u0645') ||
+        normalized.contains('\u0627\u0648\u0644 \u064a\u0648\u0645');
   }
 
   bool _looksLikeSocialTurn(String normalized) {
@@ -442,12 +569,26 @@ class AIChatRouteOwnershipPolicy {
         parsed.intensity != null) {
       return true;
     }
+    if (normalized.contains('\u0644\u0644\u0646\u0648\u0645') ||
+        normalized.contains(
+          '\u0642\u0628\u0644 \u0627\u0644\u0646\u0648\u0645',
+        ) ||
+        normalized.contains(
+          '\u064a\u0631\u064a\u062d \u0627\u0644\u0627\u0639\u0635\u0627\u0628',
+        ) ||
+        normalized.contains(
+          '\u064a\u0631\u064a\u062d \u0627\u0644\u0623\u0639\u0635\u0627\u0628',
+        )) {
+      return true;
+    }
     return normalized.contains('fresh') ||
         normalized.contains('soft') ||
         normalized.contains('elegant') ||
         normalized.contains('classy') ||
         normalized.contains('university') ||
         normalized.contains('office') ||
+        normalized.contains('interview') ||
+        normalized.contains('meeting') ||
         normalized.contains('not too strong') ||
         normalized.contains('\u0647\u0627\u062f\u064a') ||
         normalized.contains('\u0647\u0627\u062f\u064a\u0629') ||
@@ -465,6 +606,11 @@ class AIChatRouteOwnershipPolicy {
         normalized.contains('\u062d\u0633\u0627\u0633\u0629') ||
         normalized.contains('مش خانقة') ||
         normalized.contains('شيك') ||
+        normalized.contains('\u0641\u062e\u0645') ||
+        normalized.contains('\u0641\u062e\u0645\u0629') ||
+        normalized.contains('\u0641\u062e\u0645\u0647') ||
+        normalized.contains('\u0628\u0631\u0627\u0646\u062f') ||
+        normalized.contains('\u0628\u0631\u0627\u0646\u062f\u0627\u062a') ||
         normalized.contains('لطيفة');
   }
 }

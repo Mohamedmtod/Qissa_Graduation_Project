@@ -421,16 +421,73 @@ class AvailabilityRouteResolver {
     )) {
       return true;
     }
+    if (_looksLikeContextualRecommendationWithoutProductAnchor(normalized)) {
+      return true;
+    }
     return normalized.contains('anything fresh') ||
         normalized.contains('something fresh') ||
         normalized.contains('anything soft') ||
         normalized.contains('something soft') ||
         normalized.contains('anything elegant') ||
         normalized.contains('something elegant') ||
+        normalized.contains('interview') ||
+        normalized.contains('meeting') ||
+        normalized.contains('new job') ||
+        normalized.contains('first day') ||
         normalized.contains('حاجة فريش') ||
         normalized.contains('حاجه فريش') ||
         normalized.contains('حاجة ناعمة') ||
-        normalized.contains('حاجه ناعمه');
+        normalized.contains('حاجه ناعمه') ||
+        normalized.contains('ريحة كويسة') ||
+        normalized.contains('ريحه كويسه') ||
+        normalized.contains('محل براندات') ||
+        normalized.contains('المحلات الفخمة') ||
+        normalized.contains('المحلات الفخمه') ||
+        normalized.contains('براندات فخمة') ||
+        normalized.contains('براندات فخمه') ||
+        normalized.contains('شغل جديد') ||
+        normalized.contains('أول يوم') ||
+        normalized.contains('اول يوم') ||
+        normalized.contains('اجتماع') ||
+        normalized.contains('مقابلة') ||
+        normalized.contains('انترفيو');
+  }
+
+  bool _looksLikeContextualRecommendationWithoutProductAnchor(
+    String normalized,
+  ) {
+    return normalized.contains(
+          '\u0645\u0642\u0627\u0628\u0644\u0629 \u0639\u0645\u0644\u0627\u0621',
+        ) ||
+        normalized.contains('\u0639\u0645\u0644\u0627\u0621') ||
+        normalized.contains(
+          '\u0645\u0643\u0627\u0646 \u0645\u0641\u062a\u0648\u062d',
+        ) ||
+        normalized.contains(
+          '\u0642\u0627\u0639\u0629 \u0645\u063a\u0644\u0642\u0629',
+        ) ||
+        normalized.contains(
+          '\u0642\u0627\u0639\u0647 \u0645\u063a\u0644\u0642\u0647',
+        ) ||
+        normalized.contains(
+          '\u0645\u0646\u0627\u0633\u0628\u0629 \u0641\u064a',
+        ) ||
+        normalized.contains(
+          '\u0645\u0646\u0627\u0633\u0628\u0647 \u0641\u064a',
+        ) ||
+        normalized.contains(
+          '\u0627\u0633\u062a\u062e\u062f\u0645 \u0627\u064a\u0647',
+        ) ||
+        normalized.contains(
+          '\u0623\u0633\u062a\u062e\u062f\u0645 \u0625\u064a\u0647',
+        ) ||
+        normalized.contains(
+          '\u0645\u062d\u062a\u0627\u062c \u0639\u0637\u0631 \u0645\u0646\u0627\u0633\u0628',
+        ) ||
+        normalized.contains('\u0644\u0644\u0646\u0648\u0645') ||
+        normalized.contains(
+          '\u0642\u0628\u0644 \u0627\u0644\u0646\u0648\u0645',
+        );
   }
 
   bool _isLanguagePreferenceOnly(String normalized) {

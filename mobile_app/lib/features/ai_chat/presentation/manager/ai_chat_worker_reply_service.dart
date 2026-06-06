@@ -85,7 +85,8 @@ class AIChatWorkerReplyService {
       );
       String? responseSourceOverride;
       if (canUseCandidateFallback &&
-          _looksLikeBroadChoiceHelp(incoming.trimmed)) {
+          (_looksLikeBroadChoiceHelp(incoming.trimmed) ||
+              _looksLikeSpecificEnoughSafeRecommendation(incoming.trimmed))) {
         fallbackFromCandidates = true;
         latencyPolicyReason = 'safe_candidates_preemptive_fallback';
         failureReasonCode = 'app_preemptive_candidate_fallback';
@@ -111,8 +112,7 @@ class AIChatWorkerReplyService {
                 currentMessage: incoming.trimmed,
                 preferences: discovery.localPreferences,
                 candidates: recommendationContext.candidatesList,
-                localRecommendations:
-                    recommendationContext.localCandidatesRefs,
+                localRecommendations: recommendationContext.localCandidatesRefs,
                 compactContext: compactContext,
                 responseLanguage: incoming.responseLanguage,
                 requestId: incoming.requestId,
@@ -151,8 +151,7 @@ class AIChatWorkerReplyService {
                 metadata: {
                   'requestId': incoming.requestId,
                   'timeoutMs': appSoftTimeout.inMilliseconds,
-                  'candidateCount':
-                      recommendationContext.candidatesList.length,
+                  'candidateCount': recommendationContext.candidatesList.length,
                   'safeCandidateCount':
                       recommendationContext.localCandidatesRefs.length,
                 },
@@ -171,7 +170,8 @@ class AIChatWorkerReplyService {
           reply = await request.timeout(workerTimeout);
         }
       }
-      var responseSource = responseSourceOverride ??
+      var responseSource =
+          responseSourceOverride ??
           (appSoftTimeoutHit ? 'local_candidate_soft_timeout' : 'ai_worker');
       return await _normalizeWorkerReply(
         incoming: incoming,
@@ -478,12 +478,42 @@ class AIChatWorkerReplyService {
 
   bool _looksLikeExternalSimilarity(String normalized) {
     if (normalized.isEmpty) return false;
+    if (_looksLikeStoreScentVibe(normalized)) return false;
     return normalized.contains('something like') ||
         normalized.contains('similar to') ||
         normalized.contains('smells like') ||
         normalized.contains('like sauvage') ||
         normalized.contains('\u0634\u0628\u0647') ||
         normalized.contains('\u0632\u064a ');
+  }
+
+  bool _looksLikeStoreScentVibe(String normalized) {
+    if (normalized.isEmpty) return false;
+    final hasStoreCue =
+        normalized.contains('luxury store') ||
+        normalized.contains('brand store') ||
+        normalized.contains('designer store') ||
+        normalized.contains(
+          '\u0645\u062d\u0644 \u0628\u0631\u0627\u0646\u062f',
+        ) ||
+        normalized.contains(
+          '\u0645\u062d\u0644 \u0628\u0631\u0627\u0646\u062f\u0627\u062a',
+        ) ||
+        normalized.contains(
+          '\u0627\u0644\u0645\u062d\u0644\u0627\u062a \u0627\u0644\u0641\u062e\u0645\u0629',
+        ) ||
+        normalized.contains(
+          '\u0627\u0644\u0645\u062d\u0644\u0627\u062a \u0627\u0644\u0641\u062e\u0645\u0647',
+        );
+    if (!hasStoreCue) return false;
+    return normalized.contains('perfume') ||
+        normalized.contains('fragrance') ||
+        normalized.contains('scent') ||
+        normalized.contains('smell') ||
+        normalized.contains('\u0639\u0637\u0631') ||
+        normalized.contains('\u0639\u0637\u0648\u0631') ||
+        normalized.contains('\u0631\u064a\u062d\u0629') ||
+        normalized.contains('\u0631\u064a\u062d\u0647');
   }
 
   bool _looksLikeSafetyOrAllergy(String normalized) {
@@ -510,6 +540,62 @@ class AIChatWorkerReplyService {
         normalized.contains('cant choose') ||
         normalized.contains('can t choose') ||
         normalized.contains('help me choose');
+  }
+
+  bool _looksLikeSpecificEnoughSafeRecommendation(String text) {
+    final normalized = LocalIntentParser.normalizeInput(text);
+    if (normalized.isEmpty) return false;
+    final hasPerfumeProof =
+        normalized.contains('perfume') ||
+        normalized.contains('fragrance') ||
+        normalized.contains('scent') ||
+        normalized.contains('\u0639\u0637\u0631') ||
+        normalized.contains('\u0639\u0637\u0648\u0631');
+    if (_looksLikeContextualRecommendationProof(normalized)) return true;
+    if (!hasPerfumeProof) return false;
+    final hasStyleOrAudienceProof =
+        normalized.contains('masculine') ||
+        normalized.contains('feminine') ||
+        normalized.contains('men') ||
+        normalized.contains('women') ||
+        normalized.contains('attractive') ||
+        normalized.contains('compliment') ||
+        normalized.contains('noticeable') ||
+        normalized.contains('client') ||
+        normalized.contains('customer') ||
+        normalized.contains('meeting') ||
+        normalized.contains('interview') ||
+        normalized.contains('bedtime') ||
+        normalized.contains('sleep') ||
+        normalized.contains('\u0631\u062c\u0627\u0644\u064a') ||
+        normalized.contains('\u062d\u0631\u064a\u0645\u064a') ||
+        normalized.contains('\u062c\u0630\u0627\u0628') ||
+        normalized.contains('\u0645\u0644\u0641\u062a') ||
+        normalized.contains('\u0645\u062c\u0627\u0645\u0644\u0627\u062a') ||
+        normalized.contains('\u0639\u0645\u0644\u0627\u0621') ||
+        normalized.contains('\u0645\u0642\u0627\u0628\u0644\u0629') ||
+        normalized.contains('\u0644\u0644\u0646\u0648\u0645') ||
+        normalized.contains(
+          '\u0642\u0628\u0644 \u0627\u0644\u0646\u0648\u0645',
+        ) ||
+        normalized.contains('\u064a\u0633\u0623\u0644\u0648\u0646\u064a');
+    return hasStyleOrAudienceProof;
+  }
+
+  bool _looksLikeContextualRecommendationProof(String normalized) {
+    return normalized.contains('\u0639\u0645\u0644\u0627\u0621') ||
+        normalized.contains('\u0645\u0642\u0627\u0628\u0644\u0629') ||
+        normalized.contains('\u0645\u0642\u0627\u0628\u0644\u0647') ||
+        normalized.contains(
+          '\u0645\u062d\u062a\u0627\u062c \u0639\u0637\u0631 \u0645\u0646\u0627\u0633\u0628',
+        ) ||
+        normalized.contains(
+          '\u0645\u062d\u062a\u0627\u062c \u0639\u0637\u0631',
+        ) ||
+        normalized.contains('client') ||
+        normalized.contains('customer') ||
+        normalized.contains('meeting') ||
+        normalized.contains('interview');
   }
 
   AIChatReply _preserveLocalNoteConstraintPatch(

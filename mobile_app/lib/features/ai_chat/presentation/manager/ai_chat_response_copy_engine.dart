@@ -170,7 +170,25 @@ class AIChatResponseCopyEngine {
           RegExp(r'\s*and within budget\.?', caseSensitive: false),
           '',
         )
-        .replaceAll(RegExp(r'\s*within budget\.?', caseSensitive: false), '');
+        .replaceAll(RegExp(r'\s*within budget\.?', caseSensitive: false), '')
+        .replaceAll(
+          RegExp(
+            r'\s*,?\s*مع ملاحظة:\s*intensity differs from request\.?',
+            caseSensitive: false,
+          ),
+          '',
+        )
+        .replaceAll(
+          RegExp(
+            r'\s*,?\s*note:\s*intensity differs from request\.?',
+            caseSensitive: false,
+          ),
+          '',
+        )
+        .replaceAll(
+          RegExp(r'\s*intensity differs from request\.?', caseSensitive: false),
+          '',
+        );
     return _clean(cleaned).replaceAll(RegExp(r'\.{2,}$'), '.');
   }
 

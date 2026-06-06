@@ -388,7 +388,9 @@ class AIChatRecommendationResolver {
     }
 
     if (_shouldRecommendSinglePickLocally(incoming, localCandidatesRefs)) {
-      final singleCandidate = localCandidatesRefs.take(1).toList(growable: false);
+      final singleCandidate = localCandidatesRefs
+          .take(1)
+          .toList(growable: false);
       return RecommendationResolverResult(
         trace: trace.copyWith(finalGuardDecision: 'local_single_pick'),
         handledResult: AIChatHandledResult(
@@ -406,6 +408,34 @@ class AIChatRecommendationResolver {
 
     if (!discovery.isFollowUpOrCompare && localCandidatesRefs.isEmpty) {
       if (!discovery.localReadyForRecommendation) {
+        if (_shouldReturnBudgetFloorNoMatchInsteadOfSlotAsk(
+          incoming,
+          discovery.localPreferences,
+        )) {
+          final reasonCode = localNoMatchReasonForCatalog(
+            discovery.localPreferences,
+            catalog,
+          );
+          return RecommendationResolverResult(
+            trace: trace.copyWith(noMatchReason: reasonCode),
+            handledResult: AIChatHandledResult(
+              handled: true,
+              fallbackText: buildNoMatchMessage(
+                incoming.trimmed,
+                discovery.localPreferences,
+                catalog,
+                incoming.responseLanguage,
+                reasonCode: reasonCode,
+              ),
+              preferences: discovery.localPreferences,
+              source: 'local_budget_floor',
+              issueCode: 'no_candidate_match',
+              reasonCode: reasonCode,
+              isNoMatch: true,
+              pruneHistoricalBotMessages: discovery.shouldPruneBotHistory,
+            ),
+          );
+        }
         final nextMissingSlot = discovery.localMissingSlots.isNotEmpty
             ? discovery.localMissingSlots.first
             : null;
@@ -1008,6 +1038,17 @@ class AIChatRecommendationResolver {
     return 'local_candidate_no_match';
   }
 
+  bool _shouldReturnBudgetFloorNoMatchInsteadOfSlotAsk(
+    AIChatTurnContext incoming,
+    SessionPreferences preferences,
+  ) {
+    if (preferences.maxBudget == null) return false;
+    return LocalIntentParser.looksLikePerfumeRequest(
+      incoming.trimmed,
+      currentPreferences: preferences,
+    );
+  }
+
   static String localNoMatchReasonForCatalog(
     SessionPreferences preferences,
     List<ProductModel> catalog,
@@ -1097,8 +1138,12 @@ class AIChatRecommendationResolver {
         normalized.contains('one option') ||
         normalized.contains('single recommendation') ||
         normalized.contains('\u0639\u0637\u0631 \u0648\u0627\u062d\u062f') ||
-        normalized.contains('\u0627\u062e\u062a\u064a\u0627\u0631 \u0648\u0627\u062d\u062f') ||
-        normalized.contains('\u0648\u0627\u062d\u062f \u0648\u062e\u0644\u0627\u0635');
+        normalized.contains(
+          '\u0627\u062e\u062a\u064a\u0627\u0631 \u0648\u0627\u062d\u062f',
+        ) ||
+        normalized.contains(
+          '\u0648\u0627\u062d\u062f \u0648\u062e\u0644\u0627\u0635',
+        );
   }
 
   List<RecommendedProduct> _sensitiveSkinLocalCandidates(
@@ -1117,7 +1162,8 @@ class AIChatRecommendationResolver {
         (normalized.contains('\u0628\u0634\u0631') &&
             normalized.contains('\u062d\u0633\u0627\u0633'));
     if (!hasSensitiveSignal) return const [];
-    final asksForChoice = normalized.contains('choose') ||
+    final asksForChoice =
+        normalized.contains('choose') ||
         normalized.contains('pick') ||
         normalized.contains('recommend') ||
         normalized.contains('\u0627\u062e\u062a\u0627\u0631') ||
@@ -1134,14 +1180,14 @@ class AIChatRecommendationResolver {
     ).take(3).toList(growable: false);
     if (filtered.isNotEmpty) return filtered;
 
-    final fallbackCatalog = catalog.where((product) => product.stock > 0).toList(
-      growable: false,
-    )..sort((a, b) {
-        final aScore = _sensitiveSkinFallbackScore(a);
-        final bScore = _sensitiveSkinFallbackScore(b);
-        if (aScore != bScore) return bScore.compareTo(aScore);
-        return a.effectivePrice.compareTo(b.effectivePrice);
-      });
+    final fallbackCatalog =
+        catalog.where((product) => product.stock > 0).toList(growable: false)
+          ..sort((a, b) {
+            final aScore = _sensitiveSkinFallbackScore(a);
+            final bScore = _sensitiveSkinFallbackScore(b);
+            if (aScore != bScore) return bScore.compareTo(aScore);
+            return a.effectivePrice.compareTo(b.effectivePrice);
+          });
     return fallbackCatalog
         .take(3)
         .map(
@@ -1157,13 +1203,12 @@ class AIChatRecommendationResolver {
   }
 
   int _sensitiveSkinFallbackScore(ProductModel product) {
-    final terms =
-        <String>{
-          product.intensity,
-          product.fragranceFamily,
-          ...product.notes,
-          ...product.tags,
-        }.map((term) => LocalIntentParser.normalizeInput(term)).join(' ');
+    final terms = <String>{
+      product.intensity,
+      product.fragranceFamily,
+      ...product.notes,
+      ...product.tags,
+    }.map((term) => LocalIntentParser.normalizeInput(term)).join(' ');
     var score = 0;
     if (terms.contains('light')) score += 4;
     if (terms.contains('fresh')) score += 3;

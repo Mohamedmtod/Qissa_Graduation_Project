@@ -33,8 +33,65 @@ Recent validation has closed these workstreams:
 | PR25 Action Policy | PASS | One-card final pick, sensitive-skin recommendation, and answer-only size advice validated in real 30-run. |
 | PR26 Supplemental 31-60 Suite | PASS | Supplemental scenarios were added and validated separately before being merged into a unified run. |
 | PR27 Supplemental UX Fixes + 60-run | PASS | Real Android emulator + real worker + D1 validated S01-S60 with P0 `0`, D1 `60/60`, and `over15sTurnCount=0`. |
+| Supplemental 61-90 Suite | PASS | Real Android emulator + real worker + D1 validated S61-S90 separately and S01-S90 unified with P0 `0`, D1 `90/90`, and `over15sTurnCount=0`. |
+| Supplemental 91-120 Suite | PASS | Real Android emulator + real worker + D1 validated S91-S120 separately with P0 `0`, D1 `30/30`, `issues=0`, `caveats=0`, and `over15sTurnCount=0`. |
+| Unified S01-S120 Run | PASS WITH P2 WATCH | Real Android emulator + real worker + D1 validated S01-S120 with P0 `0`, D1 `120/120`, `issues=0`, and `over15sTurnCount=0`. Remaining watch items are latency-only for S08/S16 after S08 action was fixed in a targeted rerun. |
 
 Latest real emulator + D1 validation baseline:
+
+```text
+Artifact: test_artifacts/ai_chat_real_emulator_120/20260606_014641
+S01-S120 scenarios: PASS
+D1 readable sessions: 120/120
+P0: 0
+issues: 0
+external card violations: 0
+fake product IDs: 0
+fake price/stock claims: 0
+mojibake: 0
+generic copy: 0
+over15sTurnCount: 0
+avgLatencyMs: ~6347
+p95LatencyMs: ~7933
+p95TurnLatencyMs: ~7035
+maxTurnLatencyMs: ~14637
+P2 watch items: S08 and S16 latency above 10s; S16 scenario aggregate slightly above 15s; no turn exceeded 15s
+Targeted follow-up: S08 now returns recommendation cards instead of ask_retarget in test_artifacts/ai_chat_real_emulator_120/20260606_020600, but remains a latency watch item above 10s.
+```
+
+Latest supplemental S91-S120 run:
+
+```text
+Artifact: test_artifacts/ai_chat_supplemental_91_120/20260606_014038
+S91-S120 scenarios: PASS
+D1 readable sessions: 30/30
+P0: 0
+issues: 0
+caveats: 0
+over10sTurnCount: 0
+over15sTurnCount: 0
+avgLatencyMs: ~6512
+p95LatencyMs: ~7601
+p95TurnLatencyMs: ~6888
+```
+
+Previous S01-S90 baseline remains useful for comparison:
+
+```text
+Artifact: test_artifacts/ai_chat_real_emulator_90/20260605_221603
+S01-S90 scenarios: PASS
+D1 readable sessions: 90/90
+P0: 0
+issues: 0
+over15sTurnCount: 0
+avgLatencyMs: ~6225
+p95LatencyMs: ~11018
+p95TurnLatencyMs: ~7018
+maxTurnLatencyMs: ~14969
+P2 watch items: S08, S16, and S45 latency above 10s; no turn exceeded 15s
+```
+
+Previous 60-run baseline remains useful for comparison:
 
 ```text
 Artifact: test_artifacts/ai_chat_real_emulator_60/20260605_205624
@@ -63,23 +120,23 @@ avgLatencyMs: ~5761
 P2: S16 external similarity latency slightly above 10s
 ```
 
-Approximate current quality estimate after PR27/60-run validation:
+Approximate current quality estimate after S01-S120 validation:
 
 | Dimension | Estimated Score | Notes |
 |---|---:|---|
-| Catalog safety | 97-100% | External product cards, fake product IDs, fake price/stock, and mojibake were all `0` in the 60-run. |
-| Routing/action safety | 95-97% | S31-S60 route/action caveats were fixed and S01-S60 stayed clean. |
-| D1 observability | 100% | Latest run had D1 readable sessions `60/60`. |
-| Copy quality | ~90% | Safe and non-generic in the 60-run; real-user tone still needs observation. |
-| Latency | 90-92% | No turn over 15s; S08/S45 remain P2 watch items above 10s. |
-| Overall internal readiness | 94-96% | Ready for internal/staging observation. |
-| Broad production readiness | 87-90% | Needs real-user observation before broad rollout. |
+| Catalog safety | 97-100% | External product cards, fake product IDs, fake price/stock, and mojibake were all `0` in the 120-run. |
+| Routing/action safety | 96-98% | S91-S120 supplemental run is clean; S08 ask-retarget action was fixed in targeted follow-up. |
+| D1 observability | 100% | Latest unified run had D1 readable sessions `120/120`. |
+| Copy quality | ~90% | Safe and non-generic in the 120-run; real-user tone still needs observation. |
+| Latency | 90-92% | No turn over 15s; S08/S16 remain P2 watch items above 10s. |
+| Overall internal/staging pilot readiness | 95-97% | Ready for controlled internal/staging pilot. |
+| Broad production readiness | 88-90% | Needs real-user observation before broad rollout. |
 
 These percentages are engineering estimates based on targeted tests, legacy audits, mocked suites, and selected real-backend smoke. They are not production analytics.
 
-## Internal/Staging Observation Run
+## Controlled Internal/Staging Pilot
 
-Do not start PR22 cleanup, broad feature work, deploys, D1 schema changes, or Firestore changes during this phase. The goal is to observe real chat behavior with `chatDebugId` and decide future fixes from evidence.
+The S01-S120 validation is sufficient to move from synthetic-only testing into a controlled internal/staging pilot. This is not broad production. Do not start PR22 cleanup, broad feature work, deploys, D1 schema changes, or Firestore changes during this phase. The goal is to observe real chat behavior with `chatDebugId` and decide future fixes from evidence.
 
 Recommended duration and sample size:
 
@@ -162,11 +219,11 @@ external product cards
 D1 missing turns
 ```
 
-Decision after observation:
+Decision after pilot observation:
 
 ```text
 If P0 = 0, P1 is low/understood, and every reported chat has readable D1 debug:
-  AI Chat can continue to limited staging/pilot.
+  AI Chat can continue to limited pilot.
 
 If any P0 appears:
   Do not roll out. Open a small PR based on the exact chatDebugId.
@@ -180,29 +237,19 @@ If P1/P2 repeats:
   5. empathy/copy polish
 ```
 
-## Readiness Gate For The Next 30 Scenarios
+## S91-S120 Supplemental Scenario Gate
 
-Do not add the next supplemental 30 scenarios until the internal/staging observation has enough real evidence. The next suite can start when:
+S91-S120 has been added and validated. The source text was verified as clean UTF-8 after using a UTF-8-safe reader; the earlier mojibake was a console display problem, not corrupt scenario content.
 
-```text
-10-30 real internal/staging chats were reviewed
-every suspicious/bad chat has a readable chatDebugId
-P0 = 0
-no repeated P1, such as latency >15s or a clear wrong route
-S08/S45-style latency does not repeat in real chats, or remains only a P2 watch item
-```
-
-If a P0 or repeated P1 appears during observation, pause the new suite and open one small PR based on the exact `chatDebugId`.
-
-When the user provides the next 30 scenarios, treat them as a separate suite first:
+S91-S120 is wired as:
 
 ```text
-suiteName: ai_chat_supplemental_61_90
-artifactRoot: test_artifacts/ai_chat_supplemental_61_90/<timestamp>/
-do not merge into mandatory baseline immediately
+suiteName: ai_chat_supplemental_91_120
+artifactRoot: test_artifacts/ai_chat_supplemental_91_120/<timestamp>/
+unified suite later: ai_chat_real_emulator_120
 ```
 
-Before running, normalize the scenario text as UTF-8 and reject mojibake in Arabic previews. Each scenario should have:
+The supplemental run is clean and can be used as part of the current validated baseline. Each scenario has:
 
 ```text
 id
@@ -212,16 +259,16 @@ expectedCards
 focus
 ```
 
-Run order:
+Validated run order:
 
 ```text
 1. preflight: 2 scenarios
 2. subset: 5-8 varied scenarios
 3. full new 30
-4. if clean or triaged, unified S01-S90 run
+4. unified S01-S120 run
 ```
 
-Acceptance for the new 30:
+Acceptance result for the new 30:
 
 ```text
 D1 readable sessions = 30/30
@@ -233,13 +280,13 @@ over15sTurnCount = 0
 every P1/P2 has a chatDebugId and root-cause label
 ```
 
-Acceptance for the later unified S01-S90 run:
+Acceptance result for the unified S01-S120 run:
 
 ```text
-D1 readable sessions = 90/90
+D1 readable sessions = 120/120
 P0 = 0
 over15sTurnCount = 0
-baseline S01-S60 does not regress
+baseline S01-S90 does not regress
 ```
 
 ## Cleanup Hold
@@ -574,6 +621,7 @@ Deploy commands require explicit same-message approval.
 ## Current Known Watch Items
 
 - Some recommendation/note turns can still approach 10 seconds. PR17 capped worst-case latency, but UX can still be improved later with a carefully scoped soft timeout.
+- S08 and S16 are current P2 latency watch items. S08 action was fixed in targeted rerun and now returns recommendation cards; S16 external similarity remains catalog-safe but can be slower than ideal.
 - `Do you have Light Blue?` can be safe but typed as `recommendation` in worker smoke. This is a W5 polish item if the worker endpoint needs stricter availability typing.
 - Android UI smoke for PR18 was blocked when no Android device was available. Re-run when emulator/device is present.
 - Copy is improved, but staging observation should still check whether replies feel persuasive, helpful, and natural.

@@ -299,6 +299,12 @@ class LocalIntentParser {
       tags.addAll(const {'elegant', 'classic'});
       occasion ??= 'office';
     }
+    if (_looksLikeClientFacingContext(normalized)) {
+      tags.addAll(const {'clean', 'fresh'});
+      occasion ??= 'office';
+      time ??= 'all_day';
+      intensity ??= 'light';
+    }
     if (medicalContext) {
       tags.addAll(const {'clean', 'fresh'});
       occasion ??= 'office';
@@ -623,6 +629,16 @@ class LocalIntentParser {
           '\u0646\u0628\u0637\u0634\u064a\u0629',
           '\u0645\u0647\u0646\u062f\u0633',
           '\u0645\u0647\u0646\u062f\u0633\u0629',
+        ]);
+  }
+
+  static bool _looksLikeClientFacingContext(String normalizedMessage) {
+    return _containsStrictPhrase(normalizedMessage, 'client') ||
+        _containsStrictPhrase(normalizedMessage, 'customer') ||
+        _containsAnyTerm(normalizedMessage, const [
+          '\u0639\u0645\u0644\u0627\u0621',
+          '\u0645\u0642\u0627\u0628\u0644\u0629 \u0639\u0645\u0644\u0627\u0621',
+          '\u0645\u0642\u0627\u0628\u0644\u0647 \u0639\u0645\u0644\u0627\u0621',
         ]);
   }
 

@@ -13,10 +13,18 @@ const timestamp = new Date()
   .replace(/\..+/, '')
   .replace('T', '_');
 const suite = process.env.AI_CHAT_RUN_SUITE || 'ai_chat_real_emulator_30';
-const artifactRoot = suite === 'ai_chat_real_emulator_90'
+const artifactRoot = suite === 'ai_chat_real_emulator_150'
+  ? 'ai_chat_real_emulator_150'
+  : suite === 'ai_chat_real_emulator_120'
+  ? 'ai_chat_real_emulator_120'
+  : suite === 'ai_chat_real_emulator_90'
   ? 'ai_chat_real_emulator_90'
   : suite === 'ai_chat_real_emulator_60'
   ? 'ai_chat_real_emulator_60'
+  : suite === 'ai_chat_supplemental_91_120'
+  ? 'ai_chat_supplemental_91_120'
+  : suite === 'ai_chat_supplemental_121_150'
+  ? 'ai_chat_supplemental_121_150'
   : suite === 'ai_chat_supplemental_61_90'
   ? 'ai_chat_supplemental_61_90'
   : suite === 'ai_chat_supplemental_31_60'
@@ -35,14 +43,26 @@ const device = process.env.AI_CHAT_30_DEVICE || 'emulator-5554';
 const testTimeout = process.env.AI_CHAT_30_TEST_TIMEOUT || '45m';
 const allScenarioIds = Array.from({ length: 60 }, (_, index) => `S${String(index + 1).padStart(2, '0')}`).join(',');
 const all90ScenarioIds = Array.from({ length: 90 }, (_, index) => `S${String(index + 1).padStart(2, '0')}`).join(',');
+const all120ScenarioIds = Array.from({ length: 120 }, (_, index) => `S${String(index + 1).padStart(2, '0')}`).join(',');
+const all150ScenarioIds = Array.from({ length: 150 }, (_, index) => `S${String(index + 1).padStart(2, '0')}`).join(',');
 const supplementalScenarioIds = Array.from({ length: 30 }, (_, index) => `S${index + 31}`).join(',');
 const supplemental6190ScenarioIds = Array.from({ length: 30 }, (_, index) => `S${index + 61}`).join(',');
+const supplemental91120ScenarioIds = Array.from({ length: 30 }, (_, index) => `S${index + 91}`).join(',');
+const supplemental121150ScenarioIds = Array.from({ length: 30 }, (_, index) => `S${index + 121}`).join(',');
 const scenarioIds = (
   process.env.AI_CHAT_30_SCENARIO_IDS?.trim() ||
-  (suite === 'ai_chat_real_emulator_90'
+  (suite === 'ai_chat_real_emulator_150'
+    ? all150ScenarioIds
+    : suite === 'ai_chat_real_emulator_120'
+    ? all120ScenarioIds
+    : suite === 'ai_chat_real_emulator_90'
     ? all90ScenarioIds
     : suite === 'ai_chat_real_emulator_60'
       ? allScenarioIds
+      : suite === 'ai_chat_supplemental_91_120'
+        ? supplemental91120ScenarioIds
+      : suite === 'ai_chat_supplemental_121_150'
+        ? supplemental121150ScenarioIds
       : suite === 'ai_chat_supplemental_61_90'
         ? supplemental6190ScenarioIds
         : suite === 'ai_chat_supplemental_31_60'

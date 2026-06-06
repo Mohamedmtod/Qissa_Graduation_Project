@@ -251,6 +251,29 @@ void main() {
       },
     );
 
+    test(
+      'occasion scent requests do not route to availability without product anchor',
+      () {
+        AIChatExperimentConfig.setTestOverrides(llmLedRouterV2: true);
+
+        const messages = [
+          'عندي interview وعايز ريحة كويسة.',
+          'عايز عطر ريحته زي محل براندات فخمة.',
+          'عايز عطر شبه ريحة المحلات الفخمة.',
+        ];
+
+        for (final message in messages) {
+          final result = _resolve(
+            message,
+            intent: AIChatIntent.availabilityCheck,
+          );
+
+          expect(result.route, AvailabilityRoute.none, reason: message);
+          expect(result.shouldSkip, isTrue, reason: message);
+        }
+      },
+    );
+
     test('persona and preference statements do not route to availability', () {
       const messages = [
         'I am a 28-year-old man.',
@@ -331,6 +354,10 @@ void main() {
         '\u0627\u0644\u0639\u0637\u0648\u0631 \u0623\u0635\u0644\u064a\u0629\u061f',
         '\u0625\u064a\u0647 \u0623\u0643\u062a\u0631 \u0627\u0644\u0639\u0637\u0648\u0631 \u0645\u0628\u064a\u0639\u064b\u0627 \u0639\u0646\u062f\u0643\u0645\u061f',
         '\u0645\u0634 \u0628\u062d\u0628 \u0627\u0644\u0639\u0637\u0648\u0631 \u0627\u0644\u0642\u0648\u064a\u0629\u060c \u0639\u0627\u064a\u0632 \u062d\u0627\u062c\u0629 \u0647\u0627\u062f\u064a\u0629.',
+        '\u0634\u063a\u0644\u064a \u0641\u064a\u0647 \u0645\u0642\u0627\u0628\u0644\u0629 \u0639\u0645\u0644\u0627\u0621 \u0643\u062a\u064a\u0631\u060c \u0645\u062d\u062a\u0627\u062c \u0639\u0637\u0631 \u0645\u0646\u0627\u0633\u0628.',
+        '\u0639\u0646\u062f\u064a \u0645\u0646\u0627\u0633\u0628\u0629 \u0641\u064a \u0645\u0643\u0627\u0646 \u0645\u0641\u062a\u0648\u062d\u060c \u0623\u0633\u062a\u062e\u062f\u0645 \u0625\u064a\u0647\u061f',
+        '\u0639\u0646\u062f\u064a \u0645\u0646\u0627\u0633\u0628\u0629 \u0641\u064a \u0642\u0627\u0639\u0629 \u0645\u063a\u0644\u0642\u0629.',
+        '\u0639\u0627\u064a\u0632\u0629 \u0639\u0637\u0631 \u0644\u0644\u0646\u0648\u0645.',
       ];
 
       for (final message in messages) {

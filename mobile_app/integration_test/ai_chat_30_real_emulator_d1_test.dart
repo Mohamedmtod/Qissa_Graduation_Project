@@ -210,6 +210,7 @@ class _Scenario {
     required this.messages,
     required this.focus,
     this.expectCards,
+    this.expectedIntent,
   });
 
   final String id;
@@ -217,6 +218,7 @@ class _Scenario {
   final List<String> messages;
   final List<String> focus;
   final bool? expectCards;
+  final String? expectedIntent;
 }
 
 class _ScenarioResult {
@@ -1188,6 +1190,486 @@ final _scenarios = <_Scenario>[
     focus: ['value for money', 'budget quality', 'recommendation'],
     expectCards: true,
   ),
+  const _Scenario(
+    id: 'S91',
+    title: 'recommend perfume for occasion',
+    messages: ['عايز عطر مناسب لأول يوم في شغل جديد.'],
+    focus: ['عطر احترافي لأول يوم عمل'],
+    expectCards: true,
+    expectedIntent: 'recommend_perfume_for_occasion',
+  ),
+  const _Scenario(
+    id: 'S92',
+    title: 'recommend perfume for interview',
+    messages: ['عندي interview وعايز ريحة كويسة.'],
+    focus: ['عطر للمقابلات الرسمية'],
+    expectCards: true,
+    expectedIntent: 'recommend_perfume_for_interview',
+  ),
+  const _Scenario(
+    id: 'S93',
+    title: 'recommend compliment getter',
+    messages: ['عايز عطر يخلي الناس تسألني لابس إيه.'],
+    focus: ['عطور تجيب مجاملات'],
+    expectCards: true,
+    expectedIntent: 'recommend_compliment_getter',
+  ),
+  const _Scenario(
+    id: 'S94',
+    title: 'recommend fresh longlasting',
+    messages: ['أنا بعرق بسرعة، أختار إيه؟'],
+    focus: ['عطر مناسب للعرق والحرارة'],
+    expectCards: true,
+    expectedIntent: 'recommend_fresh_longlasting',
+  ),
+  const _Scenario(
+    id: 'S95',
+    title: 'recommend business perfume',
+    messages: ['عايز عطر ينفع وأنا رايح اجتماع مهم.'],
+    focus: ['عطر للاجتماعات'],
+    expectCards: true,
+    expectedIntent: 'recommend_business_perfume',
+  ),
+  const _Scenario(
+    id: 'S96',
+    title: 'recommend low projection perfume',
+    messages: ['أنا مش بحب الريحة تبقى واضحة أوي.'],
+    focus: ['عطور خفيفة وقريبة من الجلد'],
+    expectCards: true,
+    expectedIntent: 'recommend_low_projection_perfume',
+  ),
+  const _Scenario(
+    id: 'S97',
+    title: 'recommend clean masculine perfume',
+    messages: ['عايز عطر ريحته تبقى نظيفة بس رجولية.'],
+    focus: ['عطر رجالي نضيف'],
+    expectCards: true,
+    expectedIntent: 'recommend_clean_masculine_perfume',
+  ),
+  const _Scenario(
+    id: 'S98',
+    title: 'recommend elegant feminine perfume',
+    messages: ['عايزة عطر أنثوي بس مش طفولي.'],
+    focus: ['عطر حريمي ناضج وأنيق'],
+    expectCards: true,
+    expectedIntent: 'recommend_elegant_feminine_perfume',
+  ),
+  const _Scenario(
+    id: 'S99',
+    title: 'recommend perfume for outfit',
+    messages: ['عايز عطر للبس أبيض وصيفي.'],
+    focus: ['عطر مناسب للبس أبيض وصيفي'],
+    expectCards: true,
+    expectedIntent: 'recommend_perfume_for_outfit',
+  ),
+  const _Scenario(
+    id: 'S100',
+    title: 'recommend evening outfit perfume',
+    messages: ['هلبس أسود بالليل، أستخدم إيه؟'],
+    focus: ['عطر مناسب للبس أسود وسهرة'],
+    expectCards: true,
+    expectedIntent: 'recommend_evening_outfit_perfume',
+  ),
+  const _Scenario(
+    id: 'S101',
+    title: 'recommend confidence perfume',
+    messages: ['عايز عطر يحسسني بالثقة.'],
+    focus: ['عطر يعزز الثقة'],
+    expectCards: true,
+    expectedIntent: 'recommend_confidence_perfume',
+  ),
+  const _Scenario(
+    id: 'S102',
+    title: 'recommend soft feminine perfume',
+    messages: ['عايزة عطر يحسسني بالنعومة.'],
+    focus: ['عطر ناعم وأنثوي'],
+    expectCards: true,
+    expectedIntent: 'recommend_soft_feminine_perfume',
+  ),
+  const _Scenario(
+    id: 'S103',
+    title: 'recommend lighter alternative',
+    messages: ['عندي عطر قوي، عايز حاجة أخف منه.'],
+    focus: ['بدائل أخف من عطر قوي'],
+    expectCards: true,
+    expectedIntent: 'recommend_lighter_alternative',
+  ),
+  const _Scenario(
+    id: 'S104',
+    title: 'recommend stronger alternative',
+    messages: ['عندي عطر خفيف ومش ثابت، عايز حاجة أقوى.'],
+    focus: ['بدائل أقوى وأكثر ثباتًا'],
+    expectCards: true,
+    expectedIntent: 'recommend_stronger_alternative',
+  ),
+  const _Scenario(
+    id: 'S105',
+    title: 'recommend creamy clean perfume',
+    messages: ['أنا بحب ريحة الكريمات النظيفة.'],
+    focus: ['عطور كريمية ونظيفة'],
+    expectCards: true,
+    expectedIntent: 'recommend_creamy_clean_perfume',
+  ),
+  const _Scenario(
+    id: 'S106',
+    title: 'recommend creamy warm perfume',
+    messages: ['عايز عطر كريمي ودافي.'],
+    focus: ['عطر كريمي دافئ'],
+    expectCards: true,
+    expectedIntent: 'recommend_creamy_warm_perfume',
+  ),
+  const _Scenario(
+    id: 'S107',
+    title: 'recommend luxury non oriental',
+    messages: ['عايز ريحة فخمة بس مش شرقية.'],
+    focus: ['عطور فخمة غير شرقية'],
+    expectCards: true,
+    expectedIntent: 'recommend_luxury_non_oriental',
+  ),
+  const _Scenario(
+    id: 'S108',
+    title: 'recommend soft oriental perfume',
+    messages: ['عايز عطر شرقي بس مش تقيل.'],
+    focus: ['عطر شرقي خفيف'],
+    expectCards: true,
+    expectedIntent: 'recommend_soft_oriental_perfume',
+  ),
+  const _Scenario(
+    id: 'S109',
+    title: 'recommend luxury store scent',
+    messages: ['عايز عطر شبه ريحة المحلات الفخمة.'],
+    focus: ['عطر برائحة محلات فخمة'],
+    expectCards: true,
+    expectedIntent: 'recommend_luxury_store_scent',
+  ),
+  const _Scenario(
+    id: 'S110',
+    title: 'recommend winter non sweet',
+    messages: ['عايز عطر مناسب للشتا بس مش سويت.'],
+    focus: ['عطر شتوي غير مسكر'],
+    expectCards: true,
+    expectedIntent: 'recommend_winter_non_sweet',
+  ),
+  const _Scenario(
+    id: 'S111',
+    title: 'recommend summer longlasting',
+    messages: ['عايز عطر صيفي بس ثابت.'],
+    focus: ['عطر صيفي ثابت'],
+    expectCards: true,
+    expectedIntent: 'recommend_summer_longlasting',
+  ),
+  const _Scenario(
+    id: 'S112',
+    title: 'recommend versatile day to night',
+    messages: ['عايز عطر للنهار والخروج بعد الشغل.'],
+    focus: ['عطر متعدد الاستخدامات'],
+    expectCards: true,
+    expectedIntent: 'recommend_versatile_day_to_night',
+  ),
+  const _Scenario(
+    id: 'S113',
+    title: 'recommend signature perfume',
+    messages: ['أنا عايز عطر واحد ينفع كل حاجة.'],
+    focus: ['عطر يومي شامل'],
+    expectCards: true,
+    expectedIntent: 'recommend_signature_perfume',
+  ),
+  const _Scenario(
+    id: 'S114',
+    title: 'perfume selection advice',
+    messages: ['أختار عطر signature إزاي؟'],
+    focus: ['اختيار عطر signature'],
+    expectCards: true,
+    expectedIntent: 'perfume_selection_advice',
+  ),
+  const _Scenario(
+    id: 'S115',
+    title: 'recommend unique perfume',
+    messages: ['أنا بحب العطور الغريبة.'],
+    focus: ['عطور غريبة ومميزة'],
+    expectCards: true,
+    expectedIntent: 'recommend_unique_perfume',
+  ),
+  const _Scenario(
+    id: 'S116',
+    title: 'recommend public transport safe',
+    messages: ['عايز عطر مش مزعج في المواصلات.'],
+    focus: ['عطر مناسب للأماكن المزدحمة'],
+    expectCards: true,
+    expectedIntent: 'recommend_public_transport_safe',
+  ),
+  const _Scenario(
+    id: 'S117',
+    title: 'recommend student perfume',
+    messages: ['عايز عطر للجامعة بس مش عايز أبقى أوفر.'],
+    focus: ['عطر مناسب للجامعة'],
+    expectCards: true,
+    expectedIntent: 'recommend_student_perfume',
+  ),
+  const _Scenario(
+    id: 'S118',
+    title: 'recommend personality based gift',
+    messages: ['عايز عطر لواحد بيحب الهدوء والكتب والقهوة.'],
+    focus: ['هدية حسب شخصية الشخص'],
+    expectCards: true,
+    expectedIntent: 'recommend_personality_based_gift',
+  ),
+  const _Scenario(
+    id: 'S119',
+    title: 'recommend gift by preference',
+    messages: ['صاحبتي بتحب الحاجات الناعمة والبسيطة، أجيب لها إيه؟'],
+    focus: ['هدية لصديقة تحب البساطة'],
+    expectCards: true,
+    expectedIntent: 'recommend_gift_by_preference',
+  ),
+  const _Scenario(
+    id: 'S120',
+    title: 'recommend multiple gifts',
+    messages: ['عايز أشتري عطرين هدية بس واحد رجالي وواحد حريمي.'],
+    focus: ['هدايا رجالي وحريمي'],
+    expectCards: true,
+    expectedIntent: 'recommend_multiple_gifts',
+  ),
+  const _Scenario(
+    id: 'S121',
+    title: 'recommend first family visit perfume',
+    messages: ['عايز عطر مناسب وأنا رايح أزور أهل خطيبتي أول مرة.'],
+    focus: ['عطر لانطباع أول محترم'],
+    expectCards: true,
+    expectedIntent: 'recommend_first_family_visit_perfume',
+  ),
+  const _Scenario(
+    id: 'S122',
+    title: 'recommend feminine student day perfume',
+    messages: ['عايزة عطر للصبح في الجامعة بس يكون بناتي.'],
+    focus: ['عطر حريمي صباحي للجامعة'],
+    expectCards: true,
+    expectedIntent: 'recommend_feminine_student_day_perfume',
+  ),
+  const _Scenario(
+    id: 'S123',
+    title: 'recommend engagement perfume',
+    messages: ['عايز عطر للخطوبة.'],
+    focus: ['عطر للخطوبة'],
+    expectCards: true,
+    expectedIntent: 'recommend_engagement_perfume',
+  ),
+  const _Scenario(
+    id: 'S124',
+    title: 'recommend graduation perfume',
+    messages: ['عايزة عطر للتخرج.'],
+    focus: ['عطر للتخرج'],
+    expectCards: true,
+    expectedIntent: 'recommend_graduation_perfume',
+  ),
+  const _Scenario(
+    id: 'S125',
+    title: 'recommend restaurant safe perfume',
+    messages: ['عايز عطر ألبسه وأنا رايح مطعم.'],
+    focus: ['عطر مناسب للمطاعم'],
+    expectCards: true,
+    expectedIntent: 'recommend_restaurant_safe_perfume',
+  ),
+  const _Scenario(
+    id: 'S126',
+    title: 'recommend indoor date perfume',
+    messages: ['عايز عطر مناسب للسينما.'],
+    focus: ['عطر للأماكن المغلقة'],
+    expectCards: true,
+    expectedIntent: 'recommend_indoor_date_perfume',
+  ),
+  const _Scenario(
+    id: 'S127',
+    title: 'recommend healthcare work perfume',
+    messages: ['أنا شغال في مستشفى، ألبس عطر إيه؟'],
+    focus: ['عطر مناسب لبيئة طبية'],
+    expectCards: true,
+    expectedIntent: 'recommend_healthcare_work_perfume',
+  ),
+  const _Scenario(
+    id: 'S128',
+    title: 'recommend client facing work perfume',
+    messages: ['شغلي فيه مقابلة عملاء كتير، محتاج عطر مناسب.'],
+    focus: ['عطر لمقابلة العملاء'],
+    expectCards: true,
+    expectedIntent: 'recommend_client_facing_work_perfume',
+  ),
+  const _Scenario(
+    id: 'S129',
+    title: 'recommend home perfume',
+    messages: ['عايز عطر للبيت بس.'],
+    focus: ['عطر للاستخدام المنزلي'],
+    expectCards: true,
+    expectedIntent: 'recommend_home_perfume',
+  ),
+  const _Scenario(
+    id: 'S130',
+    title: 'recommend sleep perfume',
+    messages: ['عايزة عطر للنوم.'],
+    focus: ['عطر هادئ قبل النوم'],
+    expectCards: true,
+    expectedIntent: 'recommend_sleep_perfume',
+  ),
+  const _Scenario(
+    id: 'S131',
+    title: 'recommend after shave perfume',
+    messages: ['عايز عطر أحطه بعد الحلاقة.'],
+    focus: ['عطر مناسب بعد الحلاقة'],
+    expectCards: true,
+    expectedIntent: 'recommend_after_shave_perfume',
+  ),
+  const _Scenario(
+    id: 'S132',
+    title: 'recommend post shower perfume',
+    messages: ['عايز عطر بعد الاستحمام للبيت.'],
+    focus: ['عطر بعد الاستحمام'],
+    expectCards: true,
+    expectedIntent: 'recommend_post_shower_perfume',
+  ),
+  const _Scenario(
+    id: 'S133',
+    title: 'recommend outdoor event perfume',
+    messages: ['عندي مناسبة في مكان مفتوح، أستخدم إيه؟'],
+    focus: ['عطر لمناسبة خارجية'],
+    expectCards: true,
+    expectedIntent: 'recommend_outdoor_event_perfume',
+  ),
+  const _Scenario(
+    id: 'S134',
+    title: 'recommend indoor event perfume',
+    messages: ['عندي مناسبة في قاعة مغلقة.'],
+    focus: ['عطر لمناسبة داخلية'],
+    expectCards: true,
+    expectedIntent: 'recommend_indoor_event_perfume',
+  ),
+  const _Scenario(
+    id: 'S135',
+    title: 'recommend sporty outfit perfume',
+    messages: ['عايز عطر ألبسه مع لبس رياضي.'],
+    focus: ['عطر مع ستايل رياضي'],
+    expectCards: true,
+    expectedIntent: 'recommend_sporty_outfit_perfume',
+  ),
+  const _Scenario(
+    id: 'S136',
+    title: 'recommend classic style perfume',
+    messages: ['عايز عطر مع لبس كلاسيك.'],
+    focus: ['عطر للستايل الكلاسيك'],
+    expectCards: true,
+    expectedIntent: 'recommend_classic_style_perfume',
+  ),
+  const _Scenario(
+    id: 'S137',
+    title: 'recommend warm cozy perfume',
+    messages: ['عايز ريحة تبقى دافية ومريحة.'],
+    focus: ['عطر دافئ ومريح'],
+    expectCards: true,
+    expectedIntent: 'recommend_warm_cozy_perfume',
+  ),
+  const _Scenario(
+    id: 'S138',
+    title: 'recommend energizing perfume',
+    messages: ['عايز ريحة منعشة تصحيني.'],
+    focus: ['عطر منعش ومنبه'],
+    expectCards: true,
+    expectedIntent: 'recommend_energizing_perfume',
+  ),
+  const _Scenario(
+    id: 'S139',
+    title: 'recommend natural rose perfume',
+    messages: ['عايزة عطر ريحته زي الورد الطبيعي مش صناعي.'],
+    focus: ['عطر ورد طبيعي'],
+    expectCards: true,
+    expectedIntent: 'recommend_natural_rose_perfume',
+  ),
+  const _Scenario(
+    id: 'S140',
+    title: 'recommend non gourmand vanilla',
+    messages: ['عايز ريحة فانيليا بس مش كيكة.'],
+    focus: ['فانيليا غير مسكرة'],
+    expectCards: true,
+    expectedIntent: 'recommend_non_gourmand_vanilla',
+  ),
+  const _Scenario(
+    id: 'S141',
+    title: 'recommend sweet masculine perfume',
+    messages: ['عايز عطر سويت بس رجالي.'],
+    focus: ['عطر رجالي سويت متوازن'],
+    expectCards: true,
+    expectedIntent: 'recommend_sweet_masculine_perfume',
+  ),
+  const _Scenario(
+    id: 'S142',
+    title: 'recommend strong feminine perfume',
+    messages: ['عايزة عطر قوي بس أنثوي.'],
+    focus: ['عطر حريمي قوي'],
+    expectCards: true,
+    expectedIntent: 'recommend_strong_feminine_perfume',
+  ),
+  const _Scenario(
+    id: 'S143',
+    title: 'recommend youthful casual perfume',
+    messages: ['عايز عطر شبابي مش رسمي.'],
+    focus: ['عطر شبابي كاجوال'],
+    expectCards: true,
+    expectedIntent: 'recommend_youthful_casual_perfume',
+  ),
+  const _Scenario(
+    id: 'S144',
+    title: 'recommend mature formal perfume',
+    messages: ['عايز عطر رسمي مش شبابي.'],
+    focus: ['عطر رسمي ناضج'],
+    expectCards: true,
+    expectedIntent: 'recommend_mature_formal_perfume',
+  ),
+  const _Scenario(
+    id: 'S145',
+    title: 'recommend affordable luxury perfume',
+    messages: ['عايز عطر ريحته فاخرة بس سعره متوسط.'],
+    focus: ['عطر فاخر بسعر متوسط'],
+    expectCards: true,
+    expectedIntent: 'recommend_affordable_luxury_perfume',
+  ),
+  const _Scenario(
+    id: 'S146',
+    title: 'recommend by budget',
+    messages: ['عايز عطر أقل من 500 جنيه.'],
+    focus: ['عطور تحت 500 جنيه'],
+    expectCards: false,
+    expectedIntent: 'budget_floor_no_match',
+  ),
+  const _Scenario(
+    id: 'S147',
+    title: 'recommend by budget range',
+    messages: ['عايز حاجة بين 500 و1000 جنيه.'],
+    focus: ['عطور بين 500 و1000 جنيه'],
+    expectCards: true,
+    expectedIntent: 'recommend_by_budget_range',
+  ),
+  const _Scenario(
+    id: 'S148',
+    title: 'show discounted perfumes',
+    messages: ['عندكم عروض على العطور؟'],
+    focus: ['عروض وخصومات العطور'],
+    expectCards: false,
+    expectedIntent: 'answer-only',
+  ),
+  const _Scenario(
+    id: 'S149',
+    title: 'show new arrivals',
+    messages: ['إيه الجديد عندكم؟'],
+    focus: ['العطور الجديدة'],
+    expectCards: true,
+    expectedIntent: 'show_new_arrivals',
+  ),
+  const _Scenario(
+    id: 'S150',
+    title: 'quick recommendation',
+    messages: ['أنا مستعجل وعايز أطلب بسرعة.'],
+    focus: ['توصية سريعة للشراء'],
+    expectCards: true,
+    expectedIntent: 'quick_recommendation',
+  ),
 ];
 
 const _suiteName = String.fromEnvironment(
@@ -1263,6 +1745,72 @@ const _supplemental6190ScenarioIds = <String>{
   'S90',
 };
 
+const _supplemental91120ScenarioIds = <String>{
+  'S91',
+  'S92',
+  'S93',
+  'S94',
+  'S95',
+  'S96',
+  'S97',
+  'S98',
+  'S99',
+  'S100',
+  'S101',
+  'S102',
+  'S103',
+  'S104',
+  'S105',
+  'S106',
+  'S107',
+  'S108',
+  'S109',
+  'S110',
+  'S111',
+  'S112',
+  'S113',
+  'S114',
+  'S115',
+  'S116',
+  'S117',
+  'S118',
+  'S119',
+  'S120',
+};
+
+const _supplemental121150ScenarioIds = <String>{
+  'S121',
+  'S122',
+  'S123',
+  'S124',
+  'S125',
+  'S126',
+  'S127',
+  'S128',
+  'S129',
+  'S130',
+  'S131',
+  'S132',
+  'S133',
+  'S134',
+  'S135',
+  'S136',
+  'S137',
+  'S138',
+  'S139',
+  'S140',
+  'S141',
+  'S142',
+  'S143',
+  'S144',
+  'S145',
+  'S146',
+  'S147',
+  'S148',
+  'S149',
+  'S150',
+};
+
 const _baselineScenarioIds = <String>{
   'S01',
   'S02',
@@ -1306,7 +1854,19 @@ const _all90ScenarioIds = <String>{
   ..._supplemental6190ScenarioIds,
 };
 
+const _all120ScenarioIds = <String>{
+  ..._all90ScenarioIds,
+  ..._supplemental91120ScenarioIds,
+};
+
+const _all150ScenarioIds = <String>{
+  ..._all120ScenarioIds,
+  ..._supplemental121150ScenarioIds,
+};
+
 String _expectedIntentFor(_Scenario scenario) {
+  final explicitIntent = scenario.expectedIntent;
+  if (explicitIntent != null) return explicitIntent;
   switch (scenario.id) {
     case 'S44':
     case 'S52':
@@ -1588,6 +2148,11 @@ void main() {
         if (scenario.id == 'S60' && hasCards) {
           caveat('selected_product_review_rendered_new_cards');
         }
+        if (scenario.id == 'S92' &&
+            (last.responseSource?.contains('availability') == true ||
+                last.type == MessageType.availability)) {
+          caveat('interview_request_routed_to_availability');
+        }
         if (cubit.state.status == AIChatStatus.noMatch && hasCards) {
           issue('no_match_with_cards');
         }
@@ -1644,10 +2209,18 @@ void main() {
           ? const <String>['S31', 'S44']
           : _suiteName == 'ai_chat_supplemental_61_90'
           ? const <String>['S61', 'S86']
+          : _suiteName == 'ai_chat_supplemental_91_120'
+          ? const <String>['S91', 'S114']
+          : _suiteName == 'ai_chat_supplemental_121_150'
+          ? const <String>['S121', 'S148']
           : _suiteName == 'ai_chat_real_emulator_60'
           ? const <String>['S01', 'S31']
           : _suiteName == 'ai_chat_real_emulator_90'
           ? const <String>['S01', 'S61']
+          : _suiteName == 'ai_chat_real_emulator_120'
+          ? const <String>['S01', 'S91']
+          : _suiteName == 'ai_chat_real_emulator_150'
+          ? const <String>['S01', 'S121']
           : const <String>['S01', 'S16'];
       final preflight = preflightIds
           .map((id) => _scenarios.firstWhere((scenario) => scenario.id == id))
@@ -1675,10 +2248,18 @@ void main() {
           ? _supplementalScenarioIds
           : _suiteName == 'ai_chat_supplemental_61_90'
           ? _supplemental6190ScenarioIds
+          : _suiteName == 'ai_chat_supplemental_91_120'
+          ? _supplemental91120ScenarioIds
+          : _suiteName == 'ai_chat_supplemental_121_150'
+          ? _supplemental121150ScenarioIds
           : _suiteName == 'ai_chat_real_emulator_60'
           ? _allScenarioIds
           : _suiteName == 'ai_chat_real_emulator_90'
           ? _all90ScenarioIds
+          : _suiteName == 'ai_chat_real_emulator_120'
+          ? _all120ScenarioIds
+          : _suiteName == 'ai_chat_real_emulator_150'
+          ? _all150ScenarioIds
           : _baselineScenarioIds;
       final selectedScenarioIds = requestedScenarioIds.isEmpty
           ? defaultScenarioIds

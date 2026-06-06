@@ -28,5 +28,59 @@ void main() {
       expect(external.ownershipClass, AIChatRouteOwnershipClass.llmSemantic);
       expect(external.semanticIntent, AIChatSemanticIntent.externalReference);
     });
+
+    test('classifies occasion and luxury-store scent requests as semantic', () {
+      final interview = policy.classify('عندي interview وعايز ريحة كويسة.');
+      expect(interview.ownershipClass, AIChatRouteOwnershipClass.llmSemantic);
+      expect(
+        interview.semanticIntent,
+        AIChatSemanticIntent.recommendationRefinement,
+      );
+
+      final luxuryStore = policy.classify(
+        'عايز عطر ريحته زي محل براندات فخمة.',
+      );
+      expect(luxuryStore.ownershipClass, AIChatRouteOwnershipClass.llmSemantic);
+      expect(luxuryStore.semanticIntent, AIChatSemanticIntent.vibeSearch);
+
+      final luxuryStores = policy.classify('عايز عطر شبه ريحة المحلات الفخمة.');
+      expect(
+        luxuryStores.ownershipClass,
+        AIChatRouteOwnershipClass.llmSemantic,
+      );
+      expect(luxuryStores.semanticIntent, AIChatSemanticIntent.vibeSearch);
+    });
+
+    test('classifies contextual Arabic pilot requests as semantic', () {
+      final outdoorEvent = policy.classify(
+        '\u0639\u0646\u062f\u064a \u0645\u0646\u0627\u0633\u0628\u0629 \u0641\u064a \u0645\u0643\u0627\u0646 \u0645\u0641\u062a\u0648\u062d\u060c \u0623\u0633\u062a\u062e\u062f\u0645 \u0625\u064a\u0647\u061f',
+      );
+      expect(
+        outdoorEvent.ownershipClass,
+        AIChatRouteOwnershipClass.llmSemantic,
+      );
+      expect(
+        outdoorEvent.semanticIntent,
+        AIChatSemanticIntent.recommendationRefinement,
+      );
+
+      final clientMeetings = policy.classify(
+        '\u0634\u063a\u0644\u064a \u0641\u064a\u0647 \u0645\u0642\u0627\u0628\u0644\u0629 \u0639\u0645\u0644\u0627\u0621 \u0643\u062a\u064a\u0631\u060c \u0645\u062d\u062a\u0627\u062c \u0639\u0637\u0631 \u0645\u0646\u0627\u0633\u0628.',
+      );
+      expect(
+        clientMeetings.ownershipClass,
+        AIChatRouteOwnershipClass.llmSemantic,
+      );
+      expect(
+        clientMeetings.semanticIntent,
+        AIChatSemanticIntent.recommendationRefinement,
+      );
+
+      final bedtime = policy.classify(
+        '\u0639\u0627\u064a\u0632\u0629 \u0639\u0637\u0631 \u0644\u0644\u0646\u0648\u0645.',
+      );
+      expect(bedtime.ownershipClass, AIChatRouteOwnershipClass.llmSemantic);
+      expect(bedtime.semanticIntent, AIChatSemanticIntent.vibeSearch);
+    });
   });
 }
